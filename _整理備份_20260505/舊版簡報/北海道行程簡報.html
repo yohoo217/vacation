@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>北海道初夏自駕提案 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700;900&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Noto Sans TC',sans-serif;background:#0f0f1a;color:#fff;overflow-x:hidden;}
+  .slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:60px 40px;position:relative;}
+  
+  /* SLIDE 1 - Cover */
+  #s1{background:linear-gradient(180deg,#0f0f1a 0%,#1a0a2e 100%);}
+  #s1 .hero{width:100%;max-width:900px;border-radius:24px;overflow:hidden;position:relative;box-shadow:0 0 80px rgba(180,100,255,0.4);}
+  #s1 .hero img{width:100%;display:block;}
+  #s1 .hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(15,15,26,0.9) 0%,transparent 50%);display:flex;flex-direction:column;justify-content:flex-end;padding:40px;}
+  #s1 h1{font-size:3rem;font-weight:900;background:linear-gradient(135deg,#fff 0%,#c084fc 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  #s1 p{font-size:1.2rem;color:#d1d5db;margin-top:8px;}
+  .badge{display:inline-block;background:rgba(192,132,252,0.2);border:1px solid #c084fc;border-radius:99px;padding:6px 18px;font-size:0.85rem;color:#c084fc;margin-top:16px;}
+  
+  /* SLIDE 2 & 3 & 3.5 - Routes */
+  #s2{background:linear-gradient(135deg,#0a1628 0%,#0f2744 100%);}
+  #s3{background:linear-gradient(135deg,#1a0a1a 0%,#2d0a3a 100%);}
+  #s3-5{background:linear-gradient(135deg,#1a160a 0%,#3a2d0a 100%);}
+  .slide-title{font-size:2rem;font-weight:900;margin-bottom:8px;}
+  .slide-sub{font-size:1rem;color:#9ca3af;margin-bottom:32px;}
+  .accent-a{color:#60a5fa;}
+  .accent-b{color:#f472b6;}
+  .accent-c{color:#fbbf24;}
+  .content-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;max-width:1000px;width:100%;align-items:start;}
+  .photo-box{border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.5); background:#1a1a2e; display:flex; justify-content:center; align-items:center; height:400px; font-size:4rem;}
+  .photo-box img{width:100%;height:100%;object-fit:cover;display:block;}
+  .info-box{display:flex;flex-direction:column;gap:12px;}
+  .tag{display:inline-block;padding:4px 12px;border-radius:99px;font-size:0.75rem;font-weight:700;margin-bottom:8px;}
+  .tag-a{background:rgba(96,165,250,0.2);color:#60a5fa;border:1px solid #60a5fa;}
+  .tag-b{background:rgba(244,114,182,0.2);color:#f472b6;border:1px solid #f472b6;}
+  .tag-c{background:rgba(251,191,36,0.2);color:#fbbf24;border:1px solid #fbbf24;}
+  .day-card{background:rgba(255,255,255,0.05);border-radius:14px;padding:12px 18px;border-left:3px solid;}
+  .day-card.a{border-color:#60a5fa;}
+  .day-card.b{border-color:#f472b6;}
+  .day-card.c{border-color:#fbbf24;}
+  .day-label{font-size:0.75rem;font-weight:700;color:#9ca3af;margin-bottom:4px;}
+  .day-text{font-size:0.9rem;line-height:1.5;}
+  .star{color:#fbbf24;font-size:0.8rem;}
+
+  /* SLIDE 4 - Route Map Timeline */
+  #s4{background:#0f0f1a; padding: 100px 40px;}
+  .route-map-container{display:flex;flex-direction:column;gap:40px;max-width:1100px;width:100%;}
+  .route-column{background:rgba(255,255,255,0.03);border-radius:20px;padding:30px;border:1px solid rgba(255,255,255,0.08);display:flex;gap:30px;align-items:stretch;}
+  @media(max-width:800px) { .route-column { flex-direction:column; } }
+  .route-column-title{font-size:1.3rem;font-weight:700;margin-bottom:24px;text-align:left;}
+  
+  .timeline{position:relative;padding-left:30px;margin-top:10px;}
+  .timeline::before{content:'';position:absolute;left:9px;top:10px;bottom:20px;width:2px;background:rgba(255,255,255,0.1);}
+  .timeline-item{position:relative;margin-bottom:28px;}
+  .timeline-item:last-child{margin-bottom:0;}
+  .timeline-dot{position:absolute;left:-36px;top:4px;width:18px;height:18px;border-radius:50%;background:#0f0f1a;border:3px solid;z-index:2;}
+  .route-a .timeline-dot{border-color:#60a5fa;}
+  .route-b .timeline-dot{border-color:#f472b6;}
+  .route-c .timeline-dot{border-color:#fbbf24;}
+  .timeline-content h4{font-size:1.1rem;margin-bottom:6px;display:flex;align-items:center;gap:10px;}
+  .timeline-content p{font-size:0.85rem;color:#9ca3af;line-height:1.4;}
+  .distance-badge{font-size:0.7rem;background:rgba(255,255,255,0.1);padding:2px 8px;border-radius:99px;color:#d1d5db;font-weight:normal;}
+
+  /* SLIDE 5 - Compare */
+  #s5{background:linear-gradient(135deg,#0a0a1a 0%,#1a1a2e 100%);}
+  table{width:100%;max-width:1000px;border-collapse:collapse;}
+  th,td{padding:16px 20px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.08);font-size:0.95rem;}
+  th{background:rgba(255,255,255,0.05);font-weight:700;}
+  tr:hover{background:rgba(255,255,255,0.03);}
+
+  /* SLIDE 6 - Rental */
+  #s6{background:linear-gradient(135deg,#0a1a0a 0%,#0f2a1a 100%);}
+  .rental-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:900px;width:100%;}
+  .rental-card{background:rgba(255,255,255,0.05);border-radius:18px;padding:24px;border:1px solid rgba(255,255,255,0.1);}
+  .rental-card h3{font-size:1.1rem;margin-bottom:12px;color:#34d399;}
+  .rental-card ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
+  .rental-card li{font-size:0.9rem;color:#d1d5db;padding-left:24px;position:relative;line-height:1.4;}
+  .rental-card li::before{content:'✓';position:absolute;left:0;color:#34d399;}
+
+  /* NAV */
+  .nav{position:fixed;right:24px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:999;}
+  .nav-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.3);cursor:pointer;transition:all 0.3s;}
+  .nav-dot.active,.nav-dot:hover{background:#c084fc;transform:scale(1.3);}
+  .section-num{position:absolute;top:40px;right:40px;font-size:0.8rem;color:rgba(255,255,255,0.3);}
+  .highlight-box{background:rgba(251,191,36,0.1);border:1px solid #fbbf24;border-radius:12px;padding:16px 24px;font-size:0.95rem;color:#fde68a;max-width:900px;width:100%;text-align:center;line-height:1.5;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-dot active" onclick="goto(0)"></div>
+  <div class="nav-dot" onclick="goto(1)"></div>
+  <div class="nav-dot" onclick="goto(2)"></div>
+  <div class="nav-dot" onclick="goto(3)"></div>
+  <div class="nav-dot" onclick="goto(4)"></div>
+  <div class="nav-dot" onclick="goto(5)"></div>
+  <div class="nav-dot" onclick="goto(6)"></div>
+</nav>
+
+<!-- SLIDE 1: Cover -->
+<section class="slide" id="s1">
+  <div class="hero">
+    <img src="hokkaido_cover.png" alt="北海道封面">
+    <div class="hero-overlay">
+      <h1>北海道初夏自駕提案</h1>
+      <p>2026年5月下旬 ｜ 6天5夜 ｜ 新千歲機場進出</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;">
+        <span class="badge">♨️ 露天溫泉</span>
+        <span class="badge">🎆 洞爺湖花火</span>
+        <span class="badge">🍣 小樽海鮮</span>
+        <span class="badge">🚗 新千歲同點租還</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 2: Route A -->
+<section class="slide" id="s2">
+  <span class="section-num">02 / 07</span>
+  <span class="tag tag-a">路線 A</span>
+  <div class="slide-title">道央：<span class="accent-a">札幌祭典 × 富良野美瑛</span></div>
+  <div class="slide-sub">賞花與市區祭典兼具 ｜ 總距離約 600km</div>
+  <div class="content-grid">
+    <div>
+      <div class="photo-box">
+        <img src="sapporo_lilac.png" alt="札幌紫丁香祭">
+      </div>
+    </div>
+    <div class="info-box">
+      <div class="day-card a"><div class="day-label">Day 1</div><div class="day-text">新千歲機場 ➔ 札幌 <span class="star">⭐ 紫丁香祭</span>（大通公園，品酒＋美食）</div></div>
+      <div class="day-card a"><div class="day-label">Day 2</div><div class="day-text">札幌 ➔ 富良野（起司工房、森林精靈露台）</div></div>
+      <div class="day-card a"><div class="day-label">Day 3</div><div class="day-text">富良野 ➔ 美瑛拼布之路 ➔ <span class="star">⭐ 四季彩之丘</span> ➔ 白金青池</div></div>
+      <div class="day-card a"><div class="day-label">Day 4</div><div class="day-text">美瑛 ➔ 旭山動物園（企鵝散步）➔ 層雲峽溫泉</div></div>
+      <div class="day-card a"><div class="day-label">Day 5</div><div class="day-text">層雲峽 ➔ 大雪山纜車 ➔ 銀河/流星雙瀑 ➔ 千歲市</div></div>
+      <div class="day-card a"><div class="day-label">Day 6</div><div class="day-text">千歲 ➔ 支笏湖 ➔ 新千歲機場還車 ➔ 返台</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 3: Route B -->
+<section class="slide" id="s3">
+  <span class="section-num">03 / 07</span>
+  <span class="tag tag-b">路線 B</span>
+  <div class="slide-title">道東：<span class="accent-b">粉紅花海 × 知床大自然</span></div>
+  <div class="slide-sub">極致風景愛好者 ｜ 總距離約 900km</div>
+  <div class="content-grid">
+    <div>
+      <div class="photo-box">
+        <img src="shibazakura.png" alt="東藻琴芝櫻">
+      </div>
+    </div>
+    <div class="info-box">
+      <div class="day-card b"><div class="day-label">Day 1</div><div class="day-text">新千歲機場 ➔ 帶廣（吃十勝豚丼、六花亭本店）</div></div>
+      <div class="day-card b"><div class="day-label">Day 2</div><div class="day-text">帶廣 ➔ 釧路濕原展望 ➔ 阿寒湖（觀光船、愛努村）</div></div>
+      <div class="day-card b"><div class="day-label">Day 3</div><div class="day-text">阿寒湖 ➔ 摩周湖 ➔ 知床半島 <span class="star">⭐ 知床五湖木棧道</span></div></div>
+      <div class="day-card b"><div class="day-label">Day 4</div><div class="day-text">知床 ➔ 網走 ➔ <span class="star">⭐ 東藻琴芝櫻公園</span>（粉紅地毯！）</div></div>
+      <div class="day-card b"><div class="day-label">Day 5</div><div class="day-text">網走 ➔ 層雲峽（大雪山國立公園、雙瀑步道）</div></div>
+      <div class="day-card b"><div class="day-label">Day 6</div><div class="day-text">層雲峽 ➔ 旭川 ➔ 新千歲機場還車 ➔ 返台</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 3.5: Route C -->
+<section class="slide" id="s3-5">
+  <span class="section-num">04 / 07</span>
+  <span class="tag tag-c">路線 C ⭐ NEW! 休閒推薦</span>
+  <div class="slide-title">道南經典：<span class="accent-c">溫泉・洞爺湖・小樽</span></div>
+  <div class="slide-sub">完全避開花田，專注於溫泉美食與港都風情 ｜ 總距離約 450km (最輕鬆)</div>
+  <div class="content-grid">
+    <div>
+      <div class="photo-box">
+        <span style="font-size:8rem;">🎆♨️🍣</span>
+      </div>
+      <p style="font-size:0.8rem;color:#9ca3af;margin-top:12px;text-align:center;">洞爺湖每晚都會施放水上煙火！</p>
+    </div>
+    <div class="info-box">
+      <div class="day-card c"><div class="day-label">Day 1</div><div class="day-text">新千歲機場 ➔ <span class="star">⭐ 登別地獄谷</span> ➔ 登別溫泉街 [住：登別]</div></div>
+      <div class="day-card c"><div class="day-label">Day 2</div><div class="day-text">登別 ➔ 洞爺湖 ➔ 有珠山纜車 ➔ <span class="star">⭐ 夜間湖上花火</span> [住：洞爺湖]</div></div>
+      <div class="day-card c"><div class="day-label">Day 3</div><div class="day-text">洞爺湖 ➔ 二世谷 (羊蹄山名水) ➔ <span class="star">⭐ 小樽運河</span> [住：小樽]</div></div>
+      <div class="day-card c"><div class="day-label">Day 4</div><div class="day-text">小樽三角市場 (海鮮丼) ➔ 堺町通玻璃街 ➔ 札幌 [住：札幌]</div></div>
+      <div class="day-card c"><div class="day-label">Day 5</div><div class="day-text">札幌市區觀光 (白色戀人公園、狸小路購物) [住：札幌]</div></div>
+      <div class="day-card c"><div class="day-label">Day 6</div><div class="day-text">札幌 ➔ 新千歲機場還車 ➔ 返台</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 4: Route Node Maps -->
+<section class="slide" id="s4" style="height:auto;">
+  <span class="section-num">05 / 07</span>
+  <div class="slide-title" style="margin-bottom:8px;">每日行程路線地圖</div>
+  <div class="slide-sub" style="margin-bottom:40px;">互動式地圖（含所有詳細定點）與行程節點</div>
+  
+  <div class="route-map-container">
+    
+    <!-- Route C Map (NEW) -->
+    <div class="route-column route-c">
+      <div style="flex:1;">
+        <div class="route-column-title accent-c">🔆 路線 C：溫泉與小樽（總距約 450km）</div>
+        <div class="timeline">
+          <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><h4>新千歲機場 ➔ 登別 <span class="distance-badge">Day 1</span></h4><p>地獄谷硫磺奇景，泡溫泉放鬆。</p></div></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><h4>登別 ➔ 洞爺湖 <span class="distance-badge">Day 2</span></h4><p>搭乘有珠山纜車，晚上看湖上煙火大會。</p></div></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><h4>洞爺湖 ➔ 小樽 <span class="distance-badge">Day 3</span></h4><p>途經羊蹄山，抵達浪漫的小樽運河。</p></div></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><h4>小樽 ➔ 札幌 <span class="distance-badge">Day 4</span></h4><p>三角市場吃海鮮，下午開往札幌市區。</p></div></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><h4>札幌市區 <span class="distance-badge">Day 5</span></h4><p>白色戀人公園，市區購物與吃美食。</p></div></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><h4>札幌 ➔ 新千歲機場 <span class="distance-badge">Day 6</span></h4><p>輕鬆前往機場還車。</p></div></div>
+        </div>
+      </div>
+      <div style="flex:1.2;">
+        <iframe src="https://maps.google.com/maps?saddr=新千歲機場&daddr=登別地獄谷+to:洞爺湖溫泉+to:小樽運河+to:札幌大通公園+to:新千歲機場&output=embed&hl=zh-TW" width="100%" height="100%" style="border:0; border-radius:14px; min-height:350px;" allowfullscreen="" loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <!-- Route A Map -->
+    <div class="route-column route-a">
+      <div style="flex:1;">
+        <div class="route-column-title accent-a">🅰️ 路線 A：道央花田（總距約 600km）</div>
+        <div class="timeline">
+          <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><h4>新千歲機場 ➔ 札幌 <span class="distance-badge">Day 1</span></h4><p>大通公園參加紫丁香祭、成吉思汗烤肉。</p></div></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><h4>札幌 ➔ 富良野 <span class="distance-badge">Day 2</span></h4><p>起司工房與夢幻森林精靈露台。</p></div></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><h4>富良野 ➔ 美瑛 <span class="distance-badge">Day 3</span></h4><p>青池與四季彩之丘早期花海。</p></div></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><h4>美瑛 ➔ 旭川 ➔ 層雲峽 <span class="distance-badge">Day 4</span></h4><p>旭山動物園、大雪山層雲峽溫泉。</p></div></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><h4>層雲峽 ➔ 千歲市 <span class="distance-badge">Day 5</span></h4><p>銀河流星瀑布，南下回千歲市區。</p></div></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><h4>千歲 ➔ 支笏湖 ➔ 新千歲機場 <span class="distance-badge">Day 6</span></h4><p>支笏湖晨景，機場還車。</p></div></div>
+        </div>
+      </div>
+      <div style="flex:1.2;">
+        <iframe src="https://maps.google.com/maps?saddr=新千歲機場&daddr=大通公園+to:富良野起司工房+to:四季彩之丘+to:旭山動物園+to:層雲峽溫泉+to:支笏湖+to:新千歲機場&output=embed&hl=zh-TW" width="100%" height="100%" style="border:0; border-radius:14px; min-height:350px;" allowfullscreen="" loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <!-- Route B Map -->
+    <div class="route-column route-b">
+      <div style="flex:1;">
+        <div class="route-column-title accent-b">🅱️ 路線 B：道東自然（總距約 900km）</div>
+        <div class="timeline">
+          <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><h4>新千歲機場 ➔ 帶廣 <span class="distance-badge">Day 1</span></h4><p>十勝平原，帶廣豚丼與六花亭。</p></div></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><h4>帶廣 ➔ 釧路 ➔ 阿寒湖 <span class="distance-badge">Day 2</span></h4><p>釧路濕原展望，阿寒湖愛努村。</p></div></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><h4>阿寒湖 ➔ 摩周湖 ➔ 知床 <span class="distance-badge">Day 3</span></h4><p>摩周湖，抵達世界遺產知床宇登呂。</p></div></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><h4>知床 ➔ 網走 <span class="distance-badge">Day 4</span></h4><p>知床五湖，東藻琴芝櫻公園粉紅花海。</p></div></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><h4>網走 ➔ 層雲峽 <span class="distance-badge">Day 5</span></h4><p>開往大雪山層雲峽峽谷泡溫泉。</p></div></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><h4>層雲峽 ➔ 旭川 ➔ 新千歲機場 <span class="distance-badge">Day 6</span></h4><p>經旭川南下回新千歲機場還車。</p></div></div>
+        </div>
+      </div>
+      <div style="flex:1.2;">
+        <iframe src="https://maps.google.com/maps?saddr=新千歲機場&daddr=帶廣車站+to:阿寒湖溫泉+to:知床五湖+to:東藻琴芝櫻公園+to:層雲峽溫泉+to:新千歲機場&output=embed&hl=zh-TW" width="100%" height="100%" style="border:0; border-radius:14px; min-height:350px;" allowfullscreen="" loading="lazy"></iframe>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SLIDE 5: Compare -->
+<section class="slide" id="s5">
+  <span class="section-num">06 / 07</span>
+  <div class="slide-title" style="margin-bottom:24px;">路線綜合比較</div>
+  <table>
+    <thead><tr>
+      <th style="color:#fff;">比較項目</th>
+      <th class="accent-a">🅰️ 路線 A (花田祭典)</th>
+      <th class="accent-b">🅱️ 路線 B (道東大自然)</th>
+      <th class="accent-c">🔆 路線 C (溫泉小樽)</th>
+    </tr></thead>
+    <tbody>
+      <tr><td>五月下旬適合度</td><td>⭐⭐⭐⭐</td><td>⭐⭐⭐⭐⭐</td><td>⭐⭐⭐⭐⭐</td></tr>
+      <tr><td>最大亮點</td><td>紫丁香祭、青池</td><td>芝櫻花海、世界遺產</td><td>洞爺湖煙火、運河夜景</td></tr>
+      <tr><td>駕駛難度與距離</td><td>★★☆ (約 600km)</td><td>★★★ (約 900km)</td><td>★☆☆ (約 450km) <b>最輕鬆</b></td></tr>
+      <tr><td>特色體驗</td><td>看企鵝、賞花</td><td>看棕熊海豚、濕原</td><td>泡溫泉、吃海鮮</td></tr>
+    </tbody>
+  </table>
+  <div class="highlight-box" style="margin-top:32px;">
+    💡 <strong>全新建議：</strong> 如果對花田沒興趣，<strong>路線 C</strong> 是最完美的選擇！不僅開車距離最短、完全不會累，還能體驗北海道最棒的溫泉區（登別、洞爺湖）以及最浪漫的港都（小樽），美食與放鬆兼具！
+  </div>
+</section>
+
+<!-- SLIDE 6: Rental -->
+<section class="slide" id="s6">
+  <span class="section-num">07 / 07</span>
+  <div class="slide-title" style="margin-bottom:24px;color:#34d399;">租車資訊與準備</div>
+  <div class="rental-grid">
+    <div class="rental-card">
+      <h3>🚗 車種建議 (TOCOO!)</h3>
+      <ul>
+        <li><strong>油電車（Hybrid）</strong>：若選路線 B 必選，省油超有感。</li>
+        <li><strong>便宜轎車</strong>：若選路線 C (450km) 非常適合，市區好停車且租金最省！</li>
+        <li><strong>空間考量</strong>：2人同行建議選中型車，後車廂放兩個大行李箱才不擁擠。</li>
+      </ul>
+    </div>
+    <div class="rental-card">
+      <h3>📋 必備選項與文件</h3>
+      <ul>
+        <li>✅ <strong>ETC 卡租借</strong>（¥330/天，上下交流道免排隊）</li>
+        <li>✅ <strong>全險 CDW + 營業損失 NOC</strong>（出門在外保險不能省）</li>
+        <li>✅ <strong>台灣駕照正本</strong> + <strong>日文譯本</strong>（監理所辦理，NT$100）</li>
+        <li>❌ <strong>不需國際駕照</strong></li>
+      </ul>
+    </div>
+    <div class="rental-card" style="grid-column: 1 / -1;">
+      <h3 style="color:#fbbf24;">⚡ 下一步行動清單</h3>
+      <div style="display:flex;gap:40px;margin-top:16px;">
+        <div style="flex:1;">
+          <h4 style="color:#fff;margin-bottom:8px;">1. 決定路線與買機票</h4>
+          <p style="font-size:0.9rem;color:#d1d5db;line-height:1.5;">確定走 A、B 還是 C 後，立刻購買「台北 ↔ 新千歲」來回機票。5月下旬是熱門出遊期，機票價格浮動大。</p>
+        </div>
+        <div style="flex:1;">
+          <h4 style="color:#fff;margin-bottom:8px;">2. 預訂 TOCOO! 租車</h4>
+          <p style="font-size:0.9rem;color:#d1d5db;line-height:1.5;">機票確認後，馬上在 TOCOO! 預訂新千歲機場取還的車輛。</p>
+        </div>
+        <div style="flex:1;">
+          <h4 style="color:#fff;margin-bottom:8px;">3. 辦理日文譯本</h4>
+          <p style="font-size:0.9rem;color:#d1d5db;line-height:1.5;">找時間帶身分證與駕照正本去台灣各區監理所辦理，隨到隨辦，當場取件。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+const slides=['s1','s2','s3','s3-5','s4','s5','s6'];
+const dots=document.querySelectorAll('.nav-dot');
+function goto(i){document.getElementById(slides[i]).scrollIntoView({behavior:'smooth'});dots.forEach((d,j)=>d.classList.toggle('active',i===j));}
+const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){const i=slides.indexOf(e.target.id);if(i>=0){dots.forEach((d,j)=>d.classList.toggle('active',i===j));}}});},{threshold:0.5});
+slides.forEach(id=>{const el=document.getElementById(id);if(el)io.observe(el);});
+</script>
+</body>
+</html>

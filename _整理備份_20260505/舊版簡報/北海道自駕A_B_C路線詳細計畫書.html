@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 北海道自駕 A/B/C 路線詳細計畫書</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700;900&display=swap');
+  :root {
+    --bg: #0f0f1a;
+    --panel: rgba(255, 255, 255, 0.055);
+    --panel-2: rgba(255, 255, 255, 0.085);
+    --border: rgba(255, 255, 255, 0.13);
+    --text: #f3f4f6;
+    --muted: #a7b0c0;
+    --a: #60a5fa;
+    --b: #f472b6;
+    --c: #fbbf24;
+    --ok: #34d399;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; padding-bottom: 80px; }
+  a { color: inherit; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  header {
+    min-height: 58vh;
+    background: linear-gradient(to bottom, rgba(15,15,26,0.15), rgba(15,15,26,0.96)), url('hokkaido_cover.png') center/cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 64px 5%;
+  }
+  h1 { font-size: clamp(2.2rem, 6vw, 4.2rem); font-weight: 900; color: #fff; line-height: 1.08; max-width: 980px; }
+  .subtitle { font-size: 1.15rem; color: #dbe2ee; max-width: 900px; margin-top: 12px; }
+  .tags { display: flex; gap: 10px; margin-top: 22px; flex-wrap: wrap; }
+  .tag { border: 1px solid var(--border); background: rgba(255,255,255,0.08); padding: 7px 14px; border-radius: 99px; font-size: 0.9rem; font-weight: 700; }
+  .tag.a { color: var(--a); border-color: rgba(96,165,250,0.65); background: rgba(96,165,250,0.13); }
+  .tag.b { color: var(--b); border-color: rgba(244,114,182,0.65); background: rgba(244,114,182,0.13); }
+  .tag.c { color: var(--c); border-color: rgba(251,191,36,0.65); background: rgba(251,191,36,0.13); }
+  .container { max-width: 1120px; margin: 0 auto; padding: 42px 5%; }
+  h2 { font-size: 1.9rem; margin: 30px 0 22px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  h3 { font-size: 1.25rem; }
+  .notice { background: rgba(52, 211, 153, 0.11); border: 1px solid rgba(52, 211, 153, 0.35); border-radius: 14px; padding: 18px 20px; color: #d1fae5; margin-bottom: 26px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+  .card h3 { margin-bottom: 10px; }
+  .card ul { list-style: none; display: grid; gap: 8px; }
+  .card li { color: #d4dbe8; padding-left: 18px; position: relative; }
+  .card li::before { content: '›'; position: absolute; left: 0; color: var(--c); font-weight: 900; }
+  .route-tabs { display: flex; gap: 10px; flex-wrap: wrap; position: sticky; top: 0; z-index: 20; background: rgba(15,15,26,0.92); backdrop-filter: blur(12px); padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .route-tabs a { padding: 9px 14px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.06); font-weight: 700; font-size: 0.92rem; }
+  .route-section { margin: 46px 0 70px; }
+  .route-head { border-radius: 18px; padding: 24px; border: 1px solid var(--border); background: var(--panel); display: grid; gap: 10px; }
+  .route-head.a { border-left: 6px solid var(--a); }
+  .route-head.b { border-left: 6px solid var(--b); }
+  .route-head.c { border-left: 6px solid var(--c); }
+  .route-head p { color: var(--muted); }
+  .summary-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.08); border: 1px solid var(--border); border-radius: 99px; padding: 6px 12px; color: #dbe2ee; font-size: 0.86rem; }
+  .map-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 38px; padding: 8px 13px; border-radius: 9px; background: rgba(255,255,255,0.09); border: 1px solid var(--border); color: #fff; font-weight: 700; font-size: 0.88rem; }
+  .btn.primary { background: rgba(251,191,36,0.18); border-color: rgba(251,191,36,0.45); color: #fde68a; }
+  iframe { width: 100%; height: 390px; border: 0; border-radius: 14px; background: #202434; margin-top: 16px; }
+  .day { margin-top: 18px; border: 1px solid var(--border); border-radius: 18px; overflow: hidden; background: rgba(255,255,255,0.025); }
+  .day-title { padding: 18px 22px; background: rgba(255,255,255,0.065); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+  .day-title strong { color: #fff; font-size: 1.08rem; }
+  .day-title span { color: var(--muted); font-size: 0.9rem; }
+  .day-body { padding: 20px 22px; display: grid; gap: 14px; }
+  .plan-line { display: grid; grid-template-columns: 72px 1fr; gap: 16px; }
+  .time { color: #93c5fd; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 700; text-align: right; }
+  .desc { background: var(--panel); border-left: 4px solid var(--c); border-radius: 10px; padding: 13px 15px; }
+  .desc h4 { color: #fff; margin-bottom: 4px; font-size: 1rem; }
+  .desc p { color: var(--muted); font-size: 0.92rem; }
+  .stay { background: rgba(96,165,250,0.1); border: 1px solid rgba(96,165,250,0.3); border-radius: 12px; padding: 14px 16px; color: #dbeafe; }
+  .stay strong { color: #bfdbfe; }
+  .stay-title { display: block; color: #bfdbfe; font-weight: 900; margin-bottom: 8px; }
+  .hotel-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 10px; margin-top: 12px; }
+  .hotel { background: rgba(15,15,26,0.36); border: 1px solid rgba(191,219,254,0.18); border-radius: 10px; padding: 10px 12px; }
+  .hotel b { display: block; color: #fff; margin-bottom: 4px; font-size: 0.94rem; }
+  .hotel p { color: #c7d2fe; font-size: 0.84rem; margin-bottom: 8px; }
+  .special-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 16px; }
+  .spot { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
+  .spot h4 { margin-bottom: 8px; }
+  .spot p { color: var(--muted); font-size: 0.9rem; margin-bottom: 9px; }
+  .links { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .mini-link { color: #dbeafe; background: rgba(96,165,250,0.12); border: 1px solid rgba(96,165,250,0.26); border-radius: 8px; padding: 5px 8px; font-size: 0.82rem; font-weight: 700; }
+  table { width: 100%; border-collapse: collapse; overflow: hidden; border-radius: 14px; border: 1px solid var(--border); background: var(--panel); }
+  th, td { border-bottom: 1px solid var(--border); padding: 13px 14px; vertical-align: top; text-align: left; font-size: 0.92rem; }
+  th { background: rgba(255,255,255,0.08); color: #fff; }
+  tr:last-child td { border-bottom: 0; }
+  td { color: #d7dde8; }
+  .price-note { color: var(--muted); font-size: 0.88rem; margin: 10px 0 18px; }
+  .source { color: #cbd5e1; font-size: 0.86rem; margin-top: 20px; }
+  .source a { color: #bfdbfe; text-decoration: underline; }
+  @media (max-width: 720px) {
+    header { min-height: 52vh; padding: 44px 5%; }
+    .container { padding-top: 28px; }
+    .route-tabs { position: static; }
+    .plan-line { grid-template-columns: 1fr; gap: 8px; }
+    .time { text-align: left; }
+    th, td { font-size: 0.85rem; padding: 10px; }
+    iframe { height: 320px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>2026 北海道自駕 A/B/C 路線詳細計畫書</h1>
+  <p class="subtitle">6天5夜 ｜ 新千歲機場進出 ｜ A 道央花田、B 道東自然、C 道南溫泉小樽。每條路線含每日安排、住宿建議、Google Maps、費用估算與網友介紹連結。</p>
+  <div class="tags">
+    <span class="tag a">路線 A：札幌 × 富良野美瑛</span>
+    <span class="tag b">路線 B：道東 × 知床芝櫻</span>
+    <span class="tag c">路線 C：登別 × 洞爺湖 × 小樽</span>
+  </div>
+</header>
+
+<div class="container">
+  <div class="notice">
+    <strong>更新基準：</strong>本檔依 2026 年 4 月 27 日可查到的公開資訊整理。飯店價格是 5 月下旬常見區間估算，實際會受日期、房型、是否含早晚餐與取消條款影響；訂房前請再點官方或 Google Maps 確認。
+  </div>
+
+  <nav class="route-tabs">
+    <a href="#compare">先看總比較</a>
+    <a href="#route-a">路線 A 詳細</a>
+    <a href="#route-b">路線 B 詳細</a>
+    <a href="#route-c">路線 C 詳細</a>
+    <a href="#budget">總費用比較</a>
+  </nav>
+
+  <h2 id="compare">三條路線先比較</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>項目</th>
+        <th>路線 A：道央花田祭典</th>
+        <th>路線 B：道東自然知床</th>
+        <th>路線 C：道南溫泉小樽</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>適合對象</td>
+        <td>第一次玩北海道、想看花田與城市活動</td>
+        <td>想看壯闊自然、可接受每天開比較久</td>
+        <td>想放鬆泡溫泉、吃海鮮、駕駛壓力最低</td>
+      </tr>
+      <tr>
+        <td>總駕駛距離</td>
+        <td>約 600-700 km</td>
+        <td>約 1,050-1,150 km，最硬</td>
+        <td>約 450-520 km，最輕鬆</td>
+      </tr>
+      <tr>
+        <td>2026 五月亮點</td>
+        <td>札幌紫丁香祭 5/20-5/31、青池、美瑛丘陵</td>
+        <td>東藻琴芝櫻 5月上旬-6月上旬、知床五湖</td>
+        <td>洞爺湖煙火 4/28-10/31、登別溫泉、小樽夜景</td>
+      </tr>
+      <tr>
+        <td>住宿型態</td>
+        <td>市區飯店＋富良野/美瑛民宿＋層雲峽溫泉</td>
+        <td>商務飯店＋阿寒/知床/層雲峽溫泉</td>
+        <td>溫泉旅館＋小樽運河飯店＋札幌市區飯店</td>
+      </tr>
+      <tr>
+        <td>我的建議</td>
+        <td>想要景色均衡就選 A</td>
+        <td>旅伴都能接受拉車再選 B</td>
+        <td>親友旅行、想舒服，優先選 C</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>行前與租車共同準備</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>租車設定</h3>
+      <ul>
+        <li>取還：新千歲機場同點取還，免甲地乙還。</li>
+        <li>車型：A/C 可用小型或中型轎車；B 建議油電中型車，長距離省油且比較穩。</li>
+        <li>必選：ETC 卡、免責補償 CDW、NOC 營業損失補償。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>必備文件</h3>
+      <ul>
+        <li>護照、台灣駕照正本、駕照日文譯本。</li>
+        <li>不需要國際駕照；日本租車櫃檯通常看台灣駕照＋日文譯本。</li>
+        <li>導航請同時準備手機 Google Maps 與車機 MAPCODE/電話號碼。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>五月下旬衣物</h3>
+      <ul>
+        <li>札幌/小樽白天約舒適，夜晚湖邊與道東會冷。</li>
+        <li>帶防風外套、薄羽絨或刷毛、好走防水鞋。</li>
+        <li>道東、知床、層雲峽早晚溫差更明顯。</li>
+      </ul>
+    </div>
+  </div>
+
+  <section class="route-section" id="route-a">
+    <div class="route-head a">
+      <span class="tag a">路線 A</span>
+      <h2 style="margin:0;border:0;padding:0;">道央花田與札幌祭典：札幌・富良野・美瑛・旭川・層雲峽</h2>
+      <p>這條是「第一次北海道」最均衡的路線。5 月下旬剛好接札幌紫丁香祭，富良野薰衣草還不是主季，但美瑛丘陵、青池、四季彩之丘與旭山動物園都很適合排入。</p>
+      <div class="summary-row">
+        <span class="pill">總距離約 600-700 km</span>
+        <span class="pill">住宿：札幌 1、富良野 1、美瑛/旭川 1、層雲峽 1、千歲 1</span>
+        <span class="pill">景點門票：約 ¥3,000-¥5,500/人</span>
+      </div>
+      <div class="map-actions">
+        <a class="btn primary" href="https://www.google.com/maps/dir/?api=1&origin=New+Chitose+Airport&destination=New+Chitose+Airport&waypoints=Odori+Park%7CFurano+Cheese+Factory%7CNingle+Terrace%7CShikisai+No+Oka%7CShirogane+Blue+Pond%7CAsahiyama+Zoo%7CSounkyo+Onsen%7CLake+Shikotsu" target="_blank">開啟 Google Maps 路線 A</a>
+      </div>
+      <iframe src="https://maps.google.com/maps?saddr=新千歲機場&daddr=大通公園+to:富良野起司工房+to:森林精靈陽台+to:四季彩之丘+to:白金青池+to:旭山動物園+to:層雲峽溫泉+to:支笏湖+to:新千歲機場&output=embed&hl=zh-TW" loading="lazy" allowfullscreen></iframe>
+    </div>
+
+    <div class="day">
+      <div class="day-title"><strong>Day 1：新千歲機場 → 札幌</strong><span>約 55 km / 1 小時</span></div>
+      <div class="day-body">
+        <div class="plan-line"><div class="time">15:00</div><div class="desc"><h4>抵達新千歲機場，取車</h4><p>先設定 Google Maps 與車機導航，第一天只開到札幌，避免剛下飛機就長途駕駛。</p></div></div>
+        <div class="plan-line"><div class="time">17:00</div><div class="desc"><h4>大通公園・札幌紫丁香祭</h4><p>2026 大通會場為 5/20-5/31，入場免費。適合傍晚散步，順路吃活動攤位或到薄野晚餐。</p></div></div>
+        <div class="stay"><span class="stay-title">住宿建議：札幌車站 / 大通周邊</span>選這區是因為餐廳多、隔天出城方便，初日抵達後也不用再拉車。預估 ¥18,000-¥38,000/雙人房；停車多為另付約 ¥1,500-¥2,500/晚，訂房時要確認是否可預約車位。
+          <div class="hotel-list">
+            <div class="hotel"><b>Cross Hotel Sapporo</b><p>位置在札幌站與大通中間，適合第一晚快速進城、晚上步行吃飯。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Cross+Hotel+Sapporo" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>JR Inn Sapporo</b><p>靠近札幌站，價格通常較穩，隔天開車離開市區也順。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=JR+Inn+Sapporo" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>Richmond Hotel Sapporo Odori</b><p>靠大通與狸小路，晚餐、藥妝和便利商店密度高。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Richmond+Hotel+Sapporo+Odori" target="_blank">Google Maps</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-title"><strong>Day 2：札幌 → 富良野</strong><span>約 120 km / 2.5 小時</span></div>
+      <div class="day-body">
+        <div class="plan-line"><div class="time">09:00</div><div class="desc"><h4>札幌出發，前往富良野</h4><p>中途可在砂川休息站補給。富良野市區停車較容易，餐廳集中。</p></div></div>
+        <div class="plan-line"><div class="time">12:30</div><div class="desc"><h4>富良野起司工房</h4><p>可吃披薩、冰淇淋，作為午後輕鬆景點。費用以餐飲消費為主。</p></div></div>
+        <div class="plan-line"><div class="time">16:00</div><div class="desc"><h4>森林精靈陽台 Ningle Terrace</h4><p>木屋小店與森林步道很適合傍晚，建議不要排太趕。</p></div></div>
+        <div class="stay"><span class="stay-title">住宿建議：富良野市區 / 新富良野王子飯店</span>市區飯店較省，晚餐選擇較多；住新富良野王子飯店則可直接逛森林精靈陽台，行程最順但價格較高。預估 ¥16,000-¥40,000/雙人房。
+          <div class="hotel-list">
+            <div class="hotel"><b>Shin Furano Prince Hotel</b><p>森林精靈陽台旁，適合想把 Day 2 傍晚安排得輕鬆的人。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Shin+Furano+Prince+Hotel" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>La Vista Furano Hills</b><p>靠富良野站，常見評價重點是交通方便、有大浴場。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=La+Vista+Furano+Hills" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>Furano Natulux Hotel</b><p>富良野站前型住宿，適合重視晚餐與補給方便。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Furano+Natulux+Hotel" target="_blank">Google Maps</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-title"><strong>Day 3：富良野 → 美瑛 → 旭川/美瑛</strong><span>約 90 km / 分段移動</span></div>
+      <div class="day-body">
+        <div class="plan-line"><div class="time">09:30</div><div class="desc"><h4>四季彩之丘</h4><p>5 月營業約 8:40-17:00。官方入場料主要為 7-9 月收費，5 月多以停車、園內車與アルパカ牧場等消費為主，現場以公告為準。</p></div></div>
+        <div class="plan-line"><div class="time">13:30</div><div class="desc"><h4>白金青池與白鬚瀑布</h4><p>青池免費，停車約 ¥500。陰天也有冷調藍色，雨後可能混濁，建議早上看天氣決定順序。</p></div></div>
+        <div class="stay"><span class="stay-title">住宿建議：旭川站前，或美瑛民宿</span>想清晨拍美瑛丘陵住美瑛；想吃飯與停車方便住旭川站前。因 Day 4 要去旭山動物園，旭川站前是比較穩的選擇。預估 ¥14,000-¥30,000/雙人房。
+          <div class="hotel-list">
+            <div class="hotel"><b>Hotel WBF Grande Asahikawa</b><p>站前交通方便，適合隔天往旭山動物園與層雲峽移動。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Hotel+WBF+Grande+Asahikawa" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>JR Inn Asahikawa</b><p>與車站、商場連結好，餐廳和採買都省時間。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=JR+Inn+Asahikawa" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>Hotel Lavenir Biei</b><p>若重視美瑛清晨攝影，可改住美瑛站附近。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Hotel+Lavenir+Biei" target="_blank">Google Maps</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-title"><strong>Day 4：旭川 → 旭山動物園 → 層雲峽</strong><span>約 90 km / 2 小時</span></div>
+      <div class="day-body">
+        <div class="plan-line"><div class="time">09:30</div><div class="desc"><h4>旭山動物園</h4><p>2026 官方成人入園 ¥1,000，中學生以下免費。重點是企鵝館、海豹館、北極熊館的行動展示。</p></div></div>
+        <div class="plan-line"><div class="time">15:30</div><div class="desc"><h4>開往層雲峽溫泉</h4><p>進入大雪山國立公園，晚上住溫泉旅館，讓這天不用再回札幌。</p></div></div>
+        <div class="stay"><span class="stay-title">住宿建議：層雲峽溫泉區</span>山區晚餐選擇少，建議直接訂含早晚餐方案。住這裡的目的不是豪華市區飯店，而是把長距離切開、晚上泡溫泉。預估 ¥28,000-¥60,000/雙人含早晚餐。
+          <div class="hotel-list">
+            <div class="hotel"><b>Sounkyo Kanko Hotel</b><p>房型選擇多，價格通常比高級溫泉旅館好入手。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Sounkyo+Kanko+Hotel" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>Choyo Resort Hotel / 朝陽亭</b><p>溫泉感較完整，適合想把層雲峽當放鬆夜的人。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Choyo+Resort+Hotel+Sounkyo" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>Sounkaku Grand Hotel</b><p>層雲峽老牌住宿，適合比較價格與含餐方案。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Sounkaku+Grand+Hotel" target="_blank">Google Maps</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-title"><strong>Day 5：層雲峽 → 銀河流星瀑布 → 千歲</strong><span>約 210 km / 3.5 小時</span></div>
+      <div class="day-body">
+        <div class="plan-line"><div class="time">09:00</div><div class="desc"><h4>銀河・流星瀑布</h4><p>免費景點，停留 30-45 分鐘。若天氣好可加排黑岳纜車，但會壓縮回程時間。</p></div></div>
+        <div class="plan-line"><div class="time">13:00</div><div class="desc"><h4>南下千歲市</h4><p>最後一晚住千歲，可降低 Day 6 趕飛機風險。</p></div></div>
+        <div class="stay"><span class="stay-title">住宿建議：千歲站周邊</span>最後一晚住千歲可降低 Day 6 趕飛機風險。千歲住宿以商務飯店為主，重點是停車、早餐時間、離加油站與租車公司近。預估 ¥12,000-¥24,000/雙人房。
+          <div class="hotel-list">
+            <div class="hotel"><b>JR Inn Chitose</b><p>千歲站旁，適合隔天早上快速出發到支笏湖或機場。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=JR+Inn+Chitose" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>Best Western Plus Hotel Fino Chitose</b><p>房價常相對穩，適合作為機場前一晚住宿。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Best+Western+Plus+Hotel+Fino+Chitose" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>ANA Crowne Plaza Chitose</b><p>房間與設施較完整，若想住舒服一點可看這間。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=ANA+Crowne+Plaza+Chitose" target="_blank">Google Maps</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-title"><strong>Day 6：千歲 → 支笏湖 → 新千歲機場</strong><span>約 65 km / 1.5 小時</span></div>
+      <div class="day-body">
+        <div class="plan-line"><div class="time">09:00</div><div class="desc"><h4>支笏湖晨間散步</h4><p>若班機較早可略過。支笏湖免費，停車場可能收費，湖景清澈安靜。</p></div></div>
+        <div class="plan-line"><div class="time">12:00</div><div class="desc"><h4>加滿油、還車、機場採買</h4><p>新千歲機場國內線很好逛，拉麵道場、ROYCE、伴手禮可留 2 小時。</p></div></div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:24px;">路線 A 特別景點與網友介紹</h3>
+    <div class="special-grid">
+      <div class="spot"><h4>札幌紫丁香祭</h4><p>大通公園約 400 本紫丁香，搭配音樂、北海道酒食與市集。2026 大通會場 5/20-5/31，入場免費。</p><div class="links"><a class="mini-link" href="https://www.sapporo.travel/lilacfes/" target="_blank">官方</a><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Odori+Park+Sapporo" target="_blank">地圖</a><a class="mini-link" href="https://www.toretabi.jp/event/entry-25063.html" target="_blank">網友/媒體介紹</a></div></div>
+      <div class="spot"><h4>四季彩之丘</h4><p>美瑛代表花田。5 月花量不如 7-9 月，但丘陵視野很好，適合和青池排同一天。</p><div class="links"><a class="mini-link" href="https://www.shikisainooka.jp/about/guide/" target="_blank">官方</a><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Shikisai+No+Oka" target="_blank">地圖</a><a class="mini-link" href="https://www.visit-hokkaido.jp/tw/spot/detail_10136.html" target="_blank">介紹</a></div></div>
+      <div class="spot"><h4>旭山動物園</h4><p>不是大型豪華動物園，而是以「行動展示」聞名，看動物自然活動的角度很好。</p><div class="links"><a class="mini-link" href="https://www.city.asahikawa.hokkaido.jp/asahiyamazoo/generalinformation/d052849.html" target="_blank">官方票價</a><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Asahiyama+Zoo" target="_blank">地圖</a><a class="mini-link" href="https://activityjapan.com/product/22061" target="_blank">網友評價</a></div></div>
+    </div>
+  </section>
+
+  <section class="route-section" id="route-b">
+    <div class="route-head b">
+      <span class="tag b">路線 B</span>
+      <h2 style="margin:0;border:0;padding:0;">道東自然大景：帶廣・釧路・阿寒湖・摩周湖・知床・網走</h2>
+      <p>這條最壯觀，但也最吃體力。適合真的想看知床、芝櫻、湖泊、濕原的人；每天都要早出發，晚餐盡量訂住宿含餐。</p>
+      <div class="summary-row">
+        <span class="pill">總距離約 1,050-1,150 km</span>
+        <span class="pill">住宿：帶廣 1、阿寒湖 1、知床 1、網走 1、層雲峽 1</span>
+        <span class="pill">景點門票：約 ¥5,000-¥10,000/人，不含導覽</span>
+      </div>
+      <div class="map-actions">
+        <a class="btn primary" href="https://www.google.com/maps/dir/?api=1&origin=New+Chitose+Airport&destination=New+Chitose+Airport&waypoints=Obihiro+Station%7CKushiro+Marsh+Observatory%7CLake+Akan%7CLake+Mashu+Observation+Deck%7CShiretoko+Five+Lakes%7CHigashimokoto+Shibazakura+Park%7CAbashiri+Station%7CSounkyo+Onsen" target="_blank">開啟 Google Maps 路線 B</a>
+      </div>
+      <iframe src="https://maps.google.com/maps?saddr=新千歲機場&daddr=帶廣車站+to:釧路濕原展望台+to:阿寒湖溫泉+to:摩周湖第一展望台+to:知床五湖+to:東藻琴芝櫻公園+to:網走車站+to:層雲峽溫泉+to:新千歲機場&output=embed&hl=zh-TW" loading="lazy" allowfullscreen></iframe>
+    </div>
+
+    <div class="day">
+      <div class="day-title"><strong>Day 1：新千歲機場 → 帶廣</strong><span>約 155 km / 2.5 小時</span></div>
+      <div class="day-body">
+        <div class="plan-line"><div class="time">15:00</div><div class="desc"><h4>取車後直奔帶廣</h4><p>今日只安排移動與晚餐，讓後面道東行程更順。</p></div></div>
+        <div class="plan-line"><div class="time">18:30</div><div class="desc"><h4>帶廣豚丼・六花亭本店</h4><p>帶廣是十勝豚丼代表地，晚餐選豚丼名店，甜點可排六花亭或柳月。</p></div></div>
+        <div class="stay"><span class="stay-title">住宿建議：帶廣站前</span>第一天抵達時間不早，住站前可以快速吃豚丼、補給與休息。帶廣飯店通常比溫泉區便宜，重點看停車場是否可用。預估 ¥12,000-¥24,000/雙人房。
+          <div class="hotel-list">
+            <div class="hotel"><b>Richmond Hotel Obihiro Ekimae</b><p>站前位置好，適合第一晚晚到、隔天早出發。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Richmond+Hotel+Obihiro+Ekimae" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>Hotel Nikko Northland Obihiro</b><p>帶廣站旁，房間與服務穩，適合不想冒險的選擇。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Hotel+Nikko+Northland+Obihiro" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>Dormy Inn Obihiro</b><p>有大浴場與宵夜拉麵，長途自駕後比較舒服。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Dormy+Inn+Obihiro" target="_blank">Google Maps</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-title"><strong>Day 2：帶廣 → 釧路濕原 → 阿寒湖</strong><span>約 210 km / 4 小時</span></div>
+      <div class="day-body">
+        <div class="plan-line"><div class="time">08:30</div><div class="desc"><h4>開往釧路濕原展望台</h4><p>可走展望步道，濕原尺度很大，天氣清楚時視野最佳。</p></div></div>
+        <div class="plan-line"><div class="time">14:30</div><div class="desc"><h4>阿寒湖溫泉街</h4><p>可逛愛努村、湖邊散步。若時間足夠搭阿寒湖遊覽船，船票依官方公告約 ¥2,000 級距。</p></div></div>
+        <div class="stay"><span class="stay-title">住宿建議：阿寒湖湖畔溫泉旅館</span>阿寒湖晚上餐廳不多，建議訂含早晚餐。住湖畔的價值在於湖景、溫泉和晚餐一次解決。預估 ¥35,000-¥80,000/雙人含早晚餐。
+          <div class="hotel-list">
+            <div class="hotel"><b>Akan Yuku no Sato Tsuruga</b><p>阿寒湖代表高級溫泉旅館，適合重視溫泉與餐食。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Akan+Yuku+no+Sato+Tsuruga" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>Akan Tsuruga Wings</b><p>同屬鶴雅系，常可和遊久之里比較價格與房型。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Akan+Tsuruga+Wings" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>New Akan Hotel</b><p>價格相對好入手，天空露天風呂是常見亮點。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=New+Akan+Hotel" target="_blank">Google Maps</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-title"><strong>Day 3：阿寒湖 → 摩周湖 → 知床宇登呂</strong><span>約 180 km / 3.5 小時</span></div>
+      <div class="day-body">
+        <div class="plan-line"><div class="time">09:00</div><div class="desc"><h4>摩周湖第一展望台</h4><p>免費景點，若遇霧也算摩周湖名物。可加排硫磺山或川湯溫泉足湯。</p></div></div>
+        <div class="plan-line"><div class="time">15:30</div><div class="desc"><h4>抵達知床宇登呂</h4><p>路線很美但距離長，黃昏前抵達較安全。晚上泡溫泉、吃飯店晚餐。</p></div></div>
+        <div class="stay"><span class="stay-title">住宿建議：知床宇登呂溫泉區</span>一定要住宇登呂，隔天去知床五湖最近，也比較容易銜接觀光船或夕陽景點。建議含早晚餐，餐廳選擇有限。預估 ¥40,000-¥95,000/雙人含早晚餐。
+          <div class="hotel-list">
+            <div class="hotel"><b>Kitakobushi Shiretoko Hotel & Resort</b><p>位置、景觀和設施都強，預算夠時優先看。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Kitakobushi+Shiretoko+Hotel+and+Resort" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>KIKI Shiretoko Natural Resort</b><p>親子與休閒感較強，適合想住得輕鬆一點。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=KIKI+Shiretoko+Natural+Resort" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>Shiretoko Daiichi Hotel</b><p>大型溫泉飯店，常見賣點是自助餐與大浴場。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Shiretoko+Daiichi+Hotel" target="_blank">Google Maps</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-title"><strong>Day 4：知床五湖 → 東藻琴芝櫻 → 網走</strong><span>約 150 km / 3 小時</span></div>
+      <div class="day-body">
+        <div class="plan-line"><div class="time">08:30</div><div class="desc"><h4>知床五湖高架木道</h4><p>高架木道全長約 800m，官方說開園期間免費且不受棕熊出沒影響。若要走地上遊步道，5/10-7/31 是棕熊活動期，需要參加認證嚮導團。</p></div></div>
+        <div class="plan-line"><div class="time">13:30</div><div class="desc"><h4>東藻琴芝櫻公園</h4><p>5 月上旬至 6 月上旬是重點花期，粉紅鳥居與整片芝櫻山坡是道東最大亮點。官方參考入園：大人 ¥500、小人 ¥250。</p></div></div>
+        <div class="stay"><span class="stay-title">住宿建議：網走站前 / 網走湖畔</span>想省預算與晚餐方便住網走站前；想延續溫泉度假感住網走湖畔。預估 ¥14,000-¥48,000/雙人房，湖畔溫泉型會更高。
+          <div class="hotel-list">
+            <div class="hotel"><b>Dormy Inn Abashiri</b><p>站前與市區機能好，有大浴場，適合隔天長途前一晚。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Dormy+Inn+Abashiri" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>Hotel Route Inn Abashiri Ekimae</b><p>車站旁商務飯店，價格通常較好抓。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Hotel+Route+Inn+Abashiri+Ekimae" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>Hokuten no Oka Abashiriko Tsuruga Resort</b><p>網走湖畔高級溫泉型，適合想把道東住宿升級的人。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Hokuten+no+Oka+Abashiriko+Tsuruga+Resort" target="_blank">Google Maps</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-title"><strong>Day 5：網走 → 層雲峽</strong><span>約 210 km / 3.5 小時</span></div>
+      <div class="day-body">
+        <div class="plan-line"><div class="time">09:00</div><div class="desc"><h4>網走監獄博物館或天都山</h4><p>上午只選一個景點，避免抵達層雲峽太晚。博物館需門票，天都山展望視天氣決定。</p></div></div>
+        <div class="plan-line"><div class="time">13:00</div><div class="desc"><h4>開往層雲峽溫泉</h4><p>長途山路日，務必在市區先加油。晚上住溫泉旅館恢復體力。</p></div></div>
+        <div class="stay"><span class="stay-title">住宿建議：層雲峽溫泉區</span>路線 B 這天從網走開過來，晚上不要再找餐廳，直接訂含早晚餐的溫泉飯店。預估 ¥28,000-¥60,000/雙人含早晚餐。
+          <div class="hotel-list">
+            <div class="hotel"><b>Sounkyo Kanko Hotel</b><p>預算較好控制，適合作為道東回程中繼住宿。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Sounkyo+Kanko+Hotel" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>Choyo Resort Hotel / 朝陽亭</b><p>想泡溫泉、吃飯店晚餐可優先比較這區房價。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Choyo+Resort+Hotel+Sounkyo" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>Sounkaku Grand Hotel</b><p>位置在溫泉區內，適合與其他層雲峽旅館比價。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Sounkaku+Grand+Hotel" target="_blank">Google Maps</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-title"><strong>Day 6：層雲峽 → 旭川 → 新千歲機場</strong><span>約 230 km / 3.5-4 小時</span></div>
+      <div class="day-body">
+        <div class="plan-line"><div class="time">08:30</div><div class="desc"><h4>直接南下回新千歲</h4><p>這天不建議排大景點，只保留休息站與機場時間。若晚班機，可在旭川簡短午餐。</p></div></div>
+        <div class="plan-line"><div class="time">13:30</div><div class="desc"><h4>還車與機場採買</h4><p>路線 B 最怕最後一天太趕，建議班機抓下午 16:00 後。</p></div></div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:24px;">路線 B 特別景點與網友介紹</h3>
+    <div class="special-grid">
+      <div class="spot"><h4>知床五湖</h4><p>高架木道免費、好走且可看一湖與知床連山；想深入五湖需看季節規定與導覽名額。</p><div class="links"><a class="mini-link" href="https://www.goko.go.jp/elevated_wooden_path.html" target="_blank">官方高架木道</a><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Shiretoko+Five+Lakes" target="_blank">地圖</a><a class="mini-link" href="https://lantoko.com/" target="_blank">中文嚮導/網友評價</a></div></div>
+      <div class="spot"><h4>東藻琴芝櫻公園</h4><p>北海道代表芝櫻景點，10 公頃山坡變粉紅地毯，粉紅鳥居是拍照重點。</p><div class="links"><a class="mini-link" href="https://www.pref.hokkaido.lg.jp/kn/tkn/hana/place/o044.html" target="_blank">官方/道廳資料</a><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Higashimokoto+Shibazakura+Park" target="_blank">地圖</a><a class="mini-link" href="https://vialife.tw/2205/" target="_blank">網友部落格</a></div></div>
+      <div class="spot"><h4>阿寒湖與愛努村</h4><p>道東溫泉與愛努文化重點，晚上可逛商店街，住湖邊旅館體驗完整。</p><div class="links"><a class="mini-link" href="https://www.lake-akan.com/" target="_blank">官方觀光</a><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Lake+Akan+Ainu+Kotan" target="_blank">地圖</a><a class="mini-link" href="https://www.visit-hokkaido.jp/tw/spot/detail_10212.html" target="_blank">介紹</a></div></div>
+    </div>
+  </section>
+
+  <section class="route-section" id="route-c">
+    <div class="route-head c">
+      <span class="tag c">路線 C：休閒推薦</span>
+      <h2 style="margin:0;border:0;padding:0;">道南溫泉與港都：登別・洞爺湖・小樽・札幌</h2>
+      <p>這是最舒服的方案：拉車短、溫泉多、晚餐不用煩惱，還有 2026/4/28-10/31 每晚 20:45 的洞爺湖長跑煙火。若同行有長輩或不想每天趕路，選這條。</p>
+      <div class="summary-row">
+        <span class="pill">總距離約 450-520 km</span>
+        <span class="pill">住宿：登別 1、洞爺湖 1、小樽 1、札幌 2</span>
+        <span class="pill">景點門票：約 ¥4,500-¥8,000/人</span>
+      </div>
+      <div class="map-actions">
+        <a class="btn primary" href="https://www.google.com/maps/dir/?api=1&origin=New+Chitose+Airport&destination=New+Chitose+Airport&waypoints=Noboribetsu+Jigokudani%7CLake+Toya+Onsen%7CUsuzan+Ropeway%7CKyogoku+Fukidashi+Park%7COtaru+Canal%7CSankaku+Market%7COdori+Park+Sapporo%7CShiroi+Koibito+Park" target="_blank">開啟 Google Maps 路線 C</a>
+      </div>
+      <iframe src="https://maps.google.com/maps?saddr=新千歲機場&daddr=登別地獄谷+to:洞爺湖溫泉+to:有珠山纜車+to:京極吹出公園+to:小樽運河+to:小樽三角市場+to:札幌大通公園+to:白色戀人公園+to:新千歲機場&output=embed&hl=zh-TW" loading="lazy" allowfullscreen></iframe>
+    </div>
+
+    <div class="day">
+      <div class="day-title"><strong>Day 1：新千歲機場 → 登別溫泉</strong><span>約 75 km / 1 小時</span></div>
+      <div class="day-body">
+        <div class="plan-line"><div class="time">15:00</div><div class="desc"><h4>抵達新千歲機場，辦理租車</h4><p>第一天路線單純，適合熟悉右駕。若抵達時間較晚，地獄谷可改成隔天早上。</p></div></div>
+        <div class="plan-line"><div class="time">17:20</div><div class="desc"><h4>登別地獄谷散步</h4><p>免費參觀。火山噴氣、硫磺味與荒涼地貌很有記憶點，步道一圈約 20-40 分鐘。</p></div></div>
+        <div class="stay"><span class="stay-title">住宿建議：登別溫泉街</span>選登別是為了多泉質大浴場與含早晚餐，第一天抵達後不用再找餐廳。若想逛溫泉街與地獄谷，位置比房間新舊更重要。預估 ¥35,000-¥80,000/雙人含早晚餐。
+          <div class="hotel-list">
+            <div class="hotel"><b>Dai-ichi Takimotokan / 第一瀧本館</b><p>登別代表大型溫泉旅館，浴場規模大，適合第一次住登別。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Dai-ichi+Takimotokan" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>Noboribetsu Manseikaku</b><p>價格常比頂級旅館好入手，適合重視預算與位置。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Noboribetsu+Manseikaku" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>Noboribetsu Grand Hotel</b><p>老牌溫泉飯店，適合想要完整飯店晚餐與大浴場的人。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Noboribetsu+Grand+Hotel" target="_blank">Google Maps</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-title"><strong>Day 2：登別 → 有珠山 → 洞爺湖</strong><span>約 70 km / 分段移動</span></div>
+      <div class="day-body">
+        <div class="plan-line"><div class="time">10:00</div><div class="desc"><h4>有珠山纜車與昭和新山</h4><p>官方成人往復 ¥2,000、小學生 ¥1,000。山頂可看洞爺湖、昭和新山與火山地形，停留約 60-90 分鐘。</p></div></div>
+        <div class="plan-line"><div class="time">15:00</div><div class="desc"><h4>洞爺湖溫泉街與湖畔散步</h4><p>入住後先確認房間或湖畔看煙火角度。晚餐建議選飯店自助餐或會席。</p></div></div>
+        <div class="plan-line"><div class="time">20:45</div><div class="desc"><h4>洞爺湖 Long Run 花火大會</h4><p>2026/4/28-10/31 每晚 20:45 約 20 分鐘，官方公告雨天照常、風向風速不穩可能中止。湖景房或湖畔都能看。</p></div></div>
+        <div class="stay"><span class="stay-title">住宿建議：洞爺湖湖景房優先</span>這晚的核心是 20:45 湖上煙火，湖景房或至少湖畔飯店會讓體驗差很多。訂房時確認房型是否「湖側」以及晚餐時間是否會卡到煙火。預估 ¥40,000-¥95,000/雙人含早晚餐。
+          <div class="hotel-list">
+            <div class="hotel"><b>The Lake View Toya Nonokaze Resort</b><p>湖景與煙火體驗最佳候選，預算夠時優先看。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=The+Lake+View+Toya+Nonokaze+Resort" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>Toyako Manseikaku Hotel Lakeside Terrace</b><p>湖畔大型飯店，房價與房型選擇較多。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Toyako+Manseikaku+Hotel+Lakeside+Terrace" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>Toya Kohantei Hotel</b><p>湖畔位置清楚，適合想控制預算又想看煙火的人。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Toya+Kohantei+Hotel" target="_blank">Google Maps</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-title"><strong>Day 3：洞爺湖 → 京極吹出公園 → 小樽</strong><span>約 125 km / 2.5 小時</span></div>
+      <div class="day-body">
+        <div class="plan-line"><div class="time">09:30</div><div class="desc"><h4>洞爺湖展望與出發</h4><p>若早上天氣好，可先去筒倉展望台拍湖景，再往羊蹄山方向。</p></div></div>
+        <div class="plan-line"><div class="time">11:00</div><div class="desc"><h4>京極吹出公園</h4><p>免費。日本名水景點，可裝水、散步、吃小點，羊蹄山視野漂亮。</p></div></div>
+        <div class="plan-line"><div class="time">15:30</div><div class="desc"><h4>小樽堺町通與小樽運河夜景</h4><p>先逛北一硝子、音樂盒堂、LeTAO，傍晚再到運河看煤氣燈與倉庫倒影。</p></div></div>
+        <div class="stay"><span class="stay-title">住宿建議：小樽運河周邊</span>住運河旁可步行看夜景，晚餐後不用再開車找停車。小樽住宿建議看停車場高度限制與是否需預約。預估 ¥18,000-¥42,000/雙人房。
+          <div class="hotel-list">
+            <div class="hotel"><b>Hotel Torifito Otaru Canal</b><p>離運河近、價格通常較好比較，適合一晚小樽停留。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Hotel+Torifito+Otaru+Canal" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>Hotel Nord Otaru</b><p>正對運河區，夜景動線最好，適合想拍照的人。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Hotel+Nord+Otaru" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>OMO5 Otaru by Hoshino Resorts</b><p>設計感與位置都好，適合想住得有特色一點。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=OMO5+Otaru+by+Hoshino+Resorts" target="_blank">Google Maps</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-title"><strong>Day 4：小樽 → 札幌</strong><span>約 40 km / 45 分鐘</span></div>
+      <div class="day-body">
+        <div class="plan-line"><div class="time">08:30</div><div class="desc"><h4>小樽三角市場海鮮早餐</h4><p>勝手丼、海膽、鮭魚卵、干貝是主角。熱門店需排隊，建議早點到。</p></div></div>
+        <div class="plan-line"><div class="time">12:00</div><div class="desc"><h4>前往札幌，飯店寄放行李</h4><p>市區建議停好車後改步行、地鐵或計程車，停車費比景點間移動更麻煩。</p></div></div>
+        <div class="plan-line"><div class="time">18:00</div><div class="desc"><h4>藻岩山夜景或 JR Tower 展望室</h4><p>藻岩山官方/觀光資訊常見纜車＋迷你纜車往復約 ¥2,000 級距；若天氣差改 JR Tower。</p></div></div>
+        <div class="stay"><span class="stay-title">住宿建議：札幌站 / 大通 / 狸小路</span>連住兩晚最省行李整理時間。若想購物選大通、狸小路；若隔天要早點往機場選札幌站。市區停車常另計，訂房前要看每日上限。預估 ¥18,000-¥42,000/雙人房。
+          <div class="hotel-list">
+            <div class="hotel"><b>Cross Hotel Sapporo</b><p>札幌站和大通中間，市區觀光與餐廳都方便。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Cross+Hotel+Sapporo" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>Sapporo Grand Hotel</b><p>老牌飯店，位置穩，適合重視服務與交通的人。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Sapporo+Grand+Hotel" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>The Knot Sapporo</b><p>靠狸小路，購物、晚餐、宵夜動線最方便。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=The+Knot+Sapporo" target="_blank">Google Maps</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-title"><strong>Day 5：札幌市區深度與採買</strong><span>市區移動</span></div>
+      <div class="day-body">
+        <div class="plan-line"><div class="time">09:30</div><div class="desc"><h4>白色戀人公園</h4><p>2026/1-7/29 有改修提醒，製造線參觀可能受影響；官方有料區成人 ¥800、兒童 ¥400。免費區也可拍照與買伴手禮。</p></div></div>
+        <div class="plan-line"><div class="time">12:00</div><div class="desc"><h4>北海道神宮與圓山周邊</h4><p>神宮免費，可順路吃甜點或咖啡。若不想移動，改成札幌站商場也可。</p></div></div>
+        <div class="plan-line"><div class="time">15:00</div><div class="desc"><h4>狸小路、札幌地下街、大丸採買</h4><p>藥妝、伴手禮集中。自駕可把戰利品先放車，但市區停車需注意營業時間與上限。</p></div></div>
+        <div class="stay"><span class="stay-title">住宿建議：續住札幌同飯店</span>這天是札幌市區採買日，不建議換飯店。續住同一間可把行李留房內，藥妝與伴手禮買完直接回飯店整理；若前一晚覺得停車太貴，Day 5 可把車停飯店後改搭地鐵。
+          <div class="hotel-list">
+            <div class="hotel"><b>Cross Hotel Sapporo</b><p>適合札幌站、大通兩邊都想逛的人。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Cross+Hotel+Sapporo" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>Sapporo Grand Hotel</b><p>地下街動線方便，雨天或冷天也比較好移動。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Sapporo+Grand+Hotel" target="_blank">Google Maps</a></div>
+            <div class="hotel"><b>The Knot Sapporo</b><p>最適合把狸小路、薄野晚餐排在同一天。</p><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=The+Knot+Sapporo" target="_blank">Google Maps</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-title"><strong>Day 6：札幌 → 新千歲機場</strong><span>約 50 km / 1 小時</span></div>
+      <div class="day-body">
+        <div class="plan-line"><div class="time">09:00</div><div class="desc"><h4>札幌退房，開往新千歲</h4><p>先加滿油再還車，尖峰時段請預留塞車與租車接駁時間。</p></div></div>
+        <div class="plan-line"><div class="time">11:30</div><div class="desc"><h4>新千歲機場採買與用餐</h4><p>拉麵道場、ROYCE、北菓樓、六花亭都在機場可補齊。</p></div></div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:24px;">路線 C 特別景點與網友介紹</h3>
+    <div class="special-grid">
+      <div class="spot"><h4>登別地獄谷</h4><p>登別溫泉源泉之一，火山噴氣和硫磺味非常強烈，免費且可夜間散步。</p><div class="links"><a class="mini-link" href="https://noboribetsu-spa.jp/tw/spot/spot0034/" target="_blank">官方</a><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Noboribetsu+Jigokudani" target="_blank">地圖</a><a class="mini-link" href="https://1817box.tw/noboribetsu-spa/" target="_blank">網友部落格</a></div></div>
+      <div class="spot"><h4>洞爺湖長跑煙火</h4><p>2026/4/28-10/31 每晚 20:45 約 20 分鐘，免費觀看；也可付費搭煙火觀賞船。</p><div class="links"><a class="mini-link" href="https://www.laketoya.com/event/fireworks/" target="_blank">官方</a><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Lake+Toya+Onsen" target="_blank">地圖</a><a class="mini-link" href="https://hokkaido.letsgojp.com/archives/743279/" target="_blank">網友/媒體介紹</a></div></div>
+      <div class="spot"><h4>小樽運河</h4><p>白天看倉庫街、晚上看煤氣燈倒影。堺町通甜點、玻璃、音樂盒可和運河一起排。</p><div class="links"><a class="mini-link" href="https://otaru.gr.jp/tourist/otarucanal" target="_blank">官方觀光</a><a class="mini-link" href="https://www.google.com/maps/search/?api=1&query=Otaru+Canal" target="_blank">地圖</a><a class="mini-link" href="https://www.visit-hokkaido.jp/tw/spot/detail_10104.html" target="_blank">介紹</a></div></div>
+    </div>
+  </section>
+
+  <h2 id="budget">費用估算總表</h2>
+  <p class="price-note">以下以 2 人同行、雙人房、6天5夜、不含台灣出發機票估算。日幣換算台幣請依付款日匯率自行換算。</p>
+  <table>
+    <thead>
+      <tr>
+        <th>項目</th>
+        <th>路線 A</th>
+        <th>路線 B</th>
+        <th>路線 C</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>住宿 5 晚</td>
+        <td>約 ¥88,000-¥168,000/2人</td>
+        <td>約 ¥129,000-¥287,000/2人</td>
+        <td>約 ¥129,000-¥279,000/2人</td>
+      </tr>
+      <tr>
+        <td>租車＋保險</td>
+        <td>約 ¥45,000-¥70,000</td>
+        <td>約 ¥55,000-¥85,000，建議油電車</td>
+        <td>約 ¥42,000-¥65,000</td>
+      </tr>
+      <tr>
+        <td>油錢＋高速＋停車</td>
+        <td>約 ¥25,000-¥38,000</td>
+        <td>約 ¥40,000-¥60,000</td>
+        <td>約 ¥20,000-¥32,000</td>
+      </tr>
+      <tr>
+        <td>景點門票</td>
+        <td>約 ¥6,000-¥11,000/2人</td>
+        <td>約 ¥10,000-¥20,000/2人，不含知床導覽團</td>
+        <td>約 ¥9,000-¥16,000/2人</td>
+      </tr>
+      <tr>
+        <td>餐費</td>
+        <td>約 ¥60,000-¥90,000/2人</td>
+        <td>約 ¥55,000-¥85,000/2人，溫泉旅館多含晚餐</td>
+        <td>約 ¥55,000-¥85,000/2人，溫泉旅館多含晚餐</td>
+      </tr>
+      <tr>
+        <td><strong>總估算</strong></td>
+        <td><strong>約 ¥224,000-¥377,000/2人</strong></td>
+        <td><strong>約 ¥289,000-¥537,000/2人</strong></td>
+        <td><strong>約 ¥255,000-¥477,000/2人</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>訂房優先順序</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>最先訂</h3>
+      <ul>
+        <li>洞爺湖湖景房、登別溫泉旅館、知床宇登呂飯店。</li>
+        <li>這些房型少且價格浮動大，越接近旺季越貴。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>第二順位</h3>
+      <ul>
+        <li>層雲峽、阿寒湖等山區湖區住宿。</li>
+        <li>餐廳少，建議直接訂含晚餐方案。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>可晚一點</h3>
+      <ul>
+        <li>札幌、帶廣、旭川、千歲商務飯店選擇較多。</li>
+        <li>但若遇祭典或週末，仍建議早訂可取消房。</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="source">
+    主要查證來源：
+    <a href="https://www.laketoya.com/event/fireworks/" target="_blank">洞爺湖溫泉觀光協會煙火公告</a>、
+    <a href="https://www.sapporo.travel/lilacfes/" target="_blank">札幌紫丁香祭官方</a>、
+    <a href="https://usuzan.hokkaido.jp/ja/" target="_blank">有珠山纜車官方票價</a>、
+    <a href="https://www.city.asahikawa.hokkaido.jp/asahiyamazoo/generalinformation/d052849.html" target="_blank">旭山動物園官方票價</a>、
+    <a href="https://www.goko.go.jp/elevated_wooden_path.html" target="_blank">知床五湖高架木道官方</a>、
+    <a href="https://www.pref.hokkaido.lg.jp/kn/tkn/hana/place/o044.html" target="_blank">北海道廳東藻琴芝櫻資料</a>、
+    <a href="https://www.shiroikoibitopark.jp/facility/counter.html" target="_blank">白色戀人公園官方票價</a>、
+    <a href="https://noboribetsu-spa.jp/tw/spot/spot0034/" target="_blank">登別地獄谷官方</a>。
+  </p>
+</div>
+
+</body>
+</html>
