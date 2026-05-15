@@ -1,0 +1,1364 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>葡萄牙朝聖之路旅途指南</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1f2933;
+      --muted: #64707d;
+      --paper: #f7f4ed;
+      --surface: #fffdf8;
+      --line: #d9d1c3;
+      --forest: #1f5f4a;
+      --forest-2: #e8f3ee;
+      --amber: #b26b22;
+      --amber-2: #fff0d9;
+      --blue: #2c638f;
+      --blue-2: #e8f1f8;
+      --danger: #9f3830;
+      --shadow: 0 14px 36px rgba(42, 38, 31, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", sans-serif;
+      line-height: 1.55;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    button,
+    select {
+      font: inherit;
+    }
+
+    .shell {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .masthead {
+      min-height: 430px;
+      color: white;
+      background:
+        linear-gradient(90deg, rgba(20, 43, 35, 0.94), rgba(20, 43, 35, 0.62) 55%, rgba(20, 43, 35, 0.3)),
+        url("_整理備份_20260505/朝聖之路/camino_cover.png") center/cover;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 0;
+    }
+
+    .brand {
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .toplinks {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .toplinks a,
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 9px 13px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.32);
+      color: white;
+      text-decoration: none;
+      font-weight: 800;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(320px, 0.75fr);
+      gap: 28px;
+      align-items: end;
+      padding: 38px 0 42px;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 720px;
+      font-size: clamp(2.1rem, 5vw, 4.6rem);
+      line-height: 1.04;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      margin: 18px 0 0;
+      max-width: 680px;
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 1.04rem;
+    }
+
+    .day-picker {
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      background: rgba(13, 30, 25, 0.76);
+      border-radius: 8px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .label {
+      display: block;
+      margin-bottom: 8px;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 0.82rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .day-picker select {
+      width: 100%;
+      min-height: 48px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      background: #fffdf8;
+      color: var(--ink);
+      padding: 0 12px;
+      font-weight: 800;
+    }
+
+    .mini-status {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .mini-status div {
+      min-height: 74px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.12);
+      padding: 10px;
+    }
+
+    .mini-status span {
+      display: block;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 0.76rem;
+      font-weight: 800;
+    }
+
+    .mini-status strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 1.02rem;
+    }
+
+    .section {
+      padding: 44px 0;
+    }
+
+    .section.alt {
+      background: #ebe5d9;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(1.45rem, 3vw, 2.1rem);
+      letter-spacing: 0;
+    }
+
+    .hint {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .today-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.72fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .today-main {
+      padding: 22px;
+    }
+
+    .eyebrow {
+      color: var(--forest);
+      font-size: 0.82rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .today-title {
+      margin: 6px 0 12px;
+      font-size: clamp(1.55rem, 4vw, 2.65rem);
+      line-height: 1.12;
+    }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 14px 0 0;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      padding: 5px 9px;
+      border-radius: 8px;
+      font-weight: 900;
+      font-size: 0.82rem;
+      background: var(--forest-2);
+      color: var(--forest);
+      border: 1px solid #c6ded3;
+    }
+
+    .chip.amber {
+      background: var(--amber-2);
+      color: #895016;
+      border-color: #f0c991;
+    }
+
+    .chip.blue {
+      background: var(--blue-2);
+      color: var(--blue);
+      border-color: #c2d9eb;
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .action-grid a,
+    .small-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #f9f3e7;
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .action-grid a.primary {
+      background: var(--forest);
+      color: white;
+      border-color: var(--forest);
+    }
+
+    .action-grid a.alert {
+      background: var(--danger);
+      color: white;
+      border-color: var(--danger);
+    }
+
+    .note-box {
+      margin-top: 18px;
+      border-left: 4px solid var(--amber);
+      background: var(--amber-2);
+      padding: 12px 14px;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .side-list {
+      padding: 18px;
+    }
+
+    .side-list h3,
+    .guide-card h3,
+    .compact-panel h3 {
+      margin: 0 0 10px;
+      font-size: 1.05rem;
+    }
+
+    .checklist {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .checklist label {
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      gap: 10px;
+      align-items: start;
+      color: #303b45;
+      font-weight: 650;
+    }
+
+    .checklist input {
+      width: 18px;
+      height: 18px;
+      margin-top: 3px;
+      accent-color: var(--forest);
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .summary-item {
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+    }
+
+    .summary-item span {
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 900;
+    }
+
+    .summary-item strong {
+      display: block;
+      margin-top: 2px;
+      font-size: 0.98rem;
+    }
+
+    .nav-strip {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(247, 244, 237, 0.94);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+      overflow-x: auto;
+    }
+
+    .nav-strip .shell {
+      display: flex;
+      gap: 8px;
+      padding: 9px 0;
+      min-width: max-content;
+    }
+
+    .nav-strip a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      padding: 7px 11px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--ink);
+      font-weight: 900;
+      border: 1px solid transparent;
+    }
+
+    .nav-strip a:hover {
+      border-color: var(--line);
+      background: var(--surface);
+    }
+
+    .timeline {
+      display: grid;
+      gap: 10px;
+    }
+
+    .day-row {
+      display: grid;
+      grid-template-columns: 104px minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: var(--surface);
+    }
+
+    .day-row.active {
+      border-color: var(--forest);
+      background: #f1faf5;
+      box-shadow: 0 0 0 3px rgba(31, 95, 74, 0.12);
+    }
+
+    .date-tag {
+      display: grid;
+      place-items: center;
+      min-height: 58px;
+      border-radius: 8px;
+      background: #efe8dc;
+      color: var(--forest);
+      font-weight: 900;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .day-row h3 {
+      margin: 0;
+      font-size: 1.02rem;
+    }
+
+    .day-row p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .day-row button {
+      min-height: 40px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #f9f3e7;
+      color: var(--ink);
+      font-weight: 900;
+      padding: 8px 10px;
+      cursor: pointer;
+    }
+
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .guide-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      padding: 18px;
+    }
+
+    .guide-card ul {
+      margin: 0;
+      padding-left: 1.1rem;
+    }
+
+    .guide-card li {
+      margin: 8px 0;
+      color: #384550;
+    }
+
+    .link-list {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .link-list a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 36px;
+      padding: 7px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #f9f3e7;
+      text-decoration: none;
+      font-weight: 900;
+      font-size: 0.86rem;
+    }
+
+    .compact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .compact-panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      padding: 18px;
+    }
+
+    .phrase-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .phrase-table th,
+    .phrase-table td {
+      text-align: left;
+      vertical-align: top;
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--line);
+      font-size: 0.92rem;
+    }
+
+    .phrase-table th {
+      color: var(--forest);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+    }
+
+    .footer {
+      padding: 28px 0 90px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid,
+      .today-layout,
+      .guide-grid,
+      .compact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 680px) {
+      .shell {
+        width: min(100% - 22px, 1120px);
+      }
+
+      .masthead {
+        min-height: auto;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .toplinks {
+        width: 100%;
+        justify-content: stretch;
+      }
+
+      .toplinks a {
+        flex: 1;
+      }
+
+      .hero-grid {
+        padding: 24px 0 28px;
+      }
+
+      .mini-status {
+        grid-template-columns: 1fr;
+      }
+
+      .action-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .day-row {
+        grid-template-columns: 76px minmax(0, 1fr);
+      }
+
+      .day-row button {
+        grid-column: 1 / -1;
+      }
+
+      .section {
+        padding: 32px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="masthead">
+    <div class="shell">
+      <div class="topbar">
+        <div class="brand">Camino Portugués 旅途指南</div>
+        <div class="toplinks">
+          <a href="#today">今日</a>
+          <a href="#route">行程</a>
+          <a href="#critical">關鍵資訊</a>
+          <a href="_整理備份_20260505/朝聖之路/葡萄牙朝聖之路簡報.html">完整簡報</a>
+        </div>
+      </div>
+      <div class="hero-grid">
+        <div>
+          <h1>路上只看需要的資訊。</h1>
+          <p class="lead">把原本的規劃濃縮成旅途中可直接參考的版本：今日路線、住宿、地圖、蓋章、行李、船班、證書和突發狀況。</p>
+        </div>
+        <div class="day-picker">
+          <label class="label" for="daySelect">目前日程</label>
+          <select id="daySelect"></select>
+          <div class="mini-status">
+            <div><span>日期</span><strong id="miniDate">-</strong></div>
+            <div><span>移動</span><strong id="miniMove">-</strong></div>
+            <div><span>住宿</span><strong id="miniStay">-</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="nav-strip" aria-label="頁面導覽">
+    <div class="shell">
+      <a href="#today">今日路線</a>
+      <a href="#route">每日行程</a>
+      <a href="#critical">關鍵資訊</a>
+      <a href="#boat">靈性之路船班</a>
+      <a href="#baggage">行李寄送</a>
+      <a href="#phrases">常用句</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="section" id="today">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2>今日路線</h2>
+            <p class="hint" id="todayHint">依你選的日程顯示。</p>
+          </div>
+        </div>
+
+        <div class="today-layout">
+          <article class="panel today-main">
+            <div class="eyebrow" id="todayDay">Day</div>
+            <h2 class="today-title" id="todayTitle">-</h2>
+            <p id="todaySummary">-</p>
+            <div class="chips" id="todayChips"></div>
+            <div class="summary-grid">
+              <div class="summary-item"><span>出發</span><strong id="originText">-</strong></div>
+              <div class="summary-item"><span>抵達</span><strong id="destinationText">-</strong></div>
+              <div class="summary-item"><span>時間/距離</span><strong id="distanceText">-</strong></div>
+              <div class="summary-item"><span>今晚睡這裡</span><strong id="stayText">-</strong></div>
+            </div>
+            <div class="action-grid" id="todayActions"></div>
+            <div class="note-box" id="todayNote">-</div>
+          </article>
+
+          <aside class="panel side-list">
+            <h3>路上檢查</h3>
+            <ul class="checklist" id="dailyChecklist"></ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="route">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2>每日行程</h2>
+            <p class="hint">以實際旅途中會查的資訊為主，詳細住宿表仍保留在完整簡報。</p>
+          </div>
+        </div>
+        <div class="timeline" id="timeline"></div>
+      </div>
+    </section>
+
+    <section class="section" id="critical">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2>關鍵資訊</h2>
+            <p class="hint">路上最常會突然需要查的幾件事。</p>
+          </div>
+        </div>
+        <div class="guide-grid">
+          <article class="guide-card">
+            <h3>緊急與安全</h3>
+            <ul>
+              <li>葡萄牙與西班牙通用緊急電話：112。</li>
+              <li>波多、車站、地鐵與老城區留意拉鍊和手機。</li>
+              <li>護照、信用卡、保險 PDF 建議手機離線存一份。</li>
+              <li>腳有熱點就停下來處理，不要等成水泡。</li>
+            </ul>
+            <div class="link-list">
+              <a href="tel:112">撥打 112</a>
+              <a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=pharmacy+near+me">附近藥局</a>
+              <a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=hospital+near+me">附近醫院</a>
+            </div>
+          </article>
+
+          <article class="guide-card">
+            <h3>波多機場到市區</h3>
+            <ul>
+              <li>跟著 Metro / Metro do Porto 標誌走到機場地鐵站。</li>
+              <li>搭 E 線往市區，常用下車點：Trindade 或 São Bento。</li>
+              <li>機場到市區買 Z4 區間票，第一次需加可重複使用小卡。</li>
+              <li>到主教座堂買朝聖者護照並先蓋第一章。</li>
+            </ul>
+            <div class="link-list">
+              <a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Porto%20Airport%20OPO&destination=Porto%20Cathedral&travelmode=transit">機場到主教座堂</a>
+              <a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Porto%20Cathedral">Porto Cathedral</a>
+            </div>
+          </article>
+
+          <article class="guide-card">
+            <h3>蓋章與證書</h3>
+            <ul>
+              <li>沿途咖啡廳、教堂、庇護所、住宿通常可蓋章。</li>
+              <li>從 Tui 起保守做法是每天蓋 2 個章，方便最後換 Compostela。</li>
+              <li>抵達 Santiago 後到 Pilgrim Reception Office 辦 Compostela。</li>
+              <li>若走 Traslatio 船路線，可另留意 Padrón 的 Pedronia。</li>
+            </ul>
+            <div class="link-list">
+              <a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Pilgrim%20Reception%20Office%20Santiago%20de%20Compostela">Santiago 辦證書</a>
+              <a target="_blank" rel="noopener" href="https://www.padronturismo.gal/en/for-enjoying/way-of-stjames/route-of-a-pedronia/">Pedronia 說明</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="boat">
+      <div class="shell">
+        <div class="compact-grid">
+          <article class="compact-panel">
+            <h3>靈性之路船班</h3>
+            <ul>
+              <li>重點日：Day 16 抵達 Vilanova de Arousa 後，立刻確認 Day 17 船班。</li>
+              <li>船班受潮汐影響，每天時間不固定；抵達前 1-2 天就先查。</li>
+              <li>集合點通常在 Vilanova de Arousa Maritime Station 一帶，以 email / WhatsApp 指示為準。</li>
+              <li>船程約 1-1.5 小時，常見價格約 EUR 30-32。</li>
+              <li>若船班太晚，當天可改住 Padrón 或 Teo，不必硬趕 O Milladoiro。</li>
+            </ul>
+            <div class="link-list">
+              <a target="_blank" rel="noopener" href="https://www.varianteespiritual.gal/">Variante Espiritual</a>
+              <a target="_blank" rel="noopener" href="https://www.labarcadelperegrino.com/">La Barca</a>
+              <a target="_blank" rel="noopener" href="https://www.barcovarianteespiritual.com/">Amare</a>
+              <a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Vilanova%20de%20Arousa%20Maritime%20Station">上船位置</a>
+            </div>
+          </article>
+
+          <article class="compact-panel" id="baggage">
+            <h3>行李寄送</h3>
+            <ul>
+              <li>Tuitrans：常見每日寄送，08:00 前放住宿 reception，15:00 前送達；重量常見上限 15 kg。</li>
+              <li>Top Santiago：資料整理時官方列每件行李最高 18 kg；超重可能加收或視為第二件。</li>
+              <li>Luggage Driver：可查 Porto 到 Santiago 或分段，常見條件每件 23 kg；實際依商品與日期確認。</li>
+              <li>下訂前把尺寸、重量、路線、住宿名單用 email 或 WhatsApp 一次寫清楚。</li>
+              <li>寄送單印出放透明套，遇雨不會糊掉。</li>
+            </ul>
+            <div class="link-list">
+              <a target="_blank" rel="noopener" href="https://topsantiago.com/">Top Santiago</a>
+              <a target="_blank" rel="noopener" href="https://tuitrans.com/nuestros-servicios/">Tuitrans</a>
+              <a target="_blank" rel="noopener" href="https://luggagedriver.com/">Luggage Driver</a>
+              <a target="_blank" rel="noopener" href="https://www.elcaminoconcorreos.com/en/transfer-luggage">Correos</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="phrases">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2>常用句</h2>
+            <p class="hint">葡萄牙前半段用葡文，進西班牙後用西文。</p>
+          </div>
+        </div>
+        <div class="panel">
+          <table class="phrase-table">
+            <thead>
+              <tr>
+                <th>情境</th>
+                <th>葡萄牙語</th>
+                <th>西班牙語</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>我有訂房</td>
+                <td>Tenho uma reserva.</td>
+                <td>Tengo una reserva.</td>
+              </tr>
+              <tr>
+                <td>可以蓋章嗎</td>
+                <td>Posso ter um carimbo?</td>
+                <td>Me puede poner un sello?</td>
+              </tr>
+              <tr>
+                <td>我要水</td>
+                <td>Queria agua, por favor.</td>
+                <td>Queria agua, por favor.</td>
+              </tr>
+              <tr>
+                <td>哪裡有藥局</td>
+                <td>Onde fica a farmacia?</td>
+                <td>Donde esta la farmacia?</td>
+              </tr>
+              <tr>
+                <td>我需要計程車</td>
+                <td>Preciso de um taxi.</td>
+                <td>Necesito un taxi.</td>
+              </tr>
+              <tr>
+                <td>我的腳起水泡</td>
+                <td>Tenho uma bolha no pe.</td>
+                <td>Tengo una ampolla en el pie.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="shell">
+      旅途中版指南。完整住宿表、備案與原始規劃請看「完整簡報」。
+    </div>
+  </footer>
+
+  <script>
+    const days = [
+      {
+        id: "day-1",
+        day: "Day 1",
+        date: "2026-06-06",
+        title: "台北到倫敦",
+        origin: "Taipei TPE",
+        destination: "London Heathrow LHR",
+        move: "BR67 08:15-19:20",
+        distance: "長程飛行",
+        stay: "Premier Inn Heathrow Terminal 4",
+        stayUrl: "https://www.agoda.com/zh-tw/premier-inn-heathrow-airport-terminal-4/hotel/london-gb.html?checkIn=2026-06-06&los=1&adults=2",
+        summary: "抵達倫敦後住機場周邊，隔天清晨轉機前往波多。",
+        note: "今晚重點是睡眠和隔天轉機，不排市區活動。",
+        tags: ["飛行", "倫敦住宿"],
+        tasks: ["確認隔天航班時間", "護照與電子機票放隨身包", "水壺補滿", "行動電源充電"],
+        mapMode: "transit",
+        routeMap: "https://www.google.com/maps/search/?api=1&query=Premier%20Inn%20Heathrow%20Terminal%204"
+      },
+      {
+        id: "day-2",
+        day: "Day 2",
+        date: "2026-06-07",
+        title: "倫敦到波多，辦朝聖準備",
+        origin: "London Heathrow",
+        destination: "Porto",
+        move: "TP1353/1922 06:10-13:00",
+        distance: "轉機日 / 市區 2-4 km",
+        stay: "Hotel Spot Family Suites Porto",
+        stayUrl: "https://spotfamilysuites.pt",
+        summary: "13:00 抵達波多後進市區，買朝聖者護照、採買、熟悉主教座堂周邊。",
+        note: "抵達後先處理 credential、現金、零食與隔天水量；不要把第一晚排太滿。",
+        tags: ["抵達波多", "買朝聖者護照"],
+        tasks: ["到 Porto Cathedral 買朝聖者護照", "先蓋第一章", "買水與隔天早餐/點心", "檢查鞋襪與防磨用品"],
+        routeMap: "https://www.google.com/maps/dir/?api=1&origin=Porto%20Airport%20OPO&destination=Porto%20Cathedral&travelmode=transit"
+      },
+      {
+        id: "day-3",
+        day: "Day 3",
+        date: "2026-06-08",
+        title: "Porto 到 Moreira da Maia",
+        origin: "Porto",
+        destination: "Moreira da Maia",
+        move: "步行",
+        distance: "約 3-4 hr / 13 km",
+        stay: "Hotel Singular Porto Aeroporto",
+        stayUrl: "https://singularhotel.pt",
+        summary: "第一天慢走，城市與郊區路段較多，重點是不要把腳磨壞。",
+        note: "早點離開市區車流，腳有熱點就立刻停下來貼，不要忍。",
+        tags: ["第一天步行", "城市路段"],
+        tasks: ["出發前水量至少 1L", "第一個咖啡廳蓋章", "中午檢查腳底熱點", "抵達後洗衣或晾襪"],
+        originQuery: "Porto Cathedral",
+        destinationQuery: "Moreira da Maia Portugal"
+      },
+      {
+        id: "day-4",
+        day: "Day 4",
+        date: "2026-06-09",
+        title: "Moreira da Maia 到 Vilarinho / Vairao",
+        origin: "Moreira da Maia",
+        destination: "Vilarinho / Vairao",
+        move: "步行",
+        distance: "約 4-5 hr / 15 km",
+        stay: "Casa Mindela Guesthouse",
+        stayUrl: "https://www.casamindela.pt/",
+        summary: "進入更明顯的鄉間 Camino 節奏，住宿點選擇變少。",
+        note: "前一天先確認住宿入住方式；這天把節奏放穩比速度重要。",
+        tags: ["鄉間起步", "住宿較少"],
+        tasks: ["確認今晚住宿地址", "帶足點心", "看黃箭頭不要只跟 Google Maps", "睡前確認 Day 5 路線"],
+        originQuery: "Moreira da Maia Portugal",
+        destinationQuery: "Vilarinho Vila do Conde Portugal"
+      },
+      {
+        id: "day-5",
+        day: "Day 5",
+        date: "2026-06-10",
+        title: "Vilarinho 到 Sao Pedro de Rates",
+        origin: "Vilarinho",
+        destination: "Sao Pedro de Rates",
+        move: "步行",
+        distance: "約 4-5 hr / 15 km",
+        stay: "O Palhuco Pilgrims Hostel Pedra Furada",
+        stayUrl: "https://www.cm-barcelos.pt/visitar-barcelos/caminho-de-santiago/albergues/",
+        summary: "開始進入葡萄牙鄉村，Rates 是很有 Camino 氣氛的小站。",
+        note: "抵達後整理背包重量，能少帶就少帶。",
+        tags: ["鄉村", "庇護所"],
+        tasks: ["補水與補糖", "確認明天到 Barcelos 的住宿", "整理背包重量", "拍照留存 credential 章頁"],
+        originQuery: "Vilarinho Vila do Conde Portugal",
+        destinationQuery: "Sao Pedro de Rates Portugal"
+      },
+      {
+        id: "day-6",
+        day: "Day 6",
+        date: "2026-06-11",
+        title: "Sao Pedro de Rates 到 Barcelos",
+        origin: "Sao Pedro de Rates",
+        destination: "Barcelos",
+        move: "步行",
+        distance: "約 4-5 hr / 16 km",
+        stay: "Hotel Bagoeira",
+        stayUrl: "http://bagoeira.com/",
+        summary: "Barcelos 是大城，適合補給藥品、現金、零食與洗衣。",
+        note: "這是很適合把物資補齊的一晚，順便確認後面幾天住宿。",
+        tags: ["大城補給", "洗衣"],
+        tasks: ["提款或確認現金", "補防磨貼/藥品", "買零食", "洗衣或曬乾襪子"],
+        originQuery: "Sao Pedro de Rates Portugal",
+        destinationQuery: "Barcelos Portugal"
+      },
+      {
+        id: "day-7",
+        day: "Day 7",
+        date: "2026-06-12",
+        title: "Barcelos 到 Balugaes",
+        origin: "Barcelos",
+        destination: "Balugaes",
+        move: "步行",
+        distance: "約 4-5 hr / 15 km",
+        stay: "Quinta da Cancela",
+        stayUrl: "https://www.quintadacancela.pt",
+        summary: "以村落與田野為主，節奏安靜，補給點比大城少。",
+        note: "Casa da Fernanda 很熱門；若臨時改住庇護所或民宿，務必先聯絡。",
+        tags: ["田野", "補給較少"],
+        tasks: ["早上先買午間點心", "確認住宿是否供晚餐", "留意水量", "到住宿後確認明天 Ponte de Lima"],
+        originQuery: "Barcelos Portugal",
+        destinationQuery: "Balugaes Portugal"
+      },
+      {
+        id: "day-8",
+        day: "Day 8",
+        date: "2026-06-13",
+        title: "Balugaes 到 Ponte de Lima",
+        origin: "Balugaes",
+        destination: "Ponte de Lima",
+        move: "步行",
+        distance: "約 5-6 hr / 18 km",
+        stay: "ARC MY OTEL",
+        stayUrl: "https://arcmytel.com",
+        summary: "抵達葡萄牙經典古鎮，可安排老橋、市場與簡單晚餐。",
+        note: "隔天是爬升日，今晚早睡、備好水與點心。",
+        tags: ["古鎮", "隔天爬升"],
+        tasks: ["補隔天爬坡用點心", "水壺清洗補滿", "拉伸小腿", "早睡"],
+        originQuery: "Balugaes Portugal",
+        destinationQuery: "Ponte de Lima Portugal"
+      },
+      {
+        id: "day-9",
+        day: "Day 9",
+        date: "2026-06-14",
+        title: "Ponte de Lima 到 Rubiaes",
+        origin: "Ponte de Lima",
+        destination: "Rubiaes",
+        move: "步行",
+        distance: "約 4.75-6 hr / 17.4 km",
+        stay: "Quinta do Caminho",
+        stayUrl: "https://www.gronze.com/portugal/viana-do-castelo/rubiaes/quinta-do-caminho",
+        summary: "翻越 Labruja 一帶，距離不爆長但爬升集中，今天不要追速度。",
+        note: "天熱就更早出發；上坡慢一點，下坡保護膝蓋。",
+        tags: ["爬升日", "體力日"],
+        tasks: ["07:00 前後出發", "帶足水和鹽分", "上坡放慢", "抵達後冰敷或拉伸"],
+        originQuery: "Ponte de Lima Portugal",
+        destinationQuery: "Rubiaes Portugal"
+      },
+      {
+        id: "day-10",
+        day: "Day 10",
+        date: "2026-06-15",
+        title: "Rubiaes 到 Tui",
+        origin: "Rubiaes",
+        destination: "Tui",
+        move: "步行",
+        distance: "約 4.75-5.5 hr / 19.1 km",
+        stay: "A Torre do Xudeu",
+        stayUrl: "https://www.atorredoxudeu.com",
+        summary: "跨過國境進西班牙，手機時間會快 1 小時；從這裡開始更積極蓋章。",
+        note: "過橋後確認時區；Tui 起保守每天蓋 2 個章。",
+        tags: ["進入西班牙", "時區 +1"],
+        tasks: ["過境後確認手機時間", "今天至少蓋 2 個章", "確認 O Porrino 住宿", "用西班牙時間規劃晚餐"],
+        originQuery: "Rubiaes Portugal",
+        destinationQuery: "Tui Spain"
+      },
+      {
+        id: "day-11",
+        day: "Day 11",
+        date: "2026-06-16",
+        title: "Tui 到 O Porrino",
+        origin: "Tui",
+        destination: "O Porrino",
+        move: "步行",
+        distance: "約 4-5 hr / 16 km",
+        stay: "Alojamientos Central",
+        stayUrl: "https://alojamientoscentral.com",
+        summary: "建議走替代路線避開工業區，沿途注意分岔和指標。",
+        note: "今天開始把 2 個章當成日常：早上一個、下午或住宿一個。",
+        tags: ["替代路線", "兩個章"],
+        tasks: ["早上先蓋第一章", "走替代線避開工業區", "下午或住宿蓋第二章", "補給明天 Redondela"],
+        originQuery: "Tui Spain",
+        destinationQuery: "O Porrino Spain"
+      },
+      {
+        id: "day-12",
+        day: "Day 12",
+        date: "2026-06-17",
+        title: "O Porrino 到 Redondela",
+        origin: "O Porrino",
+        destination: "Redondela",
+        move: "步行",
+        distance: "約 4-5 hr / 16.4 km",
+        stay: "Alvear Suites",
+        stayUrl: "https://alvearsuites.com",
+        summary: "與海岸路線匯合，人流會增加，熱門住宿更早滿。",
+        note: "Mos / Santiaguino 一帶有爬升；下午保留洗衣和休息時間。",
+        tags: ["爬升", "人流增加"],
+        tasks: ["兩個章", "中段補水", "確認 Pontevedra 住宿", "洗衣"],
+        originQuery: "O Porrino Spain",
+        destinationQuery: "Redondela Spain"
+      },
+      {
+        id: "day-13",
+        day: "Day 13",
+        date: "2026-06-18",
+        title: "Redondela 到 Pontevedra",
+        origin: "Redondela",
+        destination: "Pontevedra",
+        move: "步行",
+        distance: "約 5-6 hr / 19.6 km",
+        stay: "Rias Bajas Hotel",
+        stayUrl: "https://hotelriasbajas.com",
+        summary: "Pontevedra 老城值得留時間逛，今晚要確認是否正式走靈性變體。",
+        note: "晚上決定 Day 14 往 Combarro / Armenteira，並確認接下來住宿。",
+        tags: ["老城", "路線決策"],
+        tasks: ["兩個章", "確認走 Variante Espiritual", "預看 Combarro 住宿", "逛老城但不要太晚"],
+        originQuery: "Redondela Spain",
+        destinationQuery: "Pontevedra Spain"
+      },
+      {
+        id: "day-14",
+        day: "Day 14",
+        date: "2026-06-19",
+        title: "Pontevedra 到 Combarro",
+        origin: "Pontevedra",
+        destination: "Combarro",
+        move: "步行",
+        distance: "約 3-4 hr / 11 km",
+        stay: "Casa Noelmar",
+        stayUrl: "https://casanoelmar.com",
+        summary: "進入靈性變體，短距離到海邊石倉小村，適合早到慢逛。",
+        note: "住宿不多，臨時調整要早點確認。",
+        tags: ["靈性變體", "短程"],
+        tasks: ["兩個章", "確認 Armenteira 住宿", "留時間看 Combarro 海邊", "查看 Day 16 船班網站"],
+        originQuery: "Pontevedra Spain",
+        destinationQuery: "Combarro Spain"
+      },
+      {
+        id: "day-15",
+        day: "Day 15",
+        date: "2026-06-20",
+        title: "Combarro 到 Armenteira",
+        origin: "Combarro",
+        destination: "Armenteira",
+        move: "步行",
+        distance: "約 3.5-5 hr / 10 km",
+        stay: "Hospederia Monasterio de Armenteira",
+        stayUrl: "https://www.monasteriodearmenteira.es/la-hospederia-3/",
+        summary: "距離短但約 400 m 爬升集中，是靈性變體很有存在感的一天。",
+        note: "短不代表輕鬆；慢慢爬，抵達修道院後休息。",
+        tags: ["爬升", "修道院"],
+        tasks: ["兩個章", "上坡慢走", "抵達後確認 Vilanova 住宿", "查 Day 17 船班"],
+        originQuery: "Combarro Spain",
+        destinationQuery: "Armenteira Spain"
+      },
+      {
+        id: "day-16",
+        day: "Day 16",
+        date: "2026-06-21",
+        title: "Armenteira 到 Vilanova de Arousa",
+        origin: "Armenteira",
+        destination: "Vilanova de Arousa",
+        move: "步行",
+        distance: "約 5.75-7 hr / 23.4 km",
+        stay: "Hotel Leal La Sirena",
+        stayUrl: "https://hotel-leal.com/",
+        summary: "水石之路很漂亮，但距離長。抵達海邊後第一件事是確認隔天船班。",
+        note: "今天是船班前夜：到住宿或港口問清楚集合時間、地點、付款和是否能蓋 Traslatio 章。",
+        tags: ["長距離", "確認船班"],
+        tasks: ["早出發", "兩個章", "抵達後確認船班與集合點", "若船班太晚先找 Padrón / Teo 備案"],
+        originQuery: "Armenteira Spain",
+        destinationQuery: "Vilanova de Arousa Spain"
+      },
+      {
+        id: "day-17",
+        day: "Day 17",
+        date: "2026-06-22",
+        title: "Vilanova 搭船到 Padrón，再往 O Milladoiro",
+        origin: "Vilanova de Arousa",
+        destination: "O Milladoiro",
+        move: "船 + 步行",
+        distance: "船約 1.5 hr + 步行約 17 km",
+        stay: "Casa Rural As Bentinas",
+        stayUrl: "https://acasadasbentinas.com",
+        summary: "依潮汐搭 Traslatio 船，船後仍有步行；今天不要排太滿。",
+        note: "如果船班太晚或體力下降，改住 Padrón 或 Teo 是正常選項，不必硬趕。",
+        tags: ["船班", "彈性日"],
+        tasks: ["提早到集合點", "拿 Traslatio 船章", "兩個章", "視時間決定住 Padrón / Teo / O Milladoiro"],
+        routeMap: "https://www.google.com/maps/dir/?api=1&origin=Pontecesures%20Spain&destination=O%20Milladoiro%20Spain&travelmode=walking"
+      },
+      {
+        id: "day-18",
+        day: "Day 18",
+        date: "2026-06-23",
+        title: "O Milladoiro 到 Santiago",
+        origin: "O Milladoiro",
+        destination: "Santiago de Compostela",
+        move: "步行",
+        distance: "約 2-2.5 hr / 8 km",
+        stay: "Hospederia San Martin Pinario",
+        stayUrl: "https://sanmartinpinario.es",
+        summary: "短距離進城，抵達 Obradoiro 廣場後辦 Compostela，晚上住市區好好休息。",
+        note: "今天不用趕快走完；保留時間給廣場、證書、大教堂和晚餐。",
+        tags: ["抵達終點", "Compostela"],
+        tasks: ["最後兩個章", "到 Pilgrim Office 辦證書", "拍照備份 credential", "預約或確認大教堂導覽"],
+        originQuery: "O Milladoiro Spain",
+        destinationQuery: "Cathedral of Santiago de Compostela"
+      },
+      {
+        id: "day-19",
+        day: "Day 19",
+        date: "2026-06-24",
+        title: "Santiago 到 Barcelona",
+        origin: "Santiago de Compostela",
+        destination: "Barcelona",
+        move: "國內線待訂",
+        distance: "飛行約 1.5 hr",
+        stay: "Barcelona 住宿待選",
+        summary: "建議選中午前後航班，避免太早趕機。抵達後輕鬆逛哥德區或蘭布拉大道。",
+        note: "朝聖剛結束，這天以移動和恢復為主。",
+        tags: ["移動日", "Barcelona"],
+        tasks: ["確認 SCQ 到 BCN 航班", "住宿盡量續住同一區", "腳部恢復", "熱門景點預約時段票"],
+        routeMap: "https://www.google.com/travel/flights/search?tfs=CBwQAhooEgoyMDI2LTA2LTI0agwIAhIIL20vMGZ2Z2hyDAgDEggvbS8wMWY2MxoMCAMSCC9tLzAxZjYz"
+      },
+      {
+        id: "day-20",
+        day: "Day 20",
+        date: "2026-06-25",
+        title: "Barcelona 觀光",
+        origin: "Barcelona",
+        destination: "Barcelona",
+        move: "市區",
+        distance: "依景點安排",
+        stay: "Barcelona 住宿待選",
+        summary: "聖家堂、奎爾公園、米拉之家都建議預約時段票。",
+        note: "朝聖後的城市日不要排太滿，讓腳恢復。",
+        tags: ["城市日", "景點預約"],
+        tasks: ["確認聖家堂時段", "把景點分區安排", "保留午休", "確認後續歐洲行程"],
+        routeMap: "https://www.google.com/maps/search/?api=1&query=Sagrada%20Familia%20Barcelona"
+      },
+      {
+        id: "day-21",
+        day: "Day 21-22",
+        date: "2026-06-26",
+        title: "Barcelona 彈性停留",
+        origin: "Barcelona",
+        destination: "Barcelona",
+        move: "市區 / 彈性",
+        distance: "依景點安排",
+        stay: "Barcelona 住宿待選",
+        summary: "海邊、波蓋利亞市場、自由活動；之後銜接倫敦與 7/8 回程。",
+        note: "回程已確認 7/8 倫敦 LHR 21:35 搭 BR68 返台。",
+        tags: ["彈性", "回程準備"],
+        tasks: ["確認飛往倫敦交通", "檢查長榮 BR68", "整理大件行李", "把重要文件離線備份"],
+        routeMap: "https://www.google.com/maps/search/?api=1&query=Barcelona"
+      }
+    ];
+
+    const commonTasks = ["水、零食、防曬或雨具", "手機與行動電源有電", "護照、錢包、credential 在身上"];
+    const daySelect = document.getElementById("daySelect");
+    const timeline = document.getElementById("timeline");
+    let currentIndex = 0;
+
+    function fmtDate(iso) {
+      const d = new Date(`${iso}T12:00:00`);
+      return `${d.getMonth() + 1}/${d.getDate()}`;
+    }
+
+    function mapDir(day) {
+      if (day.routeMap) return day.routeMap;
+      if (!day.originQuery || !day.destinationQuery) return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(day.destination)}`;
+      return `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(day.originQuery)}&destination=${encodeURIComponent(day.destinationQuery)}&travelmode=walking`;
+    }
+
+    function mapSearch(q) {
+      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
+    }
+
+    function weatherSearch(q) {
+      return `https://www.google.com/search?q=${encodeURIComponent(`${q} weather`)}`;
+    }
+
+    function initialIndex() {
+      const saved = localStorage.getItem("camino-guide-current-day");
+      if (saved) {
+        const idx = days.findIndex((d) => d.id === saved);
+        if (idx >= 0) return idx;
+      }
+      const now = new Date();
+      const todayIso = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+      const exact = days.findIndex((d) => d.date === todayIso);
+      if (exact >= 0) return exact;
+      const next = days.findIndex((d) => d.date > todayIso);
+      return next >= 0 ? next : days.length - 1;
+    }
+
+    function renderSelect() {
+      days.forEach((day, index) => {
+        const opt = document.createElement("option");
+        opt.value = String(index);
+        opt.textContent = `${day.day} (${fmtDate(day.date)}) ${day.title}`;
+        daySelect.appendChild(opt);
+      });
+      currentIndex = initialIndex();
+      daySelect.value = String(currentIndex);
+      daySelect.addEventListener("change", () => {
+        setCurrent(Number(daySelect.value), true);
+      });
+    }
+
+    function renderActions(day) {
+      const actions = document.getElementById("todayActions");
+      const links = [
+        ["步行/交通地圖", mapDir(day), "primary"],
+        ["今晚住宿地圖", mapSearch(day.stay), ""],
+        ["目的地天氣", weatherSearch(day.destination), ""],
+        ["附近藥局", "https://www.google.com/maps/search/?api=1&query=pharmacy+near+me", ""]
+      ];
+
+      if (day.stayUrl) links.splice(2, 0, ["住宿官網/訂房", day.stayUrl, ""]);
+      if (day.id === "day-16" || day.id === "day-17") {
+        links.push(["船班集合點", mapSearch("Vilanova de Arousa Maritime Station"), ""]);
+      }
+      if (day.id === "day-18") {
+        links.push(["Pilgrim Office", mapSearch("Pilgrim Reception Office Santiago de Compostela"), ""]);
+      }
+      links.push(["緊急 112", "tel:112", "alert"]);
+
+      actions.innerHTML = links.map(([label, href, cls]) => (
+        `<a class="${cls}" target="${href.startsWith("tel:") ? "_self" : "_blank"}" rel="noopener" href="${href}">${label}</a>`
+      )).join("");
+    }
+
+    function renderChecklist(day) {
+      const ul = document.getElementById("dailyChecklist");
+      const tasks = [...commonTasks, ...day.tasks];
+      const keyBase = `camino-check-${day.id}`;
+      ul.innerHTML = tasks.map((task, index) => {
+        const key = `${keyBase}-${index}`;
+        const checked = localStorage.getItem(key) === "1" ? "checked" : "";
+        return `<li><label><input type="checkbox" data-key="${key}" ${checked}> <span>${task}</span></label></li>`;
+      }).join("");
+      ul.querySelectorAll("input").forEach((input) => {
+        input.addEventListener("change", () => {
+          localStorage.setItem(input.dataset.key, input.checked ? "1" : "0");
+        });
+      });
+    }
+
+    function renderTimeline() {
+      timeline.innerHTML = days.map((day, index) => `
+        <article class="day-row ${index === currentIndex ? "active" : ""}" id="row-${day.id}">
+          <div class="date-tag">${day.day}<br>${fmtDate(day.date)}</div>
+          <div>
+            <h3>${day.title}</h3>
+            <p>${day.distance} · ${day.stay}</p>
+          </div>
+          <button type="button" data-index="${index}">設為今日</button>
+        </article>
+      `).join("");
+      timeline.querySelectorAll("button").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          setCurrent(Number(btn.dataset.index), true);
+          document.getElementById("today").scrollIntoView({ behavior: "smooth" });
+        });
+      });
+    }
+
+    function setCurrent(index, persist = false) {
+      currentIndex = index;
+      const day = days[index];
+      if (persist) localStorage.setItem("camino-guide-current-day", day.id);
+      daySelect.value = String(index);
+
+      document.getElementById("miniDate").textContent = fmtDate(day.date);
+      document.getElementById("miniMove").textContent = day.move;
+      document.getElementById("miniStay").textContent = day.stay.replace("Hospederia", "Hosp.");
+      document.getElementById("todayHint").textContent = `${fmtDate(day.date)} · ${day.move}`;
+      document.getElementById("todayDay").textContent = day.day;
+      document.getElementById("todayTitle").textContent = day.title;
+      document.getElementById("todaySummary").textContent = day.summary;
+      document.getElementById("originText").textContent = day.origin;
+      document.getElementById("destinationText").textContent = day.destination;
+      document.getElementById("distanceText").textContent = day.distance;
+      document.getElementById("stayText").textContent = day.stay;
+      document.getElementById("todayNote").textContent = day.note;
+      document.getElementById("todayChips").innerHTML = day.tags.map((tag, i) => {
+        const cls = i % 3 === 1 ? "amber" : i % 3 === 2 ? "blue" : "";
+        return `<span class="chip ${cls}">${tag}</span>`;
+      }).join("");
+
+      renderActions(day);
+      renderChecklist(day);
+      renderTimeline();
+    }
+
+    renderSelect();
+    setCurrent(currentIndex);
+  </script>
+</body>
+</html>
