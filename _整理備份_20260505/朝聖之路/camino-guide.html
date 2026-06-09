@@ -893,6 +893,12 @@
         distance: "今日休整 / 明天走約 16-17 km",
         stay: "Aerostay Hostel",
         stayUrl: "https://www.booking.com/hotel/pt/aerostay-hostel.zh-tw.html",
+        lodgingOptions: [
+          ["今晚已住", "Aerostay Hostel", "https://www.booking.com/hotel/pt/aerostay-hostel.zh-tw.html"],
+          ["舒適備案", "Solar Antigo Porto Aeroporto", "https://www.solarantigo.com/portoaeroporto"],
+          ["機場備案", "Park Hotel Porto Aeroporto", "https://www.booking.com/hotel/pt/park-porto-aeroporto.html"],
+          ["青年旅館備案", "AirPorto Hostel", "https://www.google.com/maps/search/?api=1&query=AirPorto%20Hostel%20Moreira%20da%20Maia"]
+        ],
         summary: "今天先以抵達、入住 Aerostay Hostel、補水與吃飯為主；明天不只走到 Vilarinho，會直接推到 Sao Miguel de Arcos / Arcos。",
         note: "今晚請 hostel 或附近店家蓋章；買好明天早餐、水與點心。明天走到 Arcos，比直接推到 Rates / Pedra Furada 更舒服。",
         tags: ["今日住宿", "Aerostay Hostel", "補給休整", "明天 16-17 km"],
@@ -912,6 +918,14 @@
         distance: "約 4.5-5.5 hr / 16-17 km",
         stay: "Villa d'Arcos / Quinta Sao Miguel de Arcos",
         stayUrl: "https://www.pilbeo.com/en/accommodations/camino-portugues/sao-miguel-de-arcos",
+        lodgingOptions: [
+          ["首選", "Villa d'Arcos", "https://www.gronze.com/portugal/oporto/sao-miguel-arcos/hotel-villa-darcos"],
+          ["首選", "Quinta Sao Miguel de Arcos", "https://www.booking.com/hotel/pt/quinta-sao-miguel-de-arcos.html"],
+          ["短走備案", "Mosteiro de Vairao", "https://www.google.com/maps/search/?api=1&query=Albergue%20Mosteiro%20de%20Vairao"],
+          ["短走備案", "Casa da Laura Vilarinho", "https://wisepilgrim.com/en/accommodations/camino-portugues/vilarinho/casa-da-laura"],
+          ["加走備案", "Albergue de Peregrinos Sao Pedro de Rates", "http://www.alberguederates.pt"],
+          ["加走備案", "O Palhuco Pilgrims Hostel Pedra Furada", "https://www.cm-barcelos.pt/visitar-barcelos/caminho-de-santiago/albergues/"]
+        ],
         summary: "為了維持每天 15-20 km，不停 Vilarinho，從 Aerostay / Pedras Rubras 經 Vairao、Vilarinho 繼續走到 Arcos。",
         note: "這天比只到 Vilarinho 更完整；中途仍以 Camino 黃箭頭為準，Vilarinho 可當補水與休息點。",
         tags: ["16-17 km", "經 Vilarinho", "最推薦"],
@@ -930,6 +944,14 @@
         distance: "約 3-4 hr / 11-13 km",
         stay: "Hotel Bagoeira",
         stayUrl: "http://bagoeira.com/",
+        lodgingOptions: [
+          ["高 CP", "Hotel Bagoeira", "http://bagoeira.com/"],
+          ["青年旅館", "In Barcelos Hostel & Guest House", "https://www.inbarcelos.com"],
+          ["朝聖者", "Albergue Cidade de Barcelos", "https://www.alberguedebarcelos.com"],
+          ["舒適", "Art'Otel Barcelos", "https://www.booking.com/searchresults.html?ss=Art%27Otel%20Barcelos"],
+          ["城市備案", "Flag Hotel Barcelos", "https://www.booking.com/hotel/pt/flag-hotel-barcelos.html"],
+          ["前一點備案", "Diora Hostel Barcelinhos", "http://www.diorahostel.pt/"]
+        ],
         summary: "從 Arcos 進入更明顯的鄉間路段，走到 Barcelos 後可補給、洗衣與整理裝備。",
         note: "Barcelos 是大城，適合補藥品、現金、零食，也把後面住宿再確認一輪。",
         tags: ["11-13 km", "恢復短日", "大城補給"],
@@ -1285,6 +1307,11 @@
       ];
 
       if (day.stayUrl) links.splice(2, 0, ["住宿官網/訂房", day.stayUrl, ""]);
+      if (day.lodgingOptions) {
+        day.lodgingOptions.forEach(([type, name, href]) => {
+          links.push([`${type}住宿：${name}`, href || mapSearch(name), ""]);
+        });
+      }
       if (day.suppliesQuery) links.push(["附近超市/補給", mapSearch(day.suppliesQuery), ""]);
       if (day.foodQuery) links.push(["附近晚餐", mapSearch(day.foodQuery), ""]);
       if (day.id === "day-16" || day.id === "day-17") {
