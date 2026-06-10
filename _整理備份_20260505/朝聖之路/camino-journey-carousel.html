@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Camino 每日位置 Pin 輪播</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{min-height:100vh;font-family:"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;background:#111827;color:#f8fafc;}
+  main{min-height:100vh;display:flex;flex-direction:column;padding:28px;gap:18px;}
+  header{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;max-width:1220px;width:100%;margin:0 auto;}
+  h1{font-size:clamp(1.65rem,4vw,3rem);line-height:1.05;color:#fde047;font-weight:900;letter-spacing:0;}
+  .sub{max-width:720px;color:#cbd5e1;font-size:0.98rem;line-height:1.6;margin-top:10px;}
+  .top-links{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
+  .top-links a,.journey-controls button{border:1px solid rgba(250,204,21,0.45);background:rgba(250,204,21,0.12);color:#fde68a;border-radius:8px;padding:10px 12px;font-weight:900;text-decoration:none;font-family:inherit;cursor:pointer;min-height:42px;}
+  .journey-wrap{width:100%;max-width:1220px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,0.55fr);gap:22px;align-items:stretch;flex:1;}
+  .journey-map{position:relative;min-height:660px;border:1px solid rgba(255,255,255,0.12);border-radius:18px;overflow:hidden;background:
+    radial-gradient(circle at 28% 30%,rgba(45,212,191,0.22),transparent 16%),
+    radial-gradient(circle at 58% 56%,rgba(59,130,246,0.20),transparent 18%),
+    linear-gradient(135deg,#224336 0%,#1f4d3f 38%,#203a55 39%,#122035 100%);
+    box-shadow:0 24px 70px rgba(0,0,0,0.28);}
+  .journey-map::before{content:"";position:absolute;inset:0;background:
+    linear-gradient(90deg,rgba(255,255,255,0.045) 1px,transparent 1px),
+    linear-gradient(0deg,rgba(255,255,255,0.035) 1px,transparent 1px);
+    background-size:64px 64px;opacity:0.55;}
+  .journey-map::after{content:"Portugal / Galicia / Barcelona / London";position:absolute;left:22px;bottom:18px;color:rgba(255,255,255,0.28);font-size:0.82rem;font-weight:900;letter-spacing:0;text-transform:uppercase;}
+  .region-label{position:absolute;z-index:1;color:rgba(255,255,255,0.34);font-weight:900;font-size:0.78rem;text-transform:uppercase;}
+  .label-portugal{left:22%;top:56%;}
+  .label-galicia{left:56%;top:20%;}
+  .label-barcelona{left:72%;top:83%;}
+  .label-london{left:69%;top:41%;}
+  .route-svg{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;}
+  .route-svg path{fill:none;stroke:#fde047;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 8px rgba(250,204,21,0.35));}
+  .route-svg path.ghost{stroke:rgba(255,255,255,0.18);stroke-width:10;filter:none;}
+  .route-pin{position:absolute;z-index:2;left:var(--x);top:var(--y);transform:translate(-50%,-100%);border:0;background:transparent;color:#f8fafc;cursor:pointer;}
+  .route-pin .pin-dot{width:24px;height:24px;border-radius:50% 50% 50% 0;background:#94a3b8;transform:rotate(-45deg);display:grid;place-items:center;border:2px solid rgba(255,255,255,0.85);box-shadow:0 8px 18px rgba(0,0,0,0.35);transition:all 0.2s;}
+  .route-pin .pin-dot span{transform:rotate(45deg);font-size:0.62rem;font-weight:900;color:#0f172a;}
+  .route-pin .pin-label{position:absolute;left:18px;top:-6px;white-space:nowrap;font-size:0.74rem;font-weight:900;color:#cbd5e1;background:rgba(15,23,42,0.82);border:1px solid rgba(255,255,255,0.12);border-radius:999px;padding:4px 7px;opacity:0;transform:translateX(-4px);transition:all 0.2s;}
+  .route-pin.visited .pin-dot{background:#34d399;}
+  .route-pin.active{z-index:5;}
+  .route-pin.active .pin-dot{width:36px;height:36px;background:#facc15;box-shadow:0 0 0 8px rgba(250,204,21,0.18),0 10px 24px rgba(0,0,0,0.5);}
+  .route-pin.active .pin-label,.route-pin:hover .pin-label{opacity:1;transform:translateX(0);}
+  .journey-side{display:flex;flex-direction:column;gap:14px;}
+  .journey-now{min-height:238px;background:rgba(15,23,42,0.72);border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:20px;}
+  .journey-kicker{font-size:0.78rem;font-weight:900;color:#a3e635;text-transform:uppercase;letter-spacing:0;}
+  .journey-day{font-size:1.9rem;font-weight:900;color:#fde047;margin-top:8px;}
+  .journey-place{font-size:1.18rem;font-weight:900;color:#f8fafc;margin-top:8px;line-height:1.35;}
+  .journey-note{font-size:0.92rem;color:#cbd5e1;line-height:1.55;margin-top:12px;}
+  .journey-controls{display:flex;gap:10px;flex-wrap:wrap;}
+  .journey-list{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-height:390px;overflow:auto;padding-right:4px;}
+  .journey-chip{border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:#cbd5e1;border-radius:8px;padding:8px;font-size:0.76rem;line-height:1.35;text-align:left;font-family:inherit;cursor:pointer;}
+  .journey-chip.active{border-color:#facc15;background:rgba(250,204,21,0.16);color:#fef3c7;}
+  .meta-box{border:1px solid rgba(163,230,53,0.25);background:rgba(163,230,53,0.08);border-radius:12px;padding:14px;color:#d9f99d;font-size:0.86rem;line-height:1.55;}
+  @media (max-width:900px){
+    main{padding:18px 14px;}
+    header{align-items:flex-start;flex-direction:column;}
+    .top-links{justify-content:flex-start;}
+    .journey-wrap{grid-template-columns:1fr;}
+    .journey-map{min-height:480px;}
+    .journey-list{grid-template-columns:1fr;}
+    .route-pin .pin-label{display:none;}
+  }
+  @media (max-width:520px){
+    .journey-map{min-height:410px;}
+    .journey-controls button,.top-links a{flex:1;text-align:center;}
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div>
+      <h1>整趟旅途每日位置 Pin 輪播</h1>
+      <p class="sub">獨立頁面版：依序顯示每天落腳點，包含 Camino 葡萄牙中央線、靈性變體、Santiago、Barcelona 與 London 回程。</p>
+    </div>
+    <div class="top-links">
+      <a href="葡萄牙朝聖之路簡報.html">回簡報版</a>
+      <a href="camino-guide.html">回導覽頁</a>
+    </div>
+  </header>
+
+  <section class="journey-wrap" aria-label="Camino journey pin carousel">
+    <div class="journey-map" id="journeyMap">
+      <div class="region-label label-portugal">Portugal</div>
+      <div class="region-label label-galicia">Galicia</div>
+      <div class="region-label label-barcelona">Barcelona</div>
+      <div class="region-label label-london">London</div>
+      <svg class="route-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <path class="ghost" d="M 28 82 L 30 75 L 34 66 L 36 58 L 39 48 L 43 38 L 47 28 L 51 20 L 56 15 L 61 18 L 65 23 L 68 29 L 66 38 L 63 45 L 58 50 L 60 57 L 62 65 L 58 74 L 65 82 L 76 78 L 83 66 L 70 48" />
+        <path d="M 28 82 L 30 75 L 34 66 L 36 58 L 39 48 L 43 38 L 47 28 L 51 20 L 56 15 L 61 18 L 65 23 L 68 29 L 66 38 L 63 45 L 58 50 L 60 57 L 62 65 L 58 74 L 65 82 L 76 78 L 83 66 L 70 48" />
+      </svg>
+      <div id="journeyPins"></div>
+    </div>
+
+    <aside class="journey-side">
+      <div class="journey-now">
+        <div class="journey-kicker">Now showing</div>
+        <div class="journey-day" id="journeyDay">Day 2</div>
+        <div class="journey-place" id="journeyPlace">Porto</div>
+        <div class="journey-note" id="journeyNote">每日位置會自動輪播，也可以點地圖上的 pin 或下方清單。</div>
+      </div>
+      <div class="journey-controls">
+        <button type="button" id="journeyPrev">上一日</button>
+        <button type="button" id="journeyPlay">暫停</button>
+        <button type="button" id="journeyNext">下一日</button>
+      </div>
+      <div class="meta-box">Day 5 已改為 Albergue Cidade de Barcelos。黃色 pin 是目前輪播日，綠色 pin 是已經播放過的位置。</div>
+      <div class="journey-list" id="journeyList"></div>
+    </aside>
+  </section>
+</main>
+
+<script>
+const journeyStops=[
+  {day:'Day 2',place:'Porto',note:'主教座堂、Credencial、起點準備',x:28,y:82},
+  {day:'Day 3',place:'Moreira da Maia / Aerostay',note:'機場周邊休整，準備正式北上',x:30,y:75},
+  {day:'Day 4',place:'Quinta Sao Miguel de Arcos',note:'已抵達，住宿舒服，Arcos 正線停留',x:34,y:66},
+  {day:'Day 5',place:'Barcelos / Albergue Cidade de Barcelos',note:'庇護所主住，大城補給與洗衣',x:36,y:58},
+  {day:'Day 6',place:'Balugaes / Vitorino dos Piaes',note:'田野村落，補給不便，先確認晚餐',x:39,y:48},
+  {day:'Day 7',place:'Ponte de Lima',note:'古鎮與羅馬橋，隔天爬升日前補水',x:43,y:38},
+  {day:'Day 8',place:'Rubiaes',note:'Labruja 爬升日，正線小村，補給較少',x:47,y:28},
+  {day:'Day 9',place:'Tui',note:'跨進西班牙，手機時區快一小時',x:51,y:20},
+  {day:'Day 10',place:'O Porrino',note:'建議走替代線避開工業區',x:56,y:15},
+  {day:'Day 11',place:'Redondela',note:'與海岸線匯合，人流增加',x:61,y:18},
+  {day:'Day 12',place:'Pontevedra',note:'老城補給，決定靈性變體',x:65,y:23},
+  {day:'Day 13',place:'Armenteira',note:'經 Combarro 後爬升到修道院',x:68,y:29},
+  {day:'Day 14',place:'Barrantes / Ribadumia',note:'Albergue Camino Espiritual，水石之路拆段',x:66,y:38},
+  {day:'Day 15',place:'Vilanova / A Escravitude',note:'Traslatio 船後續走，補給先在 Padron',x:63,y:45},
+  {day:'Day 16',place:'Santiago de Compostela',note:'抵達 Obradoiro 廣場，辦 Compostela',x:58,y:50},
+  {day:'Day 19',place:'Barcelona',note:'朝聖後轉往巴塞隆納觀光',x:76,y:78},
+  {day:'7/1-7/8',place:'London',note:'回程倫敦停留，7/8 晚上返台',x:70,y:48}
+];
+let journeyIndex=0;
+let journeyPlaying=true;
+let journeyTimer=null;
+
+function renderJourneyPins(){
+  const pinBox=document.getElementById('journeyPins');
+  const listBox=document.getElementById('journeyList');
+  pinBox.innerHTML=journeyStops.map((stop,i)=>`<button class="route-pin" style="--x:${stop.x}%;--y:${stop.y}%;" type="button" data-journey="${i}" title="${stop.day} ${stop.place}"><span class="pin-dot"><span>${i+1}</span></span><span class="pin-label">${stop.day} ${stop.place}</span></button>`).join('');
+  listBox.innerHTML=journeyStops.map((stop,i)=>`<button type="button" class="journey-chip" data-journey="${i}"><strong>${stop.day}</strong><br>${stop.place}</button>`).join('');
+  document.querySelectorAll('[data-journey]').forEach(btn=>btn.addEventListener('click',()=>setJourney(Number(btn.dataset.journey),true)));
+  setJourney(0,false);
+}
+
+function setJourney(index, pause){
+  journeyIndex=(index+journeyStops.length)%journeyStops.length;
+  const stop=journeyStops[journeyIndex];
+  document.getElementById('journeyDay').textContent=stop.day;
+  document.getElementById('journeyPlace').textContent=stop.place;
+  document.getElementById('journeyNote').textContent=stop.note;
+  document.querySelectorAll('.route-pin').forEach((pin,i)=>{
+    pin.classList.toggle('active',i===journeyIndex);
+    pin.classList.toggle('visited',i<journeyIndex);
+  });
+  document.querySelectorAll('.journey-chip').forEach((chip,i)=>chip.classList.toggle('active',i===journeyIndex));
+  if(pause)toggleJourney(false);
+}
+
+function toggleJourney(play){
+  journeyPlaying=play;
+  const playButton=document.getElementById('journeyPlay');
+  playButton.textContent=journeyPlaying ? '暫停' : '播放';
+  if(journeyTimer)clearInterval(journeyTimer);
+  if(journeyPlaying)journeyTimer=setInterval(()=>setJourney(journeyIndex+1,false),2200);
+}
+
+document.getElementById('journeyPrev').addEventListener('click',()=>setJourney(journeyIndex-1,true));
+document.getElementById('journeyNext').addEventListener('click',()=>setJourney(journeyIndex+1,true));
+document.getElementById('journeyPlay').addEventListener('click',()=>toggleJourney(!journeyPlaying));
+renderJourneyPins();
+toggleJourney(true);
+</script>
+</body>
+</html>
