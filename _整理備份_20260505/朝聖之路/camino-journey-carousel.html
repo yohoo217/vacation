@@ -23,12 +23,10 @@
     linear-gradient(90deg,rgba(255,255,255,0.045) 1px,transparent 1px),
     linear-gradient(0deg,rgba(255,255,255,0.035) 1px,transparent 1px);
     background-size:64px 64px;opacity:0.55;}
-  .journey-map::after{content:"Portugal / Galicia / Barcelona / London";position:absolute;left:22px;bottom:18px;color:rgba(255,255,255,0.28);font-size:0.82rem;font-weight:900;letter-spacing:0;text-transform:uppercase;}
+  .journey-map::after{content:"Portugal / Galicia / Santiago";position:absolute;left:22px;bottom:18px;color:rgba(255,255,255,0.28);font-size:0.82rem;font-weight:900;letter-spacing:0;text-transform:uppercase;}
   .region-label{position:absolute;z-index:1;color:rgba(255,255,255,0.34);font-weight:900;font-size:0.78rem;text-transform:uppercase;}
   .label-portugal{left:22%;top:56%;}
   .label-galicia{left:56%;top:20%;}
-  .label-barcelona{left:72%;top:83%;}
-  .label-london{left:69%;top:41%;}
   .route-svg{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;}
   .route-svg path{fill:none;stroke:#fde047;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 8px rgba(250,204,21,0.35));}
   .route-svg path.ghost{stroke:rgba(255,255,255,0.18);stroke-width:10;filter:none;}
@@ -71,7 +69,7 @@
   <header>
     <div>
       <h1>整趟旅途每日位置 Pin 輪播</h1>
-      <p class="sub">獨立頁面版：依序顯示每天落腳點，包含 Camino 葡萄牙中央線、靈性變體、Santiago、Barcelona 與 London 回程。</p>
+      <p class="sub">獨立頁面版：依序顯示 Camino 葡萄牙中央線與靈性變體的每天落腳點，只保留 Porto 到 Santiago 的朝聖路段。</p>
     </div>
     <div class="top-links">
       <a href="葡萄牙朝聖之路簡報.html">回簡報版</a>
@@ -83,11 +81,9 @@
     <div class="journey-map" id="journeyMap">
       <div class="region-label label-portugal">Portugal</div>
       <div class="region-label label-galicia">Galicia</div>
-      <div class="region-label label-barcelona">Barcelona</div>
-      <div class="region-label label-london">London</div>
       <svg class="route-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-        <path class="ghost" d="M 28 82 L 30 75 L 34 66 L 36 58 L 39 48 L 43 38 L 47 28 L 51 20 L 56 15 L 61 18 L 65 23 L 68 29 L 66 38 L 63 45 L 58 50 L 60 57 L 62 65 L 58 74 L 65 82 L 76 78 L 83 66 L 70 48" />
-        <path d="M 28 82 L 30 75 L 34 66 L 36 58 L 39 48 L 43 38 L 47 28 L 51 20 L 56 15 L 61 18 L 65 23 L 68 29 L 66 38 L 63 45 L 58 50 L 60 57 L 62 65 L 58 74 L 65 82 L 76 78 L 83 66 L 70 48" />
+        <path class="ghost" d="M 28 82 L 30 75 L 34 66 L 36 58 L 39 48 L 43 38 L 47 28 L 51 20 L 56 15 L 61 18 L 65 23 L 68 29 L 66 38 L 63 45 L 58 50" />
+        <path d="M 28 82 L 30 75 L 34 66 L 36 58 L 39 48 L 43 38 L 47 28 L 51 20 L 56 15 L 61 18 L 65 23 L 68 29 L 66 38 L 63 45 L 58 50" />
       </svg>
       <div id="journeyPins"></div>
     </div>
@@ -126,9 +122,7 @@ const journeyStops=[
   {day:'Day 13',place:'Armenteira',note:'經 Combarro 後爬升到修道院',x:68,y:29},
   {day:'Day 14',place:'Barrantes / Ribadumia',note:'Albergue Camino Espiritual，水石之路拆段',x:66,y:38},
   {day:'Day 15',place:'Vilanova / A Escravitude',note:'Traslatio 船後續走，補給先在 Padron',x:63,y:45},
-  {day:'Day 16',place:'Santiago de Compostela',note:'抵達 Obradoiro 廣場，辦 Compostela',x:58,y:50},
-  {day:'Day 19',place:'Barcelona',note:'朝聖後轉往巴塞隆納觀光',x:76,y:78},
-  {day:'7/1-7/8',place:'London',note:'回程倫敦停留，7/8 晚上返台',x:70,y:48}
+  {day:'Day 16',place:'Santiago de Compostela',note:'抵達 Obradoiro 廣場，辦 Compostela',x:58,y:50}
 ];
 let journeyIndex=0;
 let journeyPlaying=true;
