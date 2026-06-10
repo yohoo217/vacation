@@ -3,73 +3,81 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Camino 每日位置 Pin 輪播</title>
+<title>Camino 每日住宿地圖輪播</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
   *{box-sizing:border-box;margin:0;padding:0;}
-  :root{--ink:#15251f;--paper:#f7f0df;--sea:#bad8df;--forest:#6f9f75;--field:#d7c78f;--road:#d79a3d;--route:#d9412e;--night:#17322b;}
-  body{min-height:100vh;font-family:"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;background:#183229;color:#14211c;}
-  main{min-height:100vh;display:flex;flex-direction:column;padding:24px;gap:18px;background:linear-gradient(140deg,#f5efd9 0%,#f7f0df 56%,#dbe8df 100%);}
-  header{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;max-width:1240px;width:100%;margin:0 auto;}
-  h1{font-size:clamp(1.65rem,3.8vw,3rem);line-height:1.05;color:#213c31;font-weight:900;letter-spacing:0;}
-  .sub{max-width:760px;color:#52645a;font-size:0.98rem;line-height:1.6;margin-top:10px;}
+  :root{
+    --paper:#f6efe0;
+    --ink:#1f332c;
+    --muted:#617267;
+    --central:#d7352a;
+    --spiritual:#2563eb;
+    --rejoin:#15803d;
+    --gold:#f5c542;
+  }
+  body{min-height:100vh;font-family:"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;background:#17342c;color:var(--ink);}
+  main{min-height:100vh;display:flex;flex-direction:column;gap:18px;padding:24px;background:linear-gradient(135deg,#f8f1df 0%,#f6efe0 58%,#dbe8de 100%);}
+  header{width:100%;max-width:1260px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;gap:18px;}
+  h1{font-size:clamp(1.65rem,3.7vw,3rem);line-height:1.06;font-weight:900;color:var(--ink);letter-spacing:0;}
+  .sub{max-width:760px;margin-top:10px;color:var(--muted);font-size:0.98rem;line-height:1.6;}
   .top-links{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
-  .top-links a,.journey-controls button{border:1px solid rgba(33,60,49,0.22);background:#fff8e7;color:#213c31;border-radius:8px;padding:10px 12px;font-weight:900;text-decoration:none;font-family:inherit;cursor:pointer;min-height:42px;box-shadow:0 8px 18px rgba(37,45,35,0.08);}
-  .journey-wrap{width:100%;max-width:1240px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1.48fr) minmax(320px,0.52fr);gap:22px;align-items:stretch;flex:1;}
-  .journey-map{position:relative;min-height:680px;border:1px solid rgba(33,60,49,0.24);border-radius:18px;overflow:hidden;background:var(--sea);box-shadow:0 24px 60px rgba(37,45,35,0.22);}
-  .map-svg{position:absolute;inset:0;width:100%;height:100%;z-index:0;}
-  .map-land{fill:#e9dec1;}
-  .map-region{fill:#ceda9b;opacity:0.72;}
-  .map-mountain{fill:#a8b37a;opacity:0.48;}
-  .map-river{fill:none;stroke:#7ab5c6;stroke-width:0.45;stroke-linecap:round;opacity:0.9;}
-  .map-road{fill:none;stroke:#b58d55;stroke-width:0.36;stroke-linecap:round;stroke-dasharray:1.2 1.4;opacity:0.68;}
-  .map-border{fill:none;stroke:#8a754e;stroke-width:0.48;stroke-dasharray:1.8 1.3;opacity:0.7;}
-  .route-svg{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;}
-  .route-shadow{fill:none;stroke:rgba(54,38,21,0.22);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
-  .route-line{fill:none;stroke:var(--route);stroke-width:0.78;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 1px 1px rgba(255,255,255,0.7));}
-  .route-boat{fill:none;stroke:#2563eb;stroke-width:0.58;stroke-linecap:round;stroke-dasharray:1.5 1.3;}
-  .region-label{position:absolute;z-index:1;color:rgba(55,66,50,0.52);font-weight:900;font-size:0.78rem;text-transform:uppercase;letter-spacing:0;}
-  .label-portugal{left:18%;top:51%;}
-  .label-galicia{left:55%;top:17%;}
-  .label-atlantic{left:4%;top:74%;writing-mode:vertical-rl;color:rgba(40,83,102,0.42);}
-  .route-pin{position:absolute;z-index:2;left:var(--x);top:var(--y);transform:translate(-50%,-100%);border:0;background:transparent;color:#1d2e27;cursor:pointer;}
-  .route-pin .pin-dot{width:24px;height:24px;border-radius:50% 50% 50% 0;background:#fff8e7;transform:rotate(-45deg);display:grid;place-items:center;border:2px solid rgba(33,60,49,0.55);box-shadow:0 7px 16px rgba(37,45,35,0.28);transition:all 0.2s;}
-  .route-pin .pin-dot span{transform:rotate(45deg);font-size:0.62rem;font-weight:900;color:#213c31;}
-  .route-pin .pin-label{position:absolute;left:18px;top:-6px;white-space:nowrap;font-size:0.74rem;font-weight:900;color:#213c31;background:rgba(255,248,231,0.94);border:1px solid rgba(33,60,49,0.16);border-radius:999px;padding:4px 7px;opacity:0;transform:translateX(-4px);transition:all 0.2s;}
-  .route-pin.visited .pin-dot{background:#86b868;}
-  .route-pin.active{z-index:5;}
-  .route-pin.active .pin-dot{width:38px;height:38px;background:#f5c542;border-color:#6b4e0b;box-shadow:0 0 0 8px rgba(245,197,66,0.28),0 10px 24px rgba(37,45,35,0.38);}
-  .route-pin.active .pin-label,.route-pin:hover .pin-label{opacity:1;transform:translateX(0);}
-  .map-scale{position:absolute;left:18px;bottom:18px;z-index:3;color:#3d5147;font-size:0.78rem;font-weight:900;background:rgba(255,248,231,0.76);border:1px solid rgba(33,60,49,0.14);border-radius:8px;padding:8px 10px;}
-  .map-scale::before{content:"";display:block;width:92px;border-top:3px solid #3d5147;margin-bottom:5px;}
+  .top-links a,.journey-controls button{min-height:42px;border:1px solid rgba(31,51,44,0.2);background:#fff9ea;color:var(--ink);border-radius:8px;padding:10px 12px;font-weight:900;text-decoration:none;font-family:inherit;cursor:pointer;box-shadow:0 8px 18px rgba(37,45,35,0.08);}
+  .journey-wrap{width:100%;max-width:1260px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1.58fr) minmax(330px,0.42fr);gap:20px;align-items:stretch;flex:1;}
+  .map-panel{position:relative;min-height:700px;border:1px solid rgba(31,51,44,0.22);border-radius:18px;overflow:hidden;background:#d7e8df;box-shadow:0 24px 64px rgba(37,45,35,0.22);}
+  #map{position:absolute;inset:0;z-index:0;}
+  .leaflet-container{font-family:"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;background:#d7e8df;}
+  .leaflet-control-attribution{font-size:10px;}
+  .map-legend{position:absolute;left:14px;bottom:14px;z-index:500;background:rgba(255,249,234,0.94);border:1px solid rgba(31,51,44,0.16);border-radius:10px;padding:10px 12px;box-shadow:0 10px 24px rgba(37,45,35,0.18);font-size:0.82rem;color:var(--ink);line-height:1.55;}
+  .legend-row{display:flex;align-items:center;gap:8px;white-space:nowrap;}
+  .legend-line{width:34px;height:0;border-top:4px solid var(--central);border-radius:999px;}
+  .legend-line.spiritual{border-color:var(--spiritual);}
+  .legend-line.boat{border-color:var(--spiritual);border-top-style:dashed;}
+  .legend-line.rejoin{border-color:var(--rejoin);}
+  .segment-label{background:#fff9ea;border:1px solid rgba(31,51,44,0.2);border-radius:999px;padding:4px 8px;color:var(--ink);font-size:12px;font-weight:900;box-shadow:0 5px 14px rgba(37,45,35,0.16);}
+  .stop-marker{width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#fff9ea;border:2px solid rgba(31,51,44,0.68);box-shadow:0 7px 18px rgba(37,45,35,0.26);display:grid;place-items:center;}
+  .stop-marker span{transform:rotate(45deg);font-size:11px;font-weight:900;color:var(--ink);}
+  .stop-marker.done{background:#8bbd6d;}
+  .stop-marker.active{width:40px;height:40px;background:var(--gold);border-color:#6b4e0b;box-shadow:0 0 0 8px rgba(245,197,66,0.25),0 12px 26px rgba(37,45,35,0.36);}
+  .leaflet-popup-content-wrapper{border-radius:10px;background:#fff9ea;color:var(--ink);}
+  .leaflet-popup-content{font-size:13px;line-height:1.45;}
   .journey-side{display:flex;flex-direction:column;gap:14px;}
-  .journey-now{min-height:300px;background:#fff8e7;border:1px solid rgba(33,60,49,0.18);border-radius:16px;padding:20px;box-shadow:0 18px 38px rgba(37,45,35,0.12);}
-  .journey-kicker{font-size:0.78rem;font-weight:900;color:#667a41;text-transform:uppercase;letter-spacing:0;}
+  .journey-now{min-height:316px;background:#fff9ea;border:1px solid rgba(31,51,44,0.18);border-radius:16px;padding:20px;box-shadow:0 18px 38px rgba(37,45,35,0.12);}
+  .journey-kicker{font-size:0.78rem;font-weight:900;color:#62753e;text-transform:uppercase;letter-spacing:0;}
   .journey-day{font-size:1.9rem;font-weight:900;color:#9d3c27;margin-top:8px;}
-  .journey-place{font-size:1.2rem;font-weight:900;color:#213c31;margin-top:8px;line-height:1.35;}
+  .journey-place{font-size:1.15rem;font-weight:900;color:var(--ink);margin-top:8px;line-height:1.35;}
+  .journey-route{display:inline-flex;margin-top:10px;border-radius:999px;padding:5px 9px;font-size:0.74rem;font-weight:900;color:#fff;background:var(--central);}
+  .journey-route.spiritual{background:var(--spiritual);}
+  .journey-route.rejoin{background:var(--rejoin);}
+  .journey-route.start{background:#6b7280;}
   .journey-distance{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;}
-  .metric{background:#f0e5ca;border:1px solid rgba(33,60,49,0.12);border-radius:8px;padding:10px;}
-  .metric span{display:block;font-size:0.7rem;font-weight:900;color:#6d776d;text-transform:uppercase;letter-spacing:0;}
-  .metric strong{display:block;margin-top:5px;font-size:1.02rem;color:#213c31;}
-  .journey-note{font-size:0.92rem;color:#52645a;line-height:1.55;margin-top:12px;}
+  .metric{background:#f0e5ca;border:1px solid rgba(31,51,44,0.12);border-radius:8px;padding:10px;}
+  .metric span{display:block;font-size:0.7rem;font-weight:900;color:#69766d;text-transform:uppercase;letter-spacing:0;}
+  .metric strong{display:block;margin-top:5px;font-size:1.02rem;color:var(--ink);}
+  .journey-note{font-size:0.92rem;color:var(--muted);line-height:1.55;margin-top:12px;}
   .journey-controls{display:flex;gap:10px;flex-wrap:wrap;}
   .journey-list{display:grid;grid-template-columns:1fr;gap:8px;max-height:400px;overflow:auto;padding-right:4px;}
-  .journey-chip{border:1px solid rgba(33,60,49,0.12);background:rgba(255,248,231,0.74);color:#4d5e54;border-radius:8px;padding:10px;font-size:0.78rem;line-height:1.35;text-align:left;font-family:inherit;cursor:pointer;}
-  .journey-chip strong{color:#213c31;}
-  .journey-chip .chip-km{float:right;font-weight:900;color:#9d3c27;}
-  .journey-chip.active{border-color:#b65b32;background:#fff8e7;box-shadow:0 10px 22px rgba(37,45,35,0.12);}
-  .meta-box{border:1px solid rgba(102,122,65,0.28);background:rgba(255,248,231,0.72);border-radius:12px;padding:14px;color:#52645a;font-size:0.86rem;line-height:1.55;}
+  .journey-chip{border:1px solid rgba(31,51,44,0.12);background:rgba(255,249,234,0.74);color:#4d5e54;border-radius:8px;padding:10px;font-size:0.78rem;line-height:1.35;text-align:left;font-family:inherit;cursor:pointer;}
+  .journey-chip strong{color:var(--ink);}
+  .chip-km{float:right;font-weight:900;color:#9d3c27;}
+  .chip-route{display:inline-block;margin-top:4px;border-radius:999px;padding:2px 7px;font-size:0.68rem;font-weight:900;color:#fff;background:var(--central);}
+  .chip-route.spiritual{background:var(--spiritual);}
+  .chip-route.rejoin{background:var(--rejoin);}
+  .chip-route.start{background:#6b7280;}
+  .journey-chip.active{border-color:#b65b32;background:#fff9ea;box-shadow:0 10px 22px rgba(37,45,35,0.12);}
+  .meta-box{border:1px solid rgba(98,117,62,0.28);background:rgba(255,249,234,0.72);border-radius:12px;padding:14px;color:var(--muted);font-size:0.86rem;line-height:1.55;}
   @media (max-width:900px){
     main{padding:18px 14px;}
     header{align-items:flex-start;flex-direction:column;}
     .top-links{justify-content:flex-start;}
     .journey-wrap{grid-template-columns:1fr;}
-    .journey-map{min-height:520px;}
-    .route-pin .pin-label{display:none;}
+    .map-panel{min-height:560px;}
   }
   @media (max-width:520px){
-    .journey-map{min-height:430px;}
+    .map-panel{min-height:470px;}
     .journey-distance{grid-template-columns:1fr;}
     .journey-controls button,.top-links a{flex:1;text-align:center;}
+    .map-legend{right:10px;left:10px;bottom:10px;font-size:0.78rem;}
   }
 </style>
 </head>
@@ -77,8 +85,8 @@
 <main>
   <header>
     <div>
-      <h1>Camino 每日住宿地圖輪播</h1>
-      <p class="sub">只顯示 Porto 到 Santiago 的朝聖路段。地圖 pin 依照實際城市經緯度投影，距離以目前住宿點到隔晚住宿點的步行行程估算呈現。</p>
+      <h1>Camino 每日住宿真實地圖輪播</h1>
+      <p class="sub">使用 OpenStreetMap 真實地圖底圖。紅線是 Camino Português Central 中央線，藍線是 Pontevedra 後接的 Variante Espiritual 靈性之路，藍色虛線是 Vilanova de Arousa 的 Traslatio 船段。</p>
     </div>
     <div class="top-links">
       <a href="葡萄牙朝聖之路簡報.html">回簡報版</a>
@@ -86,29 +94,15 @@
     </div>
   </header>
 
-  <section class="journey-wrap" aria-label="Camino journey pin carousel">
-    <div class="journey-map" id="journeyMap">
-      <svg class="map-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-        <rect width="100" height="100" fill="#bad8df"/>
-        <path class="map-land" d="M 22 0 C 30 11 29 20 35 30 C 41 40 35 48 41 58 C 48 70 40 82 48 100 L 100 100 L 100 0 Z"/>
-        <path class="map-region" d="M 43 2 C 60 8 69 21 70 36 C 72 51 61 59 62 73 C 63 87 73 94 88 100 L 100 100 L 100 0 Z"/>
-        <path class="map-mountain" d="M 56 8 C 68 18 75 33 72 45 C 69 59 75 72 90 89 L 100 100 L 100 0 Z"/>
-        <path class="map-border" d="M 41 45 C 48 42 55 42 62 44"/>
-        <path class="map-river" d="M 38 67 C 48 65 57 67 68 69"/>
-        <path class="map-river" d="M 42 46 C 52 44 61 45 70 48"/>
-        <path class="map-river" d="M 47 30 C 57 29 68 31 77 36"/>
-        <path class="map-road" d="M 30 88 C 36 75 38 63 41 52 C 45 38 52 27 62 18 C 67 13 73 9 82 6"/>
-      </svg>
-      <div class="region-label label-portugal">Portugal</div>
-      <div class="region-label label-galicia">Galicia</div>
-      <div class="region-label label-atlantic">Atlantic</div>
-      <svg class="route-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-        <path class="route-shadow" id="routeShadow"></path>
-        <path class="route-line" id="routeLine"></path>
-        <path class="route-boat" id="boatLine"></path>
-      </svg>
-      <div id="journeyPins"></div>
-      <div class="map-scale">約 50 km</div>
+  <section class="journey-wrap" aria-label="Camino journey map carousel">
+    <div class="map-panel">
+      <div id="map" aria-label="Camino map"></div>
+      <div class="map-legend">
+        <div class="legend-row"><span class="legend-line"></span>中央線 Porto → Pontevedra</div>
+        <div class="legend-row"><span class="legend-line spiritual"></span>靈性之路 Pontevedra → Vilanova</div>
+        <div class="legend-row"><span class="legend-line boat"></span>Traslatio 船段</div>
+        <div class="legend-row"><span class="legend-line rejoin"></span>接回主線往 Santiago</div>
+      </div>
     </div>
 
     <aside class="journey-side">
@@ -116,6 +110,7 @@
         <div class="journey-kicker">Now showing</div>
         <div class="journey-day" id="journeyDay">Day 2</div>
         <div class="journey-place" id="journeyPlace">Porto</div>
+        <div class="journey-route start" id="journeyRoute">起點準備</div>
         <div class="journey-distance">
           <div class="metric"><span>今日距離</span><strong id="journeyKm">市區 2-4 km</strong></div>
           <div class="metric"><span>累計步行</span><strong id="journeyTotal">0 km</strong></div>
@@ -127,97 +122,147 @@
         <button type="button" id="journeyPlay">暫停</button>
         <button type="button" id="journeyNext">下一日</button>
       </div>
-      <div class="meta-box">只保留 Porto 到 Santiago 的 Camino 主行程。公里數是住宿點之間的實用步行估算；實際當日仍以 Google Maps、Gronze/Wise Pilgrim 與黃色箭頭為準。</div>
+      <div class="meta-box">只保留 Porto 到 Santiago 的朝聖路段。距離是住宿點到住宿點的實用步行估算；實際當日仍以 Google Maps、Gronze / Wise Pilgrim 與現場黃色箭頭為準。</div>
       <div class="journey-list" id="journeyList"></div>
     </aside>
   </section>
 </main>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-const bounds={minLat:41.08,maxLat:42.92,minLon:-8.93,maxLon:-8.48};
+const routeNames={
+  start:'起點準備',
+  central:'中央線',
+  spiritual:'靈性之路',
+  rejoin:'接回主線'
+};
 const journeyStops=[
-  {day:'Day 2',place:'Porto',stay:'Hotel Spot Family Suites Porto',from:'Porto 市區準備',kmText:'市區 2-4 km',km:0,note:'主教座堂、Credencial、起點準備。',lat:41.1496,lon:-8.6109},
-  {day:'Day 3',place:'Moreira da Maia',stay:'Aerostay Hostel',from:'Porto / Porto Airport',kmText:'休整日 / 交通日',km:0,note:'今天住 Aerostay Hostel，作為正式北上前的休整點。',lat:41.2475,lon:-8.6551},
-  {day:'Day 4',place:'Sao Miguel de Arcos',stay:'Quinta Sao Miguel de Arcos',from:'Aerostay Hostel',kmText:'16.5 km',km:16.5,note:'已抵達 Quinta Sao Miguel de Arcos，住宿舒服，位置仍貼近中央線。',lat:41.3888,lon:-8.6758},
-  {day:'Day 5',place:'Barcelos',stay:'Albergue Cidade de Barcelos',from:'Quinta Sao Miguel de Arcos',kmText:'12.0 km',km:12.0,note:'明天主住庇護所；Barcelos 是大城，適合補給、洗衣、整理腳。',lat:41.5324,lon:-8.6190},
-  {day:'Day 6',place:'Balugaes / Vitorino dos Piaes',stay:'Quinta da Cancela / Casa da Fernanda',from:'Barcelos',kmText:'15.0 km',km:15.0,note:'補給變少，從 Barcelos 帶午餐、點心與備用水。',lat:41.6507,lon:-8.6357},
-  {day:'Day 7',place:'Ponte de Lima',stay:'ARC MY OTEL / Albergue de Peregrinos',from:'Balugaes',kmText:'18.0 km',km:18.0,note:'抵達葡萄牙經典古鎮，隔天 Labruja 爬升日前好好休息。',lat:41.7676,lon:-8.5832},
-  {day:'Day 8',place:'Rubiaes',stay:'Quinta do Caminho / Casa das Lages',from:'Ponte de Lima',kmText:'17.4 km',km:17.4,note:'Labruja 爬升日，抓寬時間，離開 Ponte de Lima 前補足水和鹽分。',lat:41.8966,lon:-8.6229},
-  {day:'Day 9',place:'Tui',stay:'A Torre do Xudeu / Albergue de Peregrinos',from:'Rubiaes',kmText:'19.1 km',km:19.1,note:'跨過 Minho 河進西班牙，從 Tui 起每天保守蓋 2 個章。',lat:42.0471,lon:-8.6444},
-  {day:'Day 10',place:'O Porrino',stay:'Alojamientos Central',from:'Tui',kmText:'16.0 km',km:16.0,note:'建議走替代路線避開工業區，抵達後補給 Redondela 段。',lat:42.1616,lon:-8.6199},
-  {day:'Day 11',place:'Redondela',stay:'Alvear Suites / Santiago de Vilavella',from:'O Porrino',kmText:'16.4 km',km:16.4,note:'Mos / Santiaguino 一帶有爬升，Redondela 人流開始變多。',lat:42.2840,lon:-8.6096},
-  {day:'Day 12',place:'Pontevedra',stay:'Rias Bajas Hotel / Virgen Peregrina',from:'Redondela',kmText:'19.6 km',km:19.6,note:'老城值得留時間逛，今晚確認 Variante Espiritual 的後續住宿。',lat:42.4310,lon:-8.6444},
-  {day:'Day 13',place:'Armenteira',stay:'Hospederia Monasterio de Armenteira',from:'Pontevedra',kmText:'20.5 km',km:20.5,note:'經 Combarro 後爬升到修道院；Combarro 是重要午餐與補水點。',lat:42.4590,lon:-8.7466},
-  {day:'Day 14',place:'Barrantes / Ribadumia',stay:'Albergue Camino Espiritual',from:'Armenteira',kmText:'15.5 km',km:15.5,note:'水石之路拆段，主住 Albergue Camino Espiritual，晚餐早餐先確認。',lat:42.5160,lon:-8.7594},
-  {day:'Day 15',place:'Vilanova / A Escravitude',stay:'Villa Vieira / O Lagar de Jesus',from:'Ribadumia',kmText:'16.5 km + 船 1.5 hr',km:16.5,note:'先到 Vilanova 搭 Traslatio 船，下船後經 Padron 補給再續走。',lat:42.7232,lon:-8.6533,viaBoat:true},
-  {day:'Day 16',place:'Santiago de Compostela',stay:'Hospederia San Martin Pinario',from:'A Escravitude',kmText:'19.0 km',km:19.0,note:'完整收尾進 Obradoiro 廣場，抵達後辦 Compostela。',lat:42.8805,lon:-8.5457}
+  {day:'Day 2',place:'Porto',stay:'Hotel Spot Family Suites Porto',from:'Porto 市區準備',kmText:'市區 2-4 km',km:0,route:'start',note:'主教座堂、Credencial、起點準備。',lat:41.1496,lng:-8.6109},
+  {day:'Day 3',place:'Moreira da Maia',stay:'Aerostay Hostel',from:'Porto / Porto Airport',kmText:'休整日 / 交通日',km:0,route:'start',note:'今天住 Aerostay Hostel，作為正式北上前的休整點。',lat:41.2475,lng:-8.6551},
+  {day:'Day 4',place:'Sao Miguel de Arcos',stay:'Quinta Sao Miguel de Arcos',from:'Aerostay Hostel',kmText:'16.5 km',km:16.5,route:'central',note:'已抵達 Quinta Sao Miguel de Arcos，住宿舒服，位置仍貼近中央線。',lat:41.3888,lng:-8.6758},
+  {day:'Day 5',place:'Barcelos',stay:'Albergue Cidade de Barcelos',from:'Quinta Sao Miguel de Arcos',kmText:'12.0 km',km:12.0,route:'central',note:'明天主住庇護所；Barcelos 是大城，適合補給、洗衣、整理腳。',lat:41.5324,lng:-8.6190},
+  {day:'Day 6',place:'Balugaes / Vitorino dos Piaes',stay:'Quinta da Cancela / Casa da Fernanda',from:'Barcelos',kmText:'15.0 km',km:15.0,route:'central',note:'補給變少，從 Barcelos 帶午餐、點心與備用水。',lat:41.6507,lng:-8.6357},
+  {day:'Day 7',place:'Ponte de Lima',stay:'ARC MY OTEL / Albergue de Peregrinos',from:'Balugaes',kmText:'18.0 km',km:18.0,route:'central',note:'抵達葡萄牙經典古鎮，隔天 Labruja 爬升日前好好休息。',lat:41.7676,lng:-8.5832},
+  {day:'Day 8',place:'Rubiaes',stay:'Quinta do Caminho / Casa das Lages',from:'Ponte de Lima',kmText:'17.4 km',km:17.4,route:'central',note:'Labruja 爬升日，抓寬時間，離開 Ponte de Lima 前補足水和鹽分。',lat:41.8966,lng:-8.6229},
+  {day:'Day 9',place:'Tui',stay:'A Torre do Xudeu / Albergue de Peregrinos',from:'Rubiaes',kmText:'19.1 km',km:19.1,route:'central',note:'跨過 Minho 河進西班牙，從 Tui 起每天保守蓋 2 個章。',lat:42.0471,lng:-8.6444},
+  {day:'Day 10',place:'O Porrino',stay:'Alojamientos Central',from:'Tui',kmText:'16.0 km',km:16.0,route:'central',note:'建議走替代路線避開工業區，抵達後補給 Redondela 段。',lat:42.1616,lng:-8.6199},
+  {day:'Day 11',place:'Redondela',stay:'Alvear Suites / Santiago de Vilavella',from:'O Porrino',kmText:'16.4 km',km:16.4,route:'central',note:'Mos / Santiaguino 一帶有爬升，Redondela 人流開始變多。',lat:42.2840,lng:-8.6096},
+  {day:'Day 12',place:'Pontevedra',stay:'Rias Bajas Hotel / Virgen Peregrina',from:'Redondela',kmText:'19.6 km',km:19.6,route:'central',note:'中央線走到 Pontevedra；今晚確認轉入 Variante Espiritual 的後續住宿。',lat:42.4310,lng:-8.6444},
+  {day:'Day 13',place:'Armenteira',stay:'Hospederia Monasterio de Armenteira',from:'Pontevedra',kmText:'20.5 km',km:20.5,route:'spiritual',note:'從 Pontevedra 轉入靈性之路，經 Combarro 後爬升到修道院。',lat:42.4590,lng:-8.7466},
+  {day:'Day 14',place:'Barrantes / Ribadumia',stay:'Albergue Camino Espiritual',from:'Armenteira',kmText:'15.5 km',km:15.5,route:'spiritual',note:'水石之路拆段，主住 Albergue Camino Espiritual，晚餐早餐先確認。',lat:42.5160,lng:-8.7594},
+  {day:'Day 15',place:'Vilanova / A Escravitude',stay:'Villa Vieira / O Lagar de Jesus',from:'Ribadumia',kmText:'16.5 km + 船 1.5 hr',km:16.5,route:'spiritual',note:'沿靈性之路到 Vilanova de Arousa，搭 Traslatio 船後經 Padron 補給再續走。',lat:42.7232,lng:-8.6533},
+  {day:'Day 16',place:'Santiago de Compostela',stay:'Hospederia San Martin Pinario',from:'A Escravitude',kmText:'19.0 km',km:19.0,route:'rejoin',note:'接回通往 Santiago 的主線，完整收尾進 Obradoiro 廣場並辦 Compostela。',lat:42.8805,lng:-8.5457}
+];
+const centralLine=[
+  [41.1496,-8.6109],[41.1677,-8.6048],[41.2134,-8.6131],[41.2475,-8.6551],
+  [41.3201,-8.6741],[41.3486,-8.6665],[41.3888,-8.6758],[41.4221,-8.6722],
+  [41.4714,-8.6375],[41.5324,-8.6190],[41.6032,-8.6214],[41.6507,-8.6357],
+  [41.6927,-8.6122],[41.7267,-8.5908],[41.7676,-8.5832],[41.8426,-8.6097],
+  [41.8966,-8.6229],[41.9669,-8.6367],[42.0315,-8.6448],[42.0471,-8.6444],
+  [42.1085,-8.6225],[42.1616,-8.6199],[42.1952,-8.6095],[42.2840,-8.6096],
+  [42.3420,-8.6110],[42.3488,-8.6053],[42.4310,-8.6444]
+];
+const spiritualLine=[
+  [42.4310,-8.6444],[42.4319,-8.7066],[42.4315,-8.7495],[42.4590,-8.7466],
+  [42.4866,-8.7603],[42.5160,-8.7594],[42.5480,-8.7552],[42.5627,-8.8275],
+  [42.5962,-8.7650]
+];
+const boatLine=[
+  [42.5962,-8.7650],[42.6307,-8.7657],[42.6764,-8.7234],[42.7207,-8.6510]
+];
+const rejoinLine=[
+  [42.7207,-8.6510],[42.7380,-8.6602],[42.8013,-8.6242],[42.8441,-8.5797],
+  [42.8574,-8.5575],[42.8805,-8.5457]
 ];
 let journeyIndex=0;
 let journeyPlaying=true;
 let journeyTimer=null;
+let map;
+let markers=[];
 
-function project(stop){
-  return {
-    x:10+((stop.lon-bounds.minLon)/(bounds.maxLon-bounds.minLon))*80,
-    y:8+((bounds.maxLat-stop.lat)/(bounds.maxLat-bounds.minLat))*84
-  };
+function safeInit(){
+  if(!window.L){
+    document.getElementById('map').innerHTML='<div style="padding:18px;font-weight:900;color:#1f332c;background:#fff9ea;">地圖載入需要網路連線；若暫時看不到底圖，請稍後重新整理。</div>';
+    return;
+  }
+  map=L.map('map',{scrollWheelZoom:false,zoomControl:true}).setView([42.05,-8.64],8);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    maxZoom:18,
+    attribution:'&copy; OpenStreetMap contributors'
+  }).addTo(map);
+  drawSegments();
+  renderJourneyPins();
+  setJourney(0,false);
+  toggleJourney(true);
 }
-function routePath(stops){
-  return stops.map((stop,i)=>{
-    const p=project(stop);
-    return `${i===0?'M':'L'} ${p.x.toFixed(2)} ${p.y.toFixed(2)}`;
-  }).join(' ');
+function drawSegments(){
+  L.polyline(centralLine,{color:'#d7352a',weight:6,opacity:0.95}).addTo(map).bindPopup('<strong>Camino Português Central 中央線</strong><br>Porto 到 Pontevedra');
+  L.polyline(spiritualLine,{color:'#2563eb',weight:6,opacity:0.95}).addTo(map).bindPopup('<strong>Variante Espiritual 靈性之路</strong><br>Pontevedra 到 Vilanova de Arousa');
+  L.polyline(boatLine,{color:'#2563eb',weight:4,opacity:0.9,dashArray:'8 8'}).addTo(map).bindPopup('<strong>Traslatio 船段</strong><br>Vilanova de Arousa 到 Pontecesures / Padron');
+  L.polyline(rejoinLine,{color:'#15803d',weight:5,opacity:0.9}).addTo(map).bindPopup('<strong>接回主線</strong><br>Pontecesures / Padron 到 Santiago');
+  addSegmentLabel([41.76,-8.70],'中央線');
+  addSegmentLabel([42.47,-8.73],'靈性之路');
+  addSegmentLabel([42.64,-8.72],'Traslatio 船段');
+  addSegmentLabel([42.80,-8.61],'接回主線');
+  const bounds=L.latLngBounds([...centralLine,...spiritualLine,...boatLine,...rejoinLine]);
+  map.fitBounds(bounds,{padding:[30,30]});
+}
+function addSegmentLabel(latlng,text){
+  L.marker(latlng,{interactive:false,icon:L.divIcon({className:'segment-label',html:text,iconSize:null})}).addTo(map);
+}
+function markerHtml(index,state){
+  return `<div class="stop-marker ${state}"><span>${index+1}</span></div>`;
+}
+function markerIcon(index,state){
+  return L.divIcon({html:markerHtml(index,state),className:'',iconSize:[40,40],iconAnchor:[20,38],popupAnchor:[0,-34]});
 }
 function totalTo(index){
   return journeyStops.slice(0,index+1).reduce((sum,stop)=>sum+stop.km,0);
 }
-function renderRoute(){
-  const path=routePath(journeyStops);
-  document.getElementById('routeLine').setAttribute('d',path);
-  document.getElementById('routeShadow').setAttribute('d',path);
-  const boatStart=project(journeyStops[12]);
-  const boatEnd=project(journeyStops[13]);
-  document.getElementById('boatLine').setAttribute('d',`M ${boatStart.x.toFixed(2)} ${boatStart.y.toFixed(2)} C ${(boatStart.x+8).toFixed(2)} ${(boatStart.y+7).toFixed(2)}, ${(boatEnd.x-7).toFixed(2)} ${(boatEnd.y-8).toFixed(2)}, ${boatEnd.x.toFixed(2)} ${boatEnd.y.toFixed(2)}`);
+function popupHtml(stop){
+  return `<strong>${stop.day} ${stop.place}</strong><br>${routeNames[stop.route]}<br>${stop.stay}<br>${stop.kmText}`;
 }
 function renderJourneyPins(){
-  const pinBox=document.getElementById('journeyPins');
   const listBox=document.getElementById('journeyList');
-  pinBox.innerHTML=journeyStops.map((stop,i)=>{
-    const p=project(stop);
-    return `<button class="route-pin" style="--x:${p.x}%;--y:${p.y}%;" type="button" data-journey="${i}" title="${stop.day} ${stop.place}"><span class="pin-dot"><span>${i+1}</span></span><span class="pin-label">${stop.day} ${stop.place}</span></button>`;
-  }).join('');
-  listBox.innerHTML=journeyStops.map((stop,i)=>`<button type="button" class="journey-chip" data-journey="${i}"><span class="chip-km">${stop.kmText}</span><strong>${stop.day}</strong><br>${stop.place}<br>${stop.stay}</button>`).join('');
+  markers=journeyStops.map((stop,i)=>{
+    const marker=L.marker([stop.lat,stop.lng],{icon:markerIcon(i,'')}).addTo(map).bindPopup(popupHtml(stop));
+    marker.on('click',()=>setJourney(i,true));
+    return marker;
+  });
+  listBox.innerHTML=journeyStops.map((stop,i)=>`<button type="button" class="journey-chip" data-journey="${i}"><span class="chip-km">${stop.kmText}</span><strong>${stop.day}</strong><br>${stop.place}<br>${stop.stay}<br><span class="chip-route ${stop.route}">${routeNames[stop.route]}</span></button>`).join('');
   document.querySelectorAll('[data-journey]').forEach(btn=>btn.addEventListener('click',()=>setJourney(Number(btn.dataset.journey),true)));
-  setJourney(0,false);
 }
-function setJourney(index, pause){
+function setJourney(index,pause){
   journeyIndex=(index+journeyStops.length)%journeyStops.length;
   const stop=journeyStops[journeyIndex];
   document.getElementById('journeyDay').textContent=stop.day;
   document.getElementById('journeyPlace').textContent=`${stop.place} · ${stop.stay}`;
+  const routeEl=document.getElementById('journeyRoute');
+  routeEl.textContent=routeNames[stop.route];
+  routeEl.className=`journey-route ${stop.route}`;
   document.getElementById('journeyKm').textContent=stop.kmText;
   document.getElementById('journeyTotal').textContent=`${totalTo(journeyIndex).toFixed(1)} km`;
   document.getElementById('journeyNote').textContent=`${stop.from} -> ${stop.stay}。${stop.note}`;
-  document.querySelectorAll('.route-pin').forEach((pin,i)=>{
-    pin.classList.toggle('active',i===journeyIndex);
-    pin.classList.toggle('visited',i<journeyIndex);
+  markers.forEach((marker,i)=>{
+    const state=i===journeyIndex?'active':i<journeyIndex?'done':'';
+    marker.setIcon(markerIcon(i,state));
   });
+  markers[journeyIndex].openPopup();
+  map.panTo([stop.lat,stop.lng],{animate:true,duration:0.6});
   document.querySelectorAll('.journey-chip').forEach((chip,i)=>chip.classList.toggle('active',i===journeyIndex));
   if(pause)toggleJourney(false);
 }
 function toggleJourney(play){
   journeyPlaying=play;
   const playButton=document.getElementById('journeyPlay');
-  playButton.textContent=journeyPlaying ? '暫停' : '播放';
+  playButton.textContent=journeyPlaying?'暫停':'播放';
   if(journeyTimer)clearInterval(journeyTimer);
-  if(journeyPlaying)journeyTimer=setInterval(()=>setJourney(journeyIndex+1,false),2400);
+  if(journeyPlaying)journeyTimer=setInterval(()=>setJourney(journeyIndex+1,false),2600);
 }
 document.getElementById('journeyPrev').addEventListener('click',()=>setJourney(journeyIndex-1,true));
 document.getElementById('journeyNext').addEventListener('click',()=>setJourney(journeyIndex+1,true));
 document.getElementById('journeyPlay').addEventListener('click',()=>toggleJourney(!journeyPlaying));
-renderRoute();
-renderJourneyPins();
-toggleJourney(true);
+safeInit();
 </script>
 </body>
 </html>
