@@ -50,7 +50,7 @@
   .journey-route.spiritual{background:var(--spiritual);}
   .journey-route.rejoin{background:var(--rejoin);}
   .journey-route.start{background:#6b7280;}
-  .journey-distance{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;}
+  .journey-distance{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px;}
   .metric{background:#f0e5ca;border:1px solid rgba(31,51,44,0.12);border-radius:8px;padding:10px;}
   .metric span{display:block;font-size:0.7rem;font-weight:900;color:#69766d;text-transform:uppercase;letter-spacing:0;}
   .metric strong{display:block;margin-top:5px;font-size:1.02rem;color:var(--ink);}
@@ -69,6 +69,7 @@
   @media (max-width:900px){
     main{padding:18px 14px;}
     header{align-items:flex-start;flex-direction:column;}
+    .journey-distance{grid-template-columns:1fr;}
     .top-links{justify-content:flex-start;}
     .journey-wrap{grid-template-columns:1fr;}
     .map-panel{min-height:560px;}
@@ -114,6 +115,7 @@
         <div class="journey-distance">
           <div class="metric"><span>今日距離</span><strong id="journeyKm">市區 2-4 km</strong></div>
           <div class="metric"><span>累計步行</span><strong id="journeyTotal">0 km</strong></div>
+          <div class="metric"><span>完成度</span><strong id="journeyProgress">36%</strong></div>
         </div>
         <div class="journey-note" id="journeyNote">每日位置會自動輪播，也可以點地圖上的 pin 或下方清單。</div>
       </div>
@@ -136,6 +138,7 @@ const routeNames={
   spiritual:'靈性之路',
   rejoin:'接回主線'
 };
+const caminoProgress={walkedKm:78.9,totalKm:218.5,percent:36,label:'36% · 78.9/218.5 km'};
 const journeyStops=[
   {day:'Day 1',place:'Porto',stay:'Hotel Spot Family Suites Porto',from:'Porto 市區準備',kmText:'市區 2-4 km',km:0,route:'start',note:'主教座堂、Credencial、起點準備。',lat:41.1496,lng:-8.6109},
   {day:'Day 2',place:'Moreira da Maia',stay:'Aerostay Hostel',from:'Porto / Porto Airport',kmText:'休整日 / 交通日',km:0,route:'start',note:'今天住 Aerostay Hostel，作為正式北上前的休整點。',lat:41.2475,lng:-8.6551},
@@ -242,6 +245,7 @@ function setJourney(index,pause){
   routeEl.className=`journey-route ${stop.route}`;
   document.getElementById('journeyKm').textContent=stop.kmText;
   document.getElementById('journeyTotal').textContent=`${totalTo(journeyIndex).toFixed(1)} km`;
+  document.getElementById('journeyProgress').textContent=caminoProgress.label;
   document.getElementById('journeyNote').textContent=`${stop.from} -> ${stop.stay}。${stop.note}`;
   markers.forEach((marker,i)=>{
     const state=i===journeyIndex?'active':i<journeyIndex?'done':'';

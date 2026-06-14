@@ -149,7 +149,7 @@
 
     .mini-status {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 10px;
       margin-top: 14px;
     }
@@ -626,6 +626,7 @@
             <div><span>日期</span><strong id="miniDate">-</strong></div>
             <div><span>移動</span><strong id="miniMove">-</strong></div>
             <div><span>住宿</span><strong id="miniStay">-</strong></div>
+            <div><span>完成度</span><strong id="miniProgress">36%</strong></div>
           </div>
         </div>
       </div>
@@ -1252,6 +1253,12 @@
     ];
 
     const guideVersion = "2026-06-14-santiago-final-day";
+    const caminoProgress = {
+      walkedKm: 78.9,
+      totalKm: 218.5,
+      percent: 36,
+      label: "36% · 78.9/218.5 km"
+    };
     const commonTasks = ["水、零食、防曬或雨具", "手機與行動電源有電", "護照、錢包、credential 在身上"];
     const daySelect = document.getElementById("daySelect");
     const timeline = document.getElementById("timeline");
@@ -1382,7 +1389,8 @@
       document.getElementById("miniDate").textContent = fmtDate(day.date);
       document.getElementById("miniMove").textContent = day.move;
       document.getElementById("miniStay").textContent = day.stay.replace("Hospederia", "Hosp.");
-      document.getElementById("todayHint").textContent = `${fmtDate(day.date)} · ${day.move}`;
+      document.getElementById("miniProgress").textContent = caminoProgress.label;
+      document.getElementById("todayHint").textContent = `${fmtDate(day.date)} · ${day.move} · Camino 完成度 ${caminoProgress.label}`;
       document.getElementById("todayDay").textContent = day.day;
       document.getElementById("todayTitle").textContent = day.title;
       document.getElementById("todaySummary").textContent = day.summary;
