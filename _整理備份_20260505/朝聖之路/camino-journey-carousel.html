@@ -138,7 +138,7 @@ const routeNames={
   spiritual:'靈性之路',
   rejoin:'接回主線'
 };
-const caminoProgress={walkedKm:78.9,totalKm:218.5,percent:36,label:'36% · 78.9/218.5 km'};
+const caminoProgress={totalKm:218.5};
 const journeyStops=[
   {day:'Day 1',place:'Porto',stay:'Hotel Spot Family Suites Porto',from:'Porto 市區準備',kmText:'市區 2-4 km',km:0,route:'start',note:'主教座堂、Credencial、起點準備。',lat:41.1496,lng:-8.6109},
   {day:'Day 2',place:'Moreira da Maia',stay:'Aerostay Hostel',from:'Porto / Porto Airport',kmText:'休整日 / 交通日',km:0,route:'start',note:'今天住 Aerostay Hostel，作為正式北上前的休整點。',lat:41.2475,lng:-8.6551},
@@ -222,6 +222,11 @@ function markerIcon(index,state){
 function totalTo(index){
   return journeyStops.slice(0,index+1).reduce((sum,stop)=>sum+stop.km,0);
 }
+function progressTo(index){
+  const walked=totalTo(index);
+  const percent=Math.min(100,Math.round((walked/caminoProgress.totalKm)*100));
+  return `${percent}% · ${walked.toFixed(1)}/${caminoProgress.totalKm.toFixed(1)} km`;
+}
 function popupHtml(stop){
   return `<strong>${stop.day} ${stop.place}</strong><br>${routeNames[stop.route]}<br>${stop.stay}<br>${stop.kmText}`;
 }
@@ -245,7 +250,7 @@ function setJourney(index,pause){
   routeEl.className=`journey-route ${stop.route}`;
   document.getElementById('journeyKm').textContent=stop.kmText;
   document.getElementById('journeyTotal').textContent=`${totalTo(journeyIndex).toFixed(1)} km`;
-  document.getElementById('journeyProgress').textContent=caminoProgress.label;
+  document.getElementById('journeyProgress').textContent=progressTo(journeyIndex);
   document.getElementById('journeyNote').textContent=`${stop.from} -> ${stop.stay}。${stop.note}`;
   markers.forEach((marker,i)=>{
     const state=i===journeyIndex?'active':i<journeyIndex?'done':'';

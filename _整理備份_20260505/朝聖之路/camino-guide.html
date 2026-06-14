@@ -1254,10 +1254,24 @@
 
     const guideVersion = "2026-06-14-santiago-final-day";
     const caminoProgress = {
-      walkedKm: 78.9,
       totalKm: 218.5,
-      percent: 36,
-      label: "36% · 78.9/218.5 km"
+      byDay: {
+        "day-1": 0,
+        "day-2": 0,
+        "day-3": 16.5,
+        "day-4": 28.5,
+        "day-5": 43.5,
+        "day-6": 61.5,
+        "day-7": 78.9,
+        "day-8": 98.0,
+        "day-9": 114.0,
+        "day-10": 130.4,
+        "day-11": 150.0,
+        "day-12": 170.5,
+        "day-13": 186.0,
+        "day-14": 202.5,
+        "day-15": 218.5
+      }
     };
     const commonTasks = ["水、零食、防曬或雨具", "手機與行動電源有電", "護照、錢包、credential 在身上"];
     const daySelect = document.getElementById("daySelect");
@@ -1281,6 +1295,13 @@
 
     function weatherSearch(q) {
       return `https://www.google.com/search?q=${encodeURIComponent(`${q} weather`)}`;
+    }
+
+    function progressLabel(day) {
+      const walked = caminoProgress.byDay[day.id];
+      if (typeof walked !== "number") return "朝聖後";
+      const percent = Math.min(100, Math.round((walked / caminoProgress.totalKm) * 100));
+      return `${percent}% · ${walked.toFixed(1)}/${caminoProgress.totalKm.toFixed(1)} km`;
     }
 
     function initialIndex() {
@@ -1389,8 +1410,9 @@
       document.getElementById("miniDate").textContent = fmtDate(day.date);
       document.getElementById("miniMove").textContent = day.move;
       document.getElementById("miniStay").textContent = day.stay.replace("Hospederia", "Hosp.");
-      document.getElementById("miniProgress").textContent = caminoProgress.label;
-      document.getElementById("todayHint").textContent = `${fmtDate(day.date)} · ${day.move} · Camino 完成度 ${caminoProgress.label}`;
+      const progress = progressLabel(day);
+      document.getElementById("miniProgress").textContent = progress;
+      document.getElementById("todayHint").textContent = `${fmtDate(day.date)} · ${day.move} · Camino 完成度 ${progress}`;
       document.getElementById("todayDay").textContent = day.day;
       document.getElementById("todayTitle").textContent = day.title;
       document.getElementById("todaySummary").textContent = day.summary;
