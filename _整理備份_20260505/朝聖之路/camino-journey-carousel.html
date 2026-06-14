@@ -108,7 +108,7 @@
     <aside class="journey-side">
       <div class="journey-now">
         <div class="journey-kicker">Now showing</div>
-        <div class="journey-day" id="journeyDay">Day 2</div>
+        <div class="journey-day" id="journeyDay">Day 1</div>
         <div class="journey-place" id="journeyPlace">Porto</div>
         <div class="journey-route start" id="journeyRoute">起點準備</div>
         <div class="journey-distance">
@@ -122,7 +122,7 @@
         <button type="button" id="journeyPlay">暫停</button>
         <button type="button" id="journeyNext">下一日</button>
       </div>
-      <div class="meta-box">只保留 Porto 到 Santiago 的朝聖路段。距離是住宿點到住宿點的實用步行估算；實際當日仍以 Google Maps、Gronze / Wise Pilgrim 與現場黃色箭頭為準。</div>
+      <div class="meta-box">只保留 Porto 到 Santiago 的朝聖路段，並以 Porto 起算為 Day 1。目前已抵達 Rubiaes：累計約 78.9 / 218.5 km，完成約 36%。距離是住宿點到住宿點的實用步行估算；實際當日仍以 Google Maps、Gronze / Wise Pilgrim 與現場黃色箭頭為準。</div>
       <div class="journey-list" id="journeyList"></div>
     </aside>
   </section>
@@ -137,21 +137,21 @@ const routeNames={
   rejoin:'接回主線'
 };
 const journeyStops=[
-  {day:'Day 2',place:'Porto',stay:'Hotel Spot Family Suites Porto',from:'Porto 市區準備',kmText:'市區 2-4 km',km:0,route:'start',note:'主教座堂、Credencial、起點準備。',lat:41.1496,lng:-8.6109},
-  {day:'Day 3',place:'Moreira da Maia',stay:'Aerostay Hostel',from:'Porto / Porto Airport',kmText:'休整日 / 交通日',km:0,route:'start',note:'今天住 Aerostay Hostel，作為正式北上前的休整點。',lat:41.2475,lng:-8.6551},
-  {day:'Day 4',place:'Sao Miguel de Arcos',stay:'Quinta Sao Miguel de Arcos',from:'Aerostay Hostel',kmText:'16.5 km',km:16.5,route:'central',note:'已抵達 Quinta Sao Miguel de Arcos，住宿舒服，位置仍貼近中央線。',lat:41.3888,lng:-8.6758},
-  {day:'Day 5',place:'Barcelos',stay:'In Barcelos Hostel & Guest House',from:'Quinta Sao Miguel de Arcos',kmText:'12.0 km',km:12.0,route:'central',note:'2026/6/11 今日實住 In Barcelos Hostel & Guest House；Albergue Cidade de Barcelos 改為庇護所備案。Barcelos 是大城，適合補給、洗衣、整理腳。',lat:41.5324,lng:-8.6190},
-  {day:'Day 6',place:'Balugaes / Vitorino dos Piaes',stay:'Quinta da Cancela',from:'Barcelos',kmText:'15.0 km',km:15.0,route:'central',note:'2026/6/12 今日實住 Quinta da Cancela，住宿不錯；補給變少，從 Barcelos 帶午餐、點心與備用水。',lat:41.6507,lng:-8.6357},
-  {day:'Day 7',place:'Ponte de Lima',stay:'Vila de Ponte Guest House',from:'Balugaes',kmText:'18.0 km',km:18.0,route:'central',note:'2026/6/13 今日實住 Vila de Ponte Guest House；抵達葡萄牙經典古鎮，隔天 Labruja 爬升日前好好休息。',lat:41.7676,lng:-8.5832},
-  {day:'Day 8',place:'Rubiaes',stay:'Casa de S Sebastião',from:'Ponte de Lima',kmText:'17.4 km',km:17.4,route:'central',note:'2026/6/14 實際走到 Rubiaes，今日實住 Casa de S Sebastião；已完成 Labruja 主要爬升。',lat:41.8966,lng:-8.6229},
-  {day:'Day 9',place:'Tui',stay:'A Torre do Xudeu / Albergue de Peregrinos',from:'Rubiaes',kmText:'19.1 km',km:19.1,route:'central',note:'經 Fontoura、Valenca 城塞後跨 Minho 河進西班牙；Valenca 是今日補給與短停重點，Tui 起每天保守蓋 2 個章。',lat:42.0471,lng:-8.6444},
-  {day:'Day 10',place:'O Porrino',stay:'Alojamientos Central',from:'Tui',kmText:'16.0 km',km:16.0,route:'central',note:'經 Ribadelouro、Orbenlle，建議走 As Gandaras / Rio Louro 替代線避開 O Porrino 工業區；市區補給方便。',lat:42.1616,lng:-8.6199},
-  {day:'Day 11',place:'Redondela',stay:'Alvear Suites / Santiago de Vilavella',from:'O Porrino',kmText:'16.4 km',km:16.4,route:'central',note:'經 Mos、Santiaguino 下到 Redondela；Mos 可補水短休，Redondela 與海岸線匯合，人流開始增加。',lat:42.2840,lng:-8.6096},
-  {day:'Day 12',place:'Pontevedra',stay:'Rias Bajas Hotel / Virgen Peregrina',from:'Redondela',kmText:'19.6 km',km:19.6,route:'central',note:'經 Cesantes、Arcade、Pontesampaio 到 Pontevedra；Arcade 可午餐，Pontesampaio 石橋值得短停。',lat:42.4310,lng:-8.6444},
-  {day:'Day 13',place:'Armenteira',stay:'Hospederia Monasterio de Armenteira',from:'Pontevedra',kmText:'20.5 km',km:20.5,route:'spiritual',note:'轉入靈性之路，經 Poio 修道院、Combarro 海邊石倉後爬升到 Armenteira；Combarro 是午餐補水重點。',lat:42.4590,lng:-8.7466},
-  {day:'Day 14',place:'Barrantes / Ribadumia',stay:'Albergue Camino Espiritual',from:'Armenteira',kmText:'15.5 km',km:15.5,route:'spiritual',note:'走 Ruta da Pedra e da Auga 水石之路，經 A Torre / Os Castanos、Barrantes、Ribadumia；沿途補給少。',lat:42.5160,lng:-8.7594},
-  {day:'Day 15',place:'Vilanova / A Escravitude',stay:'Villa Vieira / O Lagar de Jesus',from:'Ribadumia',kmText:'16.5 km + 船 1.5 hr',km:16.5,route:'spiritual',note:'經 Ponte Arnelas 到 Vilanova 搭 Traslatio 船；下船後在 Pontecesures / Padron 補給，再看船班早晚決定推到 A Escravitude。',lat:42.7232,lng:-8.6533},
-  {day:'Day 16',place:'Santiago de Compostela',stay:'Hospederia San Martin Pinario',from:'A Escravitude / Villa Vieira',kmText:'16.0 km',km:16.0,route:'rejoin',note:'經 O Faramello、Rua de Francos、O Milladoiro 進 Santiago；O Milladoiro 是進城前最後大補給點。',lat:42.8805,lng:-8.5457}
+  {day:'Day 1',place:'Porto',stay:'Hotel Spot Family Suites Porto',from:'Porto 市區準備',kmText:'市區 2-4 km',km:0,route:'start',note:'主教座堂、Credencial、起點準備。',lat:41.1496,lng:-8.6109},
+  {day:'Day 2',place:'Moreira da Maia',stay:'Aerostay Hostel',from:'Porto / Porto Airport',kmText:'休整日 / 交通日',km:0,route:'start',note:'今天住 Aerostay Hostel，作為正式北上前的休整點。',lat:41.2475,lng:-8.6551},
+  {day:'Day 3',place:'Sao Miguel de Arcos',stay:'Quinta Sao Miguel de Arcos',from:'Aerostay Hostel',kmText:'16.5 km',km:16.5,route:'central',note:'已抵達 Quinta Sao Miguel de Arcos，住宿舒服，位置仍貼近中央線。',lat:41.3888,lng:-8.6758},
+  {day:'Day 4',place:'Barcelos',stay:'In Barcelos Hostel & Guest House',from:'Quinta Sao Miguel de Arcos',kmText:'12.0 km',km:12.0,route:'central',note:'2026/6/11 今日實住 In Barcelos Hostel & Guest House；Albergue Cidade de Barcelos 改為庇護所備案。Barcelos 是大城，適合補給、洗衣、整理腳。',lat:41.5324,lng:-8.6190},
+  {day:'Day 5',place:'Balugaes / Vitorino dos Piaes',stay:'Quinta da Cancela',from:'Barcelos',kmText:'15.0 km',km:15.0,route:'central',note:'2026/6/12 今日實住 Quinta da Cancela，住宿不錯；補給變少，從 Barcelos 帶午餐、點心與備用水。',lat:41.6507,lng:-8.6357},
+  {day:'Day 6',place:'Ponte de Lima',stay:'Vila de Ponte Guest House',from:'Balugaes',kmText:'18.0 km',km:18.0,route:'central',note:'2026/6/13 今日實住 Vila de Ponte Guest House；抵達葡萄牙經典古鎮，隔天 Labruja 爬升日前好好休息。',lat:41.7676,lng:-8.5832},
+  {day:'Day 7',place:'Rubiaes',stay:'Casa de S Sebastião',from:'Ponte de Lima',kmText:'17.4 km',km:17.4,route:'central',note:'2026/6/14 實際走到 Rubiaes，今日實住 Casa de S Sebastião；已完成 Labruja 主要爬升。進度：約 78.9 / 218.5 km，完成約 36%。',lat:41.8966,lng:-8.6229},
+  {day:'Day 8',place:'Tui',stay:'A Torre do Xudeu / Albergue de Peregrinos',from:'Rubiaes',kmText:'19.1 km',km:19.1,route:'central',note:'經 Fontoura、Valenca 城塞後跨 Minho 河進西班牙；Valenca 是今日補給與短停重點，Tui 起每天保守蓋 2 個章。',lat:42.0471,lng:-8.6444},
+  {day:'Day 9',place:'O Porrino',stay:'Alojamientos Central',from:'Tui',kmText:'16.0 km',km:16.0,route:'central',note:'經 Ribadelouro、Orbenlle，建議走 As Gandaras / Rio Louro 替代線避開 O Porrino 工業區；市區補給方便。',lat:42.1616,lng:-8.6199},
+  {day:'Day 10',place:'Redondela',stay:'Alvear Suites / Santiago de Vilavella',from:'O Porrino',kmText:'16.4 km',km:16.4,route:'central',note:'經 Mos、Santiaguino 下到 Redondela；Mos 可補水短休，Redondela 與海岸線匯合，人流開始增加。',lat:42.2840,lng:-8.6096},
+  {day:'Day 11',place:'Pontevedra',stay:'Rias Bajas Hotel / Virgen Peregrina',from:'Redondela',kmText:'19.6 km',km:19.6,route:'central',note:'經 Cesantes、Arcade、Pontesampaio 到 Pontevedra；Arcade 可午餐，Pontesampaio 石橋值得短停。',lat:42.4310,lng:-8.6444},
+  {day:'Day 12',place:'Armenteira',stay:'Hospederia Monasterio de Armenteira',from:'Pontevedra',kmText:'20.5 km',km:20.5,route:'spiritual',note:'轉入靈性之路，經 Poio 修道院、Combarro 海邊石倉後爬升到 Armenteira；Combarro 是午餐補水重點。',lat:42.4590,lng:-8.7466},
+  {day:'Day 13',place:'Barrantes / Ribadumia',stay:'Albergue Camino Espiritual',from:'Armenteira',kmText:'15.5 km',km:15.5,route:'spiritual',note:'走 Ruta da Pedra e da Auga 水石之路，經 A Torre / Os Castanos、Barrantes、Ribadumia；沿途補給少。',lat:42.5160,lng:-8.7594},
+  {day:'Day 14',place:'Vilanova / A Escravitude',stay:'Villa Vieira / O Lagar de Jesus',from:'Ribadumia',kmText:'16.5 km + 船 1.5 hr',km:16.5,route:'spiritual',note:'經 Ponte Arnelas 到 Vilanova 搭 Traslatio 船；下船後在 Pontecesures / Padron 補給，再看船班早晚決定推到 A Escravitude。',lat:42.7232,lng:-8.6533},
+  {day:'Day 15',place:'Santiago de Compostela',stay:'Hospederia San Martin Pinario',from:'A Escravitude / Villa Vieira',kmText:'16.0 km',km:16.0,route:'rejoin',note:'經 O Faramello、Rua de Francos、O Milladoiro 進 Santiago；O Milladoiro 是進城前最後大補給點。',lat:42.8805,lng:-8.5457}
 ];
 const centralLine=[
   [41.1496,-8.6109],[41.1677,-8.6048],[41.2134,-8.6131],[41.2475,-8.6551],
