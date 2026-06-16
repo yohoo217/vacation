@@ -209,13 +209,60 @@
       font-size: .84rem;
       padding: 8px 9px;
     }
-    .detail-panel {
+    .route-panel, .detail-panel {
       margin-top: 16px;
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: 8px;
       box-shadow: var(--shadow);
       overflow: hidden;
+    }
+    .route-panel {
+      padding: 14px;
+    }
+    .route-panel h2 {
+      margin: 0;
+      font-size: 1.2rem;
+      letter-spacing: 0;
+    }
+    .route-panel .route-intro {
+      margin: 6px 0 12px;
+      color: var(--muted);
+      font-size: .94rem;
+    }
+    .route-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .route-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fffdf8;
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+      min-height: 150px;
+    }
+    .route-card strong {
+      line-height: 1.2;
+    }
+    .route-card span {
+      color: var(--muted);
+      font-size: .88rem;
+    }
+    .route-card a {
+      align-self: end;
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: var(--green);
+      color: #fff;
+      font-weight: 900;
+      text-decoration: none;
     }
     .detail-grid {
       display: grid;
@@ -270,7 +317,7 @@
       font-size: .9rem;
     }
     @media (max-width: 860px) {
-      .toolbar, .map-layout, .detail-grid {
+      .toolbar, .map-layout, .detail-grid, .route-grid {
         grid-template-columns: 1fr;
       }
       .map-frame, .detail-map {
@@ -327,9 +374,10 @@
     <section class="map-layout">
       <div class="map-panel">
         <div class="map-head">
-          <strong>全部住宿一起看</strong>
+          <strong>接下來住宿路徑圖</strong>
           <div class="map-actions">
-            <a class="primary" id="allDirections" target="_blank" rel="noopener">Google Maps 路線</a>
+            <a class="primary" id="nextDirections" target="_blank" rel="noopener">接下來路線</a>
+            <a id="allDirections" target="_blank" rel="noopener">全部住宿路線</a>
             <a id="allStaySearch" target="_blank" rel="noopener">住宿清單搜尋</a>
           </div>
         </div>
@@ -339,6 +387,12 @@
         <div class="map-head"><strong>每日分開看</strong></div>
         <div class="day-list" id="dayList"></div>
       </aside>
+    </section>
+
+    <section class="route-panel">
+      <h2>接下來每日住宿點路線</h2>
+      <p class="route-intro">從今天 O Porriño 開始，依序到 Redondela、Pontevedra、Armenteira、Ribadumia、A Escravitude、Santiago。每張卡都是住宿點到下一晚住宿點的 Google Maps 步行路線。</p>
+      <div class="route-grid" id="nextRouteGrid"></div>
     </section>
 
     <section class="detail-panel">
@@ -473,7 +527,8 @@
       }
     ];
 
-    let selectedIndex = 8;
+    const currentStayIndex = 8;
+    let selectedIndex = currentStayIndex;
     let selectedCategory = "stay";
 
     function enc(value) {
@@ -498,14 +553,36 @@
       return `https://maps.google.com/maps?saddr=${origin}&daddr=${stops}&dirflg=w`;
     }
 
+    function nextStays() {
+      return stays.slice(currentStayIndex);
+    }
+
+    function nextDirectionsUrl() {
+      const routeStays = nextStays();
+      const origin = enc(routeStays[0].address);
+      const stops = routeStays.slice(1).map((stay) => enc(stay.address)).join("+to:");
+      return `https://maps.google.com/maps?saddr=${origin}&daddr=${stops}&dirflg=w`;
+    }
+
     function allEmbedUrl() {
       const origin = enc(stays[0].address);
       const stops = stays.slice(1).map((stay) => enc(stay.address)).join("+to:");
       return `https://maps.google.com/maps?saddr=${origin}&daddr=${stops}&dirflg=w&output=embed`;
     }
 
+    function nextEmbedUrl() {
+      const routeStays = nextStays();
+      const origin = enc(routeStays[0].address);
+      const stops = routeStays.slice(1).map((stay) => enc(stay.address)).join("+to:");
+      return `https://maps.google.com/maps?saddr=${origin}&daddr=${stops}&dirflg=w&output=embed`;
+    }
+
     function allStaySearchUrl() {
       return `https://www.google.com/maps/search/?api=1&query=${enc("Camino Portugues Central hotels Porto Santiago")}`;
+    }
+
+    function legDirectionsUrl(fromStay, toStay) {
+      return `https://www.google.com/maps/dir/?api=1&origin=${enc(fromStay.address)}&destination=${enc(toStay.address)}&travelmode=walking`;
     }
 
     function routeName(route) {
@@ -548,6 +625,23 @@
       });
     }
 
+    function renderNextRoutes() {
+      const box = document.getElementById("nextRouteGrid");
+      const routeStays = nextStays();
+      box.innerHTML = routeStays.slice(0, -1).map((stay, index) => {
+        const next = routeStays[index + 1];
+        return `
+          <article class="route-card">
+            <strong>${stay.day} → ${next.day}</strong>
+            <span>${stay.city} · ${stay.stay}</span>
+            <span>到</span>
+            <span>${next.city} · ${next.stay}</span>
+            <a target="_blank" rel="noopener" href="${legDirectionsUrl(stay, next)}">開啟這段路線</a>
+          </article>
+        `;
+      }).join("");
+    }
+
     function renderDetail() {
       const stay = stays[selectedIndex];
       document.getElementById("detailTitle").textContent = `${stay.day} (${stay.date}) · ${stay.city}`;
@@ -573,12 +667,14 @@
       document.querySelector(".detail-panel").scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
-    document.getElementById("overviewMap").src = allEmbedUrl();
+    document.getElementById("overviewMap").src = nextEmbedUrl();
+    document.getElementById("nextDirections").href = nextDirectionsUrl();
     document.getElementById("allDirections").href = allDirectionsUrl();
-    document.getElementById("openAllMap").href = allDirectionsUrl();
+    document.getElementById("openAllMap").href = nextDirectionsUrl();
     document.getElementById("allStaySearch").href = allStaySearchUrl();
     document.getElementById("searchBox").addEventListener("input", (event) => renderDayList(event.target.value));
     renderDayList();
+    renderNextRoutes();
     renderDetail();
   </script>
 </body>
