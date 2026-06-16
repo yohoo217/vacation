@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Camino 住宿地圖與附近補給</title>
+  <style>
+    :root {
+      --ink: #1f2933;
+      --muted: #667085;
+      --paper: #fffaf0;
+      --panel: #ffffff;
+      --line: #e6dcc8;
+      --green: #256f5b;
+      --red: #c73b2d;
+      --blue: #2563eb;
+      --gold: #b7791f;
+      --shadow: 0 18px 42px rgba(38, 28, 14, .12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.55;
+    }
+    header {
+      padding: 24px 18px 18px;
+      background: #f3ead7;
+      border-bottom: 1px solid var(--line);
+    }
+    .shell {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(1.65rem, 4vw, 3rem);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+    .subtitle {
+      margin: 10px 0 0;
+      color: var(--muted);
+      max-width: 880px;
+      font-size: 1rem;
+    }
+    .status-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, .75);
+      border-radius: 999px;
+      font-size: .88rem;
+      font-weight: 800;
+      color: #3a3428;
+    }
+    main {
+      padding: 18px 0 34px;
+    }
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .toolbar input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px 13px;
+      background: #fff;
+      font: inherit;
+    }
+    .toolbar a, .map-actions a, .quick-link, .category-button {
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--ink);
+      font-weight: 850;
+      font-size: .92rem;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .toolbar a {
+      background: var(--green);
+      color: #fff;
+      border-color: var(--green);
+      white-space: nowrap;
+    }
+    .map-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(300px, .8fr);
+      gap: 16px;
+      align-items: start;
+    }
+    .map-panel, .day-panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .map-head {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      background: #fffdf8;
+    }
+    .map-head strong {
+      font-size: 1.02rem;
+    }
+    .map-frame {
+      width: 100%;
+      height: min(68vh, 620px);
+      min-height: 420px;
+      border: 0;
+      display: block;
+      background: #efe5d1;
+    }
+    .map-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .map-actions a.primary {
+      background: var(--red);
+      border-color: var(--red);
+      color: #fff;
+    }
+    .day-list {
+      display: grid;
+      gap: 10px;
+      max-height: calc(68vh + 62px);
+      min-height: 420px;
+      overflow: auto;
+      padding: 12px;
+    }
+    .day-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fffdf8;
+      padding: 12px;
+    }
+    .day-card.active {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(37, 111, 91, .13);
+    }
+    .day-top {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+    .day-label {
+      font-weight: 950;
+      font-size: .96rem;
+    }
+    .route-tag {
+      flex: 0 0 auto;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: .75rem;
+      color: #fff;
+      background: var(--red);
+      font-weight: 850;
+    }
+    .route-tag.spiritual { background: var(--blue); }
+    .route-tag.rejoin { background: var(--green); }
+    .route-tag.start { background: var(--gold); }
+    .stay-name {
+      margin-top: 5px;
+      font-weight: 850;
+      color: #2f3d36;
+    }
+    .address {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 7px;
+      margin-top: 10px;
+    }
+    .quick-link {
+      justify-content: flex-start;
+      min-width: 0;
+      font-size: .84rem;
+      padding: 8px 9px;
+    }
+    .detail-panel {
+      margin-top: 16px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .detail-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, .72fr);
+      gap: 0;
+    }
+    .detail-info {
+      padding: 16px;
+      border-right: 1px solid var(--line);
+    }
+    .detail-info h2 {
+      margin: 0;
+      font-size: 1.25rem;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+    .detail-info p {
+      margin: 8px 0 0;
+      color: var(--muted);
+    }
+    .category-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .category-button.active {
+      background: var(--green);
+      border-color: var(--green);
+      color: #fff;
+    }
+    .detail-links {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .detail-map {
+      width: 100%;
+      height: 430px;
+      border: 0;
+      display: block;
+      background: #efe5d1;
+    }
+    .note {
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: #f9f0db;
+      border: 1px solid #ead9b8;
+      border-radius: 8px;
+      color: #5b4630;
+      font-size: .9rem;
+    }
+    @media (max-width: 860px) {
+      .toolbar, .map-layout, .detail-grid {
+        grid-template-columns: 1fr;
+      }
+      .map-frame, .detail-map {
+        height: 420px;
+        min-height: 360px;
+      }
+      .day-list {
+        max-height: none;
+        min-height: 0;
+      }
+      .detail-info {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+    }
+    @media (max-width: 520px) {
+      header {
+        padding-top: 18px;
+      }
+      .shell {
+        width: min(100% - 20px, 1180px);
+      }
+      .quick-grid, .detail-links {
+        grid-template-columns: 1fr;
+      }
+      .map-head {
+        align-items: stretch;
+      }
+      .map-actions a {
+        flex: 1 1 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell">
+      <h1>Camino 住宿地圖與附近補給</h1>
+      <p class="subtitle">每一日住宿點都可直接開 Google Maps；每日卡片提供附近洗衣店、餐廳、麵包店、超市搜尋。總覽地圖把 Porto 到 Santiago 的住宿順序串在一起。</p>
+      <div class="status-row">
+        <span class="pill">目前：Day 9 O Porriño</span>
+        <span class="pill">已走：約 114.0 / 218.5 km</span>
+        <span class="pill">完成度：約 52%</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell">
+    <div class="toolbar">
+      <input id="searchBox" type="search" placeholder="搜尋住宿、城市、Day，例如 Tui、洗衣、Day 12">
+      <a id="openAllMap" target="_blank" rel="noopener">開啟全部住宿地圖</a>
+    </div>
+
+    <section class="map-layout">
+      <div class="map-panel">
+        <div class="map-head">
+          <strong>全部住宿一起看</strong>
+          <div class="map-actions">
+            <a class="primary" id="allDirections" target="_blank" rel="noopener">Google Maps 路線</a>
+            <a id="allStaySearch" target="_blank" rel="noopener">住宿清單搜尋</a>
+          </div>
+        </div>
+        <iframe id="overviewMap" class="map-frame" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+      <aside class="day-panel">
+        <div class="map-head"><strong>每日分開看</strong></div>
+        <div class="day-list" id="dayList"></div>
+      </aside>
+    </section>
+
+    <section class="detail-panel">
+      <div class="detail-grid">
+        <div class="detail-info">
+          <h2 id="detailTitle">Day 9 O Porriño</h2>
+          <p id="detailStay"></p>
+          <p id="detailAddress"></p>
+          <div class="category-row" id="categoryRow"></div>
+          <div class="detail-links" id="detailLinks"></div>
+          <div class="note">Google Maps 會依目前資料顯示「附近」搜尋結果；實際最近與營業中店家請以打開後的 Google Maps 排序、營業時間和評論為準。小村如 Balugães、Rubiães、Armenteira、Ribadumia 補給較少，建議前一個大城先買水、點心與早餐。</div>
+        </div>
+        <iframe id="detailMap" class="detail-map" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const categories = [
+      { key: "stay", label: "住宿位置", query: "" },
+      { key: "laundry", label: "最近洗衣店", query: "laundromat OR laundry near" },
+      { key: "restaurant", label: "好吃餐廳", query: "restaurant near" },
+      { key: "bakery", label: "麵包店", query: "bakery near" },
+      { key: "supermarket", label: "超市", query: "supermarket near" }
+    ];
+
+    const stays = [
+      {
+        day: "Day 1", date: "6/7", city: "Porto", route: "start",
+        stay: "Hotel Spot Family Suites Porto",
+        address: "Hotel Spot Family Suites Porto, Porto, Portugal",
+        km: "市區 2-4 km",
+        maps: "https://www.google.com/maps/search/?api=1&query=Hotel%20Spot%20Family%20Suites%20Porto"
+      },
+      {
+        day: "Day 2", date: "6/9", city: "Moreira da Maia", route: "start",
+        stay: "Aerostay Hostel",
+        address: "Aerostay Hostel, Moreira da Maia, Portugal",
+        km: "休整 / 交通日",
+        maps: "https://www.google.com/maps/search/?api=1&query=Aerostay%20Hostel%20Moreira%20da%20Maia"
+      },
+      {
+        day: "Day 3", date: "6/10", city: "Arcos", route: "central",
+        stay: "Quinta Sao Miguel de Arcos",
+        address: "Quinta Sao Miguel de Arcos, Arcos, Vila do Conde, Portugal",
+        km: "16-17 km",
+        maps: "https://www.google.com/maps/search/?api=1&query=Quinta%20Sao%20Miguel%20de%20Arcos"
+      },
+      {
+        day: "Day 4", date: "6/11", city: "Barcelos", route: "central",
+        stay: "In Barcelos Hostel & Guest House",
+        address: "In Barcelos Hostel & Guest House, Barcelos, Portugal",
+        km: "11-13 km",
+        maps: "https://maps.app.goo.gl/r2D6HRrqNnVsQS8g7?g_st=ic"
+      },
+      {
+        day: "Day 5", date: "6/12", city: "Balugaes / Vitorino dos Piaes", route: "central",
+        stay: "Quinta da Cancela",
+        address: "Quinta da Cancela, Balugaes, Portugal",
+        km: "15 km",
+        maps: "https://maps.app.goo.gl/ScxoXc94tvRcZAWW9?g_st=ic"
+      },
+      {
+        day: "Day 6", date: "6/13", city: "Ponte de Lima", route: "central",
+        stay: "Vila de Ponte Guest House",
+        address: "Vila de Ponte Guest House, Ponte de Lima, Portugal",
+        km: "18 km",
+        maps: "https://maps.app.goo.gl/4rSisqv7QxjVYUz47?g_st=ic"
+      },
+      {
+        day: "Day 7", date: "6/14", city: "Rubiaes", route: "central",
+        stay: "Casa de S Sebastiao",
+        address: "Casa de S Sebastiao, Rubiaes, Portugal",
+        km: "17.4 km",
+        maps: "https://maps.app.goo.gl/JB2wCmnwgb2nRznY6?g_st=ic"
+      },
+      {
+        day: "Day 8", date: "6/15", city: "Tui", route: "central",
+        stay: "La Sigrina Hostal",
+        address: "La Sigrina Hostal, R. Foxo 8, 36700 Tui, Pontevedra, Spain",
+        km: "19.1 km",
+        maps: "https://maps.app.goo.gl/auhfF7ndiFthVb8t8?g_st=ic"
+      },
+      {
+        day: "Day 9", date: "6/16", city: "O Porrino", route: "central",
+        stay: "Alojamientos Central",
+        address: "Alojamientos Central, Av. Buenos Aires 2, 36400 O Porriño, Pontevedra, Spain",
+        km: "16 km",
+        maps: "https://maps.app.goo.gl/UghjYorNZECByfkK7?g_st=ic"
+      },
+      {
+        day: "Day 10", date: "6/17", city: "Redondela", route: "central",
+        stay: "Alvear Suites",
+        address: "Alvear Suites, Redondela, Spain",
+        km: "16.4 km",
+        maps: "https://www.google.com/maps/search/?api=1&query=Alvear%20Suites%20Redondela"
+      },
+      {
+        day: "Day 11", date: "6/18", city: "Pontevedra", route: "central",
+        stay: "Rias Bajas Hotel",
+        address: "Rias Bajas Hotel, Pontevedra, Spain",
+        km: "19.6 km",
+        maps: "https://www.google.com/maps/search/?api=1&query=Rias%20Bajas%20Hotel%20Pontevedra"
+      },
+      {
+        day: "Day 12", date: "6/19", city: "Armenteira", route: "spiritual",
+        stay: "Hospederia Monasterio de Armenteira",
+        address: "Hospederia Monasterio de Armenteira, Armenteira, Meis, Spain",
+        km: "20-21 km",
+        maps: "https://www.google.com/maps/search/?api=1&query=Hospederia%20Monasterio%20de%20Armenteira"
+      },
+      {
+        day: "Day 13", date: "6/20", city: "Barrantes / Ribadumia", route: "spiritual",
+        stay: "Albergue Camino Espiritual",
+        address: "Albergue Camino Espiritual, Ribadumia, Spain",
+        km: "15-16 km",
+        maps: "https://www.google.com/maps/search/?api=1&query=Albergue%20Camino%20Espiritual%20Ribadumia"
+      },
+      {
+        day: "Day 14", date: "6/21", city: "A Escravitude", route: "spiritual",
+        stay: "Villa Vieira / O Lagar de Jesus",
+        address: "Villa Vieira, A Escravitude, Padron, Spain",
+        km: "16-17 km + 船",
+        maps: "https://www.google.com/maps/search/?api=1&query=Villa%20Vieira%20A%20Escravitude%20Padron"
+      },
+      {
+        day: "Day 15", date: "6/22", city: "Santiago de Compostela", route: "rejoin",
+        stay: "Hospederia San Martin Pinario",
+        address: "Hospederia San Martin Pinario, Santiago de Compostela, Spain",
+        km: "16 km",
+        maps: "https://www.google.com/maps/search/?api=1&query=Hospederia%20San%20Martin%20Pinario%20Santiago%20de%20Compostela"
+      }
+    ];
+
+    let selectedIndex = 8;
+    let selectedCategory = "stay";
+
+    function enc(value) {
+      return encodeURIComponent(value);
+    }
+
+    function searchUrl(stay, categoryKey) {
+      const cat = categories.find((item) => item.key === categoryKey);
+      if (!cat || categoryKey === "stay") return stay.maps;
+      return `https://www.google.com/maps/search/?api=1&query=${enc(`${cat.query} ${stay.address}`)}`;
+    }
+
+    function embedUrl(stay, categoryKey) {
+      if (categoryKey === "stay") return `https://www.google.com/maps?q=${enc(stay.address)}&output=embed`;
+      const cat = categories.find((item) => item.key === categoryKey);
+      return `https://www.google.com/maps?q=${enc(`${cat.query} ${stay.address}`)}&output=embed`;
+    }
+
+    function allDirectionsUrl() {
+      const origin = enc(stays[0].address);
+      const stops = stays.slice(1).map((stay) => enc(stay.address)).join("+to:");
+      return `https://maps.google.com/maps?saddr=${origin}&daddr=${stops}&dirflg=w`;
+    }
+
+    function allEmbedUrl() {
+      const origin = enc(stays[0].address);
+      const stops = stays.slice(1).map((stay) => enc(stay.address)).join("+to:");
+      return `https://maps.google.com/maps?saddr=${origin}&daddr=${stops}&dirflg=w&output=embed`;
+    }
+
+    function allStaySearchUrl() {
+      return `https://www.google.com/maps/search/?api=1&query=${enc("Camino Portugues Central hotels Porto Santiago")}`;
+    }
+
+    function routeName(route) {
+      return {
+        start: "起點",
+        central: "中央線",
+        spiritual: "靈性之路",
+        rejoin: "進城段"
+      }[route] || "路線";
+    }
+
+    function renderDayList(filter = "") {
+      const target = document.getElementById("dayList");
+      const q = filter.trim().toLowerCase();
+      target.innerHTML = stays.map((stay, index) => ({ stay, index }))
+        .filter(({ stay }) => {
+          const text = `${stay.day} ${stay.date} ${stay.city} ${stay.stay} ${stay.address}`.toLowerCase();
+          return !q || text.includes(q);
+        })
+        .map(({ stay, index }) => `
+          <article class="day-card ${index === selectedIndex ? "active" : ""}" data-day-index="${index}">
+            <div class="day-top">
+              <div>
+                <div class="day-label">${stay.day} (${stay.date}) · ${stay.city}</div>
+                <div class="stay-name">${stay.stay}</div>
+              </div>
+              <span class="route-tag ${stay.route}">${routeName(stay.route)}</span>
+            </div>
+            <div class="address">${stay.address}</div>
+            <div class="quick-grid">
+              ${categories.map((cat) => `<a class="quick-link" target="_blank" rel="noopener" href="${searchUrl(stay, cat.key)}">${cat.label}</a>`).join("")}
+            </div>
+          </article>
+        `).join("");
+      target.querySelectorAll("[data-day-index]").forEach((card) => {
+        card.addEventListener("click", (event) => {
+          if (event.target.closest("a")) return;
+          selectDay(Number(card.dataset.dayIndex), selectedCategory);
+        });
+      });
+    }
+
+    function renderDetail() {
+      const stay = stays[selectedIndex];
+      document.getElementById("detailTitle").textContent = `${stay.day} (${stay.date}) · ${stay.city}`;
+      document.getElementById("detailStay").textContent = `${stay.stay} · ${stay.km}`;
+      document.getElementById("detailAddress").textContent = stay.address;
+      document.getElementById("detailMap").src = embedUrl(stay, selectedCategory);
+      document.getElementById("categoryRow").innerHTML = categories.map((cat) => `
+        <button class="category-button ${cat.key === selectedCategory ? "active" : ""}" type="button" data-category="${cat.key}">${cat.label}</button>
+      `).join("");
+      document.getElementById("detailLinks").innerHTML = categories.map((cat) => `
+        <a class="quick-link" target="_blank" rel="noopener" href="${searchUrl(stay, cat.key)}">${cat.label}</a>
+      `).join("");
+      document.querySelectorAll("[data-category]").forEach((button) => {
+        button.addEventListener("click", () => selectDay(selectedIndex, button.dataset.category));
+      });
+      renderDayList(document.getElementById("searchBox").value);
+    }
+
+    function selectDay(index, category = "stay") {
+      selectedIndex = index;
+      selectedCategory = category;
+      renderDetail();
+      document.querySelector(".detail-panel").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    document.getElementById("overviewMap").src = allEmbedUrl();
+    document.getElementById("allDirections").href = allDirectionsUrl();
+    document.getElementById("openAllMap").href = allDirectionsUrl();
+    document.getElementById("allStaySearch").href = allStaySearchUrl();
+    document.getElementById("searchBox").addEventListener("input", (event) => renderDayList(event.target.value));
+    renderDayList();
+    renderDetail();
+  </script>
+</body>
+</html>
