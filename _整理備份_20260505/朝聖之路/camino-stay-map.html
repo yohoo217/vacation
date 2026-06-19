@@ -358,9 +358,9 @@
       <h1>Camino 住宿地圖與附近補給</h1>
       <p class="subtitle">每一日住宿點都可直接開 Google Maps；每日卡片提供附近洗衣店、餐廳、麵包店、超市搜尋。總覽地圖把 Porto 到 Santiago 的住宿順序串在一起。</p>
       <div class="status-row">
-        <span class="pill">目前：Day 11 Pontevedra</span>
-        <span class="pill">已走：約 150.0 / 218.5 km</span>
-        <span class="pill">完成度：約 69%</span>
+        <span class="pill">目前：Day 9 O Porriño（6/19 第二晚）</span>
+        <span class="pill">已走：約 114.0 / 218.5 km</span>
+        <span class="pill">完成度：約 52%</span>
       </div>
     </div>
   </header>
@@ -391,14 +391,14 @@
 
     <section class="route-panel">
       <h2>接下來每日住宿點路線</h2>
-      <p class="route-intro">從今天 Pontevedra 開始，依序到 Armenteira、Ribadumia、A Escravitude、Santiago。每張卡都是住宿點到下一晚住宿點的 Google Maps 步行路線。</p>
+      <p class="route-intro">從 6/20 O Porriño 出發，依序到 Redondela、Pontevedra、Armenteira、Ribadumia、A Escravitude、Santiago。每張卡都是住宿點到下一晚住宿點的 Google Maps 步行路線。</p>
       <div class="route-grid" id="nextRouteGrid"></div>
     </section>
 
     <section class="detail-panel">
       <div class="detail-grid">
         <div class="detail-info">
-          <h2 id="detailTitle">Day 11 Pontevedra</h2>
+          <h2 id="detailTitle">Day 9 O Porriño</h2>
           <p id="detailStay"></p>
           <p id="detailAddress"></p>
           <div class="category-row" id="categoryRow"></div>
@@ -477,49 +477,49 @@
         maps: "https://maps.app.goo.gl/auhfF7ndiFthVb8t8?g_st=ic"
       },
       {
-        day: "Day 9", date: "6/16", city: "O Porrino", route: "central",
+        day: "Day 9", date: "6/18-6/19", city: "O Porrino", route: "central",
         stay: "Alojamientos Central",
         address: "Alojamientos Central, Av. Buenos Aires 2, 36400 O Porriño, Pontevedra, Spain",
         km: "16 km",
         maps: "https://maps.app.goo.gl/UghjYorNZECByfkK7?g_st=ic"
       },
       {
-        day: "Day 10", date: "6/17", city: "Redondela", route: "central",
+        day: "Day 10", date: "6/20", city: "Redondela", route: "central",
         stay: "Rua do Medio",
         address: "Rua do Medio, Rua Reveriano Soutullo 42, 36800 Redondela, Pontevedra, Spain",
         km: "16.4 km",
         maps: "https://maps.app.goo.gl/EFeVxjow1mmDo9sp9?g_st=ic"
       },
       {
-        day: "Day 11", date: "6/18", city: "Pontevedra", route: "central",
+        day: "Day 11", date: "6/21", city: "Pontevedra", route: "central",
         stay: "Galicia Palace",
         address: "Galicia Palace, Av. de Vigo 3, 36003 Pontevedra, Spain",
         km: "19.6 km",
         maps: "https://maps.app.goo.gl/fj8aLQ8MCWuXZEK27?g_st=ic"
       },
       {
-        day: "Day 12", date: "6/19", city: "Armenteira", route: "spiritual",
+        day: "Day 12", date: "6/22", city: "Armenteira", route: "spiritual",
         stay: "Hospederia Monasterio de Armenteira",
         address: "Hospederia Monasterio de Armenteira, Armenteira, Meis, Spain",
         km: "20-21 km",
         maps: "https://www.google.com/maps/search/?api=1&query=Hospederia%20Monasterio%20de%20Armenteira"
       },
       {
-        day: "Day 13", date: "6/20", city: "Barrantes / Ribadumia", route: "spiritual",
+        day: "Day 13", date: "6/23", city: "Barrantes / Ribadumia", route: "spiritual",
         stay: "Albergue Camino Espiritual",
         address: "Albergue Camino Espiritual, Ribadumia, Spain",
         km: "15-16 km",
         maps: "https://www.google.com/maps/search/?api=1&query=Albergue%20Camino%20Espiritual%20Ribadumia"
       },
       {
-        day: "Day 14", date: "6/21", city: "A Escravitude", route: "spiritual",
+        day: "Day 14", date: "6/24", city: "A Escravitude", route: "spiritual",
         stay: "Villa Vieira / O Lagar de Jesus",
         address: "Villa Vieira, A Escravitude, Padron, Spain",
         km: "16-17 km + 船",
         maps: "https://www.google.com/maps/search/?api=1&query=Villa%20Vieira%20A%20Escravitude%20Padron"
       },
       {
-        day: "Day 15", date: "6/22", city: "Santiago de Compostela", route: "rejoin",
+        day: "Day 15", date: "6/25", city: "Santiago de Compostela", route: "rejoin",
         stay: "Hospederia San Martin Pinario",
         address: "Hospederia San Martin Pinario, Santiago de Compostela, Spain",
         km: "16 km",
@@ -527,7 +527,7 @@
       }
     ];
 
-    const currentStayIndex = 10;
+    const currentStayIndex = 8;
     let selectedIndex = currentStayIndex;
     let selectedCategory = "stay";
 
