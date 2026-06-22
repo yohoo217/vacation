@@ -3,13 +3,141 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="refresh" content="0; url=_整理備份_20260505/朝聖之路/camino-guide.html">
-  <title>葡萄牙朝聖之路旅途指南</title>
+  <title>旅行計畫入口</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1e2a32;
+      --muted: #68747d;
+      --paper: #f4f1ea;
+      --surface: #fffdf8;
+      --line: #d7d0c2;
+      --green: #1f6b55;
+      --blue: #2f6f8f;
+      --red: #b84a3a;
+      --shadow: 0 14px 32px rgba(39, 45, 49, 0.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", sans-serif;
+      line-height: 1.55;
+    }
+    .shell {
+      width: min(980px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 34px 0;
+    }
+    header {
+      min-height: 280px;
+      display: grid;
+      align-items: end;
+      color: white;
+      background:
+        linear-gradient(90deg, rgba(26, 47, 40, 0.96), rgba(26, 47, 40, 0.7)),
+        url("_整理備份_20260505/朝聖之路/camino_cover.png") center/cover;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 6vw, 4rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+    .lead {
+      max-width: 700px;
+      margin: 14px 0 0;
+      color: rgba(255,255,255,0.86);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 22px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .card h2 {
+      margin: 0;
+      font-size: 1.35rem;
+    }
+    .card p {
+      color: var(--muted);
+      min-height: 72px;
+    }
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      border-radius: 8px;
+      padding: 9px 12px;
+      text-decoration: none;
+      border: 1px solid var(--line);
+      color: var(--ink);
+      font-weight: 900;
+      background: #fff;
+    }
+    a.primary {
+      color: #fff;
+      border-color: var(--green);
+      background: var(--green);
+    }
+    a.blue {
+      color: #fff;
+      border-color: var(--blue);
+      background: var(--blue);
+    }
+    a.red {
+      color: #fff;
+      border-color: var(--red);
+      background: var(--red);
+    }
+    @media (max-width: 700px) {
+      .grid { grid-template-columns: 1fr; }
+      .card p { min-height: 0; }
+    }
+  </style>
 </head>
 <body>
-  <p>
-    前往
-    <a href="_整理備份_20260505/朝聖之路/camino-guide.html">葡萄牙朝聖之路旅途指南</a>
-  </p>
+  <header>
+    <div class="shell">
+      <h1>旅行計畫入口</h1>
+      <p class="lead">Camino、住宿地圖、輪播頁，以及 Spain → Barcelona → Scotland → London 的一週計畫。</p>
+    </div>
+  </header>
+  <main class="shell">
+    <section class="grid">
+      <article class="card">
+        <h2>Camino 葡萄牙朝聖之路</h2>
+        <p>目前行程、每日住宿、進度、船班、補給與抵達 Santiago 後安排。</p>
+        <div class="links">
+          <a class="primary" href="_整理備份_20260505/朝聖之路/camino-guide.html">主導覽頁</a>
+          <a href="_整理備份_20260505/朝聖之路/camino-stay-map.html">住宿地圖</a>
+          <a href="_整理備份_20260505/朝聖之路/camino-journey-carousel.html">輪播頁</a>
+        </div>
+      </article>
+      <article class="card">
+        <h2>Barcelona + Scotland + London</h2>
+        <p>西班牙後到倫敦前的一週行程：Barcelona 2 晚、Edinburgh 4 晚、Highlands 一日團、最後到 London。</p>
+        <div class="links">
+          <a class="blue" href="europe-week-plan.html">一週規劃頁</a>
+          <a href="europe-itinerary.csv">行程 CSV</a>
+          <a href="europe-booking-checklist.csv">訂票 CSV</a>
+          <a href="europe-accommodation-criteria.csv">住宿 CSV</a>
+        </div>
+      </article>
+    </section>
+  </main>
 </body>
 </html>

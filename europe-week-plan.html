@@ -1,0 +1,829 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spain to London via Barcelona and Scotland</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1e2a32;
+      --muted: #68747d;
+      --paper: #f4f1ea;
+      --surface: #fffdf8;
+      --line: #d7d0c2;
+      --green: #1f6b55;
+      --green-soft: #e6f2ed;
+      --red: #b84a3a;
+      --red-soft: #fde8e2;
+      --blue: #2f6f8f;
+      --blue-soft: #e7f1f6;
+      --yellow: #b68022;
+      --yellow-soft: #fff3d8;
+      --shadow: 0 14px 32px rgba(39, 45, 49, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", sans-serif;
+      line-height: 1.55;
+    }
+    a { color: inherit; }
+    button { font: inherit; }
+    .shell { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
+    .masthead {
+      color: #fff;
+      background:
+        linear-gradient(90deg, rgba(26, 47, 40, 0.96), rgba(26, 47, 40, 0.76)),
+        url("_整理備份_20260505/朝聖之路/santiago_cathedral.png") center/cover;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 0;
+    }
+    .brand { font-weight: 900; letter-spacing: 0; }
+    .nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .nav a,
+    .nav button,
+    .action-link {
+      border: 1px solid rgba(255,255,255,0.36);
+      background: rgba(255,255,255,0.12);
+      color: inherit;
+      text-decoration: none;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+      gap: 32px;
+      align-items: end;
+      min-height: 420px;
+      padding: 44px 0 40px;
+    }
+    h1 {
+      margin: 0;
+      max-width: 820px;
+      font-size: clamp(2.2rem, 6vw, 4.7rem);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+    .lead {
+      margin: 18px 0 0;
+      max-width: 760px;
+      color: rgba(255,255,255,0.88);
+      font-size: 1.05rem;
+    }
+    .summary-panel {
+      background: rgba(255,255,255,0.13);
+      border: 1px solid rgba(255,255,255,0.28);
+      border-radius: 8px;
+      padding: 18px;
+      backdrop-filter: blur(12px);
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .metric {
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      padding: 12px;
+      min-height: 84px;
+      background: rgba(255,255,255,0.08);
+    }
+    .metric span {
+      display: block;
+      color: rgba(255,255,255,0.7);
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+    .metric strong {
+      display: block;
+      margin-top: 6px;
+      font-size: 1.25rem;
+      line-height: 1.2;
+    }
+    .section { padding: 42px 0; }
+    .section.alt { background: #ebe6dc; }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    h2 { margin: 0; font-size: clamp(1.55rem, 3vw, 2.2rem); letter-spacing: 0; }
+    .muted { color: var(--muted); }
+    .pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .pill {
+      border-radius: 999px;
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      font-weight: 800;
+      font-size: 0.86rem;
+      white-space: nowrap;
+    }
+    .tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 0 0 18px;
+    }
+    .tab {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 10px 12px;
+      cursor: pointer;
+      font-weight: 900;
+      color: var(--ink);
+    }
+    .tab.active { background: var(--green); color: #fff; border-color: var(--green); }
+    .grid { display: grid; gap: 14px; }
+    .day-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+    .day-card,
+    .booking-row,
+    .stay-card,
+    .option-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+    .day-card {
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      min-height: 330px;
+      overflow: hidden;
+    }
+    .day-top {
+      padding: 12px;
+      color: #fff;
+      background: var(--green);
+    }
+    .day-top.barcelona { background: var(--red); }
+    .day-top.edinburgh { background: var(--blue); }
+    .day-top.london { background: var(--yellow); color: #251c0a; }
+    .day-num { font-size: 0.82rem; font-weight: 900; opacity: 0.82; }
+    .day-city { margin-top: 4px; font-size: 1.08rem; font-weight: 950; line-height: 1.2; }
+    .day-body { padding: 12px; }
+    .day-body ul,
+    .compact-list {
+      margin: 8px 0 0;
+      padding-left: 18px;
+    }
+    .day-body li { margin: 4px 0; }
+    .day-foot {
+      border-top: 1px solid var(--line);
+      padding: 10px 12px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      border-radius: 999px;
+      padding: 4px 9px;
+      font-weight: 900;
+      font-size: 0.78rem;
+      background: var(--green-soft);
+      color: var(--green);
+    }
+    .badge.red { background: var(--red-soft); color: var(--red); }
+    .badge.blue { background: var(--blue-soft); color: var(--blue); }
+    .badge.yellow { background: var(--yellow-soft); color: #7b520d; }
+    .map-wrap {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 16px;
+      align-items: stretch;
+    }
+    #routeMap {
+      min-height: 500px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      overflow: hidden;
+      background: #d9e6e1;
+    }
+    .route-side {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .route-side h3,
+    .stay-card h3,
+    .option-card h3 {
+      margin: 0;
+      font-size: 1.05rem;
+    }
+    .route-step {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .route-step:last-child { border-bottom: 0; }
+    .dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: var(--green);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 0.78rem;
+      font-weight: 900;
+    }
+    .booking-table {
+      display: grid;
+      gap: 10px;
+    }
+    .booking-row {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1.2fr) 140px 160px minmax(180px, 0.8fr);
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+    }
+    .booking-row input {
+      width: 22px;
+      height: 22px;
+      accent-color: var(--green);
+    }
+    .booking-row a {
+      color: var(--blue);
+      font-weight: 900;
+      text-decoration: none;
+    }
+    .booking-row.done {
+      opacity: 0.68;
+      background: #f4f4f0;
+    }
+    .booking-row.done .item-title { text-decoration: line-through; }
+    .item-title { font-weight: 950; }
+    .priority {
+      font-weight: 950;
+      color: #fff;
+      background: var(--red);
+      border-radius: 999px;
+      padding: 5px 9px;
+      width: fit-content;
+      font-size: 0.8rem;
+    }
+    .priority.mid { background: var(--blue); }
+    .priority.low { background: var(--yellow); color: #241b08; }
+    .stay-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .stay-card,
+    .option-card { padding: 16px; box-shadow: none; }
+    .criteria {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .criteria strong { color: var(--green); }
+    .criteria div {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: #fbf8f0;
+    }
+    .option-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .option-card { min-height: 210px; }
+    .link-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .link-row a,
+    .download-row a {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 9px 11px;
+      background: var(--surface);
+      text-decoration: none;
+      font-weight: 900;
+    }
+    .download-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .note-box {
+      border-left: 4px solid var(--yellow);
+      background: var(--yellow-soft);
+      padding: 12px 14px;
+      border-radius: 8px;
+      margin-top: 14px;
+    }
+    .leaflet-popup-content { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif; }
+
+    @media (max-width: 1080px) {
+      .day-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .booking-row { grid-template-columns: 34px minmax(0, 1fr); }
+      .booking-row > *:nth-child(n+3) { grid-column: 2; }
+      .option-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 820px) {
+      .hero,
+      .map-wrap,
+      .stay-grid,
+      .criteria { grid-template-columns: 1fr; }
+      .hero { min-height: 0; padding: 30px 0; }
+      .summary-grid { grid-template-columns: 1fr 1fr; }
+      #routeMap { min-height: 420px; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .nav { justify-content: flex-start; }
+    }
+    @media (max-width: 560px) {
+      .shell { width: min(100% - 20px, 1120px); }
+      .summary-grid,
+      .day-grid { grid-template-columns: 1fr; }
+      .section { padding: 30px 0; }
+      .section-head { display: block; }
+      .pills { margin-top: 12px; }
+      .day-card { min-height: 0; }
+      .booking-row { gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="masthead">
+    <div class="shell">
+      <div class="topbar">
+        <div class="brand">Spain → Barcelona → Scotland → London</div>
+        <nav class="nav" aria-label="主要導覽">
+          <a href="#itinerary">行程</a>
+          <a href="#booking">訂票</a>
+          <a href="#stays">住宿</a>
+          <a href="#map">地圖</a>
+          <a href="_整理備份_20260505/朝聖之路/camino-guide.html">Camino</a>
+        </nav>
+      </div>
+      <div class="hero">
+        <div>
+          <h1>西班牙收尾，蘇格蘭主行程，最後進倫敦</h1>
+          <p class="lead">暫以 2026/6/26 從 Santiago de Compostela 出發估算。主軸是 Barcelona 2 晚、Edinburgh 4 晚、Day 7 抵達 London；不自駕，優先直飛與市中心火車，保留剛走完 Camino 後的體力餘裕。</p>
+          <div class="link-row">
+            <a href="https://www.google.com/travel/flights?q=BCN%20to%20EDI" target="_blank" rel="noopener">查 BCN → EDI</a>
+            <a href="https://www.lner.co.uk/routes/edinburgh-to-london-kings-cross-trains/" target="_blank" rel="noopener">查 EDB → King’s Cross</a>
+            <a href="https://www.rabbies.com/en-gb/tour/loch-ness-glencoe-highlands-day-tour-from-edinburgh" target="_blank" rel="noopener">Highlands 一日團</a>
+          </div>
+        </div>
+        <aside class="summary-panel">
+          <div class="summary-grid">
+            <div class="metric"><span>總長</span><strong>7 天</strong></div>
+            <div class="metric"><span>住宿</span><strong>Barcelona 2 晚<br>Edinburgh 4 晚</strong></div>
+            <div class="metric"><span>核心交通</span><strong>BCN → EDI 飛機<br>EDI → London 火車</strong></div>
+            <div class="metric"><span>體力策略</span><strong>少搬行李<br>不自駕</strong></div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" id="itinerary">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2>7 天行程</h2>
+            <p class="muted">日期以 6/26 起算；實際日期依航班、住宿價格與倫敦銜接調整。</p>
+          </div>
+          <div class="pills">
+            <span class="pill">Barcelona 2 晚</span>
+            <span class="pill">Edinburgh 4 晚</span>
+            <span class="pill">London Day 7 抵達</span>
+          </div>
+        </div>
+        <div class="grid day-grid" id="dayGrid"></div>
+      </div>
+    </section>
+
+    <section class="section alt" id="map">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2>路線地圖</h2>
+            <p class="muted">Santiago → Barcelona → Edinburgh，高地一日團後從 Edinburgh 進 London。</p>
+          </div>
+          <div class="pills">
+            <span class="pill">飛機：Barcelona → Edinburgh</span>
+            <span class="pill">火車：Edinburgh → London</span>
+          </div>
+        </div>
+        <div class="map-wrap">
+          <div id="routeMap" aria-label="旅遊路線地圖"></div>
+          <aside class="route-side">
+            <h3>路線邏輯</h3>
+            <div id="routeSteps"></div>
+            <div class="note-box">不加入 Norway。7 天內 Barcelona + Scotland + Norway 會把時間切碎，交通成本與疲勞都偏高。</div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="booking">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2>訂票 Checklist</h2>
+            <p class="muted">勾選狀態會存在這台手機或電腦的瀏覽器。</p>
+          </div>
+          <div class="download-row">
+            <a href="europe-itinerary.csv">Itinerary CSV</a>
+            <a href="europe-booking-checklist.csv">Booking CSV</a>
+            <a href="europe-accommodation-criteria.csv">Stays CSV</a>
+          </div>
+        </div>
+        <div class="tabs" id="bookingTabs"></div>
+        <div class="booking-table" id="bookingTable"></div>
+      </div>
+    </section>
+
+    <section class="section alt" id="stays">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2>住宿條件</h2>
+            <p class="muted">以少拖行李、交通順、冷氣與電梯為優先。</p>
+          </div>
+        </div>
+        <div class="grid stay-grid" id="stayGrid"></div>
+      </div>
+    </section>
+
+    <section class="section" id="options">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2>Day 6 三種版本</h2>
+            <p class="muted">依腳的狀態切換，不需要現在鎖死。</p>
+          </div>
+        </div>
+        <div class="grid option-grid" id="optionGrid"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const days = [
+      {
+        day: 1,
+        date: "6/26",
+        city: "Santiago / Spain → Barcelona",
+        overnight: "Barcelona, Eixample",
+        area: "barcelona",
+        intensity: "low",
+        transport: "火車或國內線，依出發城市決定",
+        tickets: "BCN 住宿",
+        morning: ["從西班牙目前城市移動到 Barcelona"],
+        afternoon: ["Check-in", "Eixample / Passeig de Gracia 輕鬆散步"],
+        evening: ["Gothic Quarter 或 El Born", "Barceloneta 海邊", "Tapas 晚餐"],
+        note: "Barcelona 白天偏熱，Day 1 不排硬景點。"
+      },
+      {
+        day: 2,
+        date: "6/27",
+        city: "Barcelona",
+        overnight: "Barcelona, Eixample",
+        area: "barcelona",
+        intensity: "medium",
+        transport: "地鐵 / taxi",
+        tickets: "Sagrada Família, Casa Batlló, Park Güell",
+        morning: ["Sagrada Família 09:00-11:00", "Casa Batlló 11:30-13:00"],
+        afternoon: ["午餐", "回飯店休息，避開中午高溫"],
+        evening: ["Park Güell 17:30-19:00", "Passeig de Gracia 或 El Born 晚餐"],
+        note: "Casa Milà 可刪除；保留三個高第重點即可。"
+      },
+      {
+        day: 3,
+        date: "6/28",
+        city: "Barcelona → Edinburgh",
+        overnight: "Edinburgh, New Town / Haymarket",
+        area: "edinburgh",
+        intensity: "medium",
+        transport: "BCN → EDI 直飛優先",
+        tickets: "BCN → EDI 機票",
+        morning: ["退房", "前往 BCN 機場"],
+        afternoon: ["中午或下午直飛 Edinburgh"],
+        evening: ["Check-in", "Royal Mile 短散步", "Victoria Street / Grassmarket 晚餐"],
+        note: "不要在這天排城堡或高地團。"
+      },
+      {
+        day: 4,
+        date: "6/29",
+        city: "Edinburgh",
+        overnight: "Edinburgh",
+        area: "edinburgh",
+        intensity: "medium",
+        transport: "步行 / bus",
+        tickets: "Edinburgh Castle",
+        morning: ["Edinburgh Castle 09:30-12:00"],
+        afternoon: ["Royal Mile", "St Giles’ Cathedral", "Victoria Street", "Grassmarket"],
+        evening: ["Calton Hill", "Pub 或現場音樂"],
+        note: "Arthur’s Seat 需要爬坡，腳累就跳過。"
+      },
+      {
+        day: 5,
+        date: "6/30",
+        city: "Scottish Highlands day tour",
+        overnight: "Edinburgh",
+        area: "highlands",
+        intensity: "long travel day",
+        transport: "Edinburgh 出發一日團",
+        tickets: "Highlands 一日團",
+        morning: ["集合上車", "Rannoch Moor / Glencoe"],
+        afternoon: ["Loch Ness / Fort Augustus", "Highland scenery"],
+        evening: ["返回 Edinburgh", "簡單晚餐"],
+        note: "優先 Loch Ness + Glencoe + Highlands；不建議 Isle of Skye 一日團。"
+      },
+      {
+        day: 6,
+        date: "7/1",
+        city: "Glasgow / Stirling / Edinburgh",
+        overnight: "Edinburgh",
+        area: "edinburgh",
+        intensity: "flexible",
+        transport: "火車一日來回或市區慢玩",
+        tickets: "Glasgow 火車可當天買",
+        morning: ["首選 Glasgow：Cathedral + Necropolis"],
+        afternoon: ["University of Glasgow", "Kelvingrove Art Gallery and Museum"],
+        evening: ["Ashton Lane 晚餐", "回 Edinburgh"],
+        note: "腳累則改 Dean Village, Stockbridge, Leith, Botanic Garden。"
+      },
+      {
+        day: 7,
+        date: "7/2",
+        city: "Edinburgh → London",
+        overnight: "London",
+        area: "london",
+        intensity: "travel day",
+        transport: "Edinburgh Waverley → London King’s Cross 火車優先",
+        tickets: "LNER / National Rail",
+        morning: ["退房", "前往 Edinburgh Waverley"],
+        afternoon: ["搭火車到 London King’s Cross"],
+        evening: ["London check-in", "附近晚餐"],
+        note: "若要接 Heathrow / Gatwick 國際線，再改查飛機。"
+      }
+    ];
+
+    const bookings = [
+      ["transport", "第一優先", "BCN → EDI 機票", "現在", "https://www.google.com/travel/flights?q=BCN%20to%20EDI", "直飛優先；含行李後比較總價。"],
+      ["transport", "第一優先", "Edinburgh → London 火車/機票", "現在", "https://www.lner.co.uk/routes/edinburgh-to-london-kings-cross-trains/", "倫敦市中心火車優先；接國際線才考慮飛機。"],
+      ["stay", "第一優先", "Barcelona 住宿", "現在", "https://www.google.com/maps/search/?api=1&query=Eixample%20hotel%20Barcelona%20air%20conditioning%20elevator", "Eixample、冷氣、電梯、近地鐵。"],
+      ["stay", "第一優先", "Edinburgh 住宿", "現在", "https://www.google.com/maps/search/?api=1&query=Edinburgh%20New%20Town%20Haymarket%20hotel%20elevator", "New Town 或 Haymarket；確認一日團集合點。"],
+      ["tour", "第一優先", "Highlands 一日團", "現在", "https://www.rabbies.com/en-gb/tour/loch-ness-glencoe-highlands-day-tour-from-edinburgh", "Rabbie’s 優先；也可查 Timberbush / Discover Scotland。"],
+      ["tickets", "第二優先", "Sagrada Família", "現在", "https://sagradafamilia.org/en/tickets-individuals", "Day 2 早上 09:00-10:30。"],
+      ["tickets", "第二優先", "Park Güell", "現在", "https://parkguell.barcelona/en", "Day 2 傍晚 17:00-19:00。"],
+      ["tickets", "第二優先", "Casa Batlló", "現在或 1-3 天前", "https://www.casabatllo.es/en/online-tickets/", "排在 Sagrada Família 後。"],
+      ["tickets", "第二優先", "Edinburgh Castle", "至少 2-5 天前", "https://www.edinburghcastle.scot/plan-your-visit/tickets/", "Day 4 早上 09:30-10:30 入場。"],
+      ["optional", "第三優先", "Glasgow 火車", "前一天或當天", "https://www.scotrail.co.uk/", "Day 6 若選 Glasgow 再買。"],
+      ["optional", "第三優先", "Stirling Castle", "彈性", "https://www.stirlingcastle.scot/", "Day 6 不去 Glasgow 時可改。"]
+    ];
+
+    const stays = [
+      {
+        city: "Barcelona",
+        preferred: "Eixample",
+        backups: ["El Born", "Gothic Quarter", "Barceloneta"],
+        must: ["冷氣", "電梯", "近地鐵", "評分 8.0+", "24 小時櫃台佳"],
+        avoid: ["La Rambla 正旁邊", "沒電梯老公寓", "沒有冷氣", "深夜 check-in 困難"],
+        searches: [
+          ["Eixample hotel Barcelona air conditioning elevator", "https://www.google.com/maps/search/?api=1&query=Eixample%20hotel%20Barcelona%20air%20conditioning%20elevator"],
+          ["Hotel near Passeig de Gracia", "https://www.google.com/maps/search/?api=1&query=Hotel%20near%20Passeig%20de%20Gracia%20Barcelona"],
+          ["Hotel near Sagrada Familia Barcelona", "https://www.google.com/maps/search/?api=1&query=Hotel%20near%20Sagrada%20Familia%20Barcelona"]
+        ]
+      },
+      {
+        city: "Edinburgh",
+        preferred: "New Town / Haymarket",
+        backups: ["Old Town", "Leith"],
+        must: ["電梯", "近 tram / train / bus", "評分 8.0+", "到一日團集合點方便"],
+        avoid: ["Old Town 深處", "陡坡與石板路", "沒電梯", "離集合點太遠"],
+        searches: [
+          ["Edinburgh New Town hotel elevator", "https://www.google.com/maps/search/?api=1&query=Edinburgh%20New%20Town%20hotel%20elevator"],
+          ["Edinburgh Haymarket hotel near tram", "https://www.google.com/maps/search/?api=1&query=Edinburgh%20Haymarket%20hotel%20near%20tram"],
+          ["Hotel near Waverley Station elevator", "https://www.google.com/maps/search/?api=1&query=Edinburgh%20hotel%20near%20Waverley%20Station%20elevator"]
+        ]
+      }
+    ];
+
+    const options = [
+      {
+        title: "A. Glasgow 一日遊",
+        label: "最推薦",
+        body: ["Edinburgh Waverley → Glasgow Queen Street", "Glasgow Cathedral + Necropolis", "University of Glasgow + Kelvingrove", "Ashton Lane 晚餐後回 Edinburgh"],
+        note: "行程完整度最高，城市感與 Edinburgh 不同。"
+      },
+      {
+        title: "B. Stirling Castle + Loch Lomond",
+        label: "城堡湖景",
+        body: ["可參加一日團", "或火車到 Stirling 自行遊覽", "比 Highlands 一日團輕鬆"],
+        note: "想看城堡與湖、不想去大城市時選這個。"
+      },
+      {
+        title: "C. Edinburgh 恢復日",
+        label: "腳累備案",
+        body: ["Dean Village", "Stockbridge", "Leith", "Royal Botanic Garden", "National Museum of Scotland"],
+        note: "不用搬行李、不坐長途車，保留恢復。"
+      }
+    ];
+
+    const routeStops = [
+      ["Santiago", 42.8805, -8.5457, "西班牙目前以 Santiago 起算"],
+      ["Barcelona", 41.3874, 2.1686, "西班牙收尾，住 Eixample 2 晚"],
+      ["Edinburgh", 55.9533, -3.1883, "蘇格蘭基地，住 4 晚"],
+      ["Glencoe", 56.6826, -5.1023, "Highlands 一日團代表景觀"],
+      ["Loch Ness", 57.3229, -4.4244, "Highlands 一日團常見停留"],
+      ["Glasgow", 55.8642, -4.2518, "Day 6 首選一日遊"],
+      ["London", 51.5074, -0.1278, "Day 7 抵達"]
+    ];
+
+    function renderDays() {
+      const grid = document.getElementById("dayGrid");
+      grid.innerHTML = days.map((d) => `
+        <article class="day-card">
+          <div class="day-top ${d.area}">
+            <div class="day-num">Day ${d.day} / ${d.date}</div>
+            <div class="day-city">${d.city}</div>
+          </div>
+          <div class="day-body">
+            <strong>住宿：${d.overnight}</strong>
+            <ul>
+              <li><strong>上午</strong>：${d.morning.join("、")}</li>
+              <li><strong>下午</strong>：${d.afternoon.join("、")}</li>
+              <li><strong>晚上</strong>：${d.evening.join("、")}</li>
+            </ul>
+            <p class="muted">${d.note}</p>
+          </div>
+          <div class="day-foot">
+            <span class="badge ${d.area === "barcelona" ? "red" : d.area === "edinburgh" || d.area === "highlands" ? "blue" : d.area === "london" ? "yellow" : ""}">${d.intensity}</span>
+            <span class="badge">${d.transport}</span>
+            <span class="badge yellow">${d.tickets}</span>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function renderBookings(filter = "all") {
+      const tabs = [
+        ["all", "全部"],
+        ["transport", "交通"],
+        ["stay", "住宿"],
+        ["tour", "一日團"],
+        ["tickets", "景點"],
+        ["optional", "彈性"]
+      ];
+      document.getElementById("bookingTabs").innerHTML = tabs.map(([key, label]) => `
+        <button class="tab ${filter === key ? "active" : ""}" data-filter="${key}" type="button">${label}</button>
+      `).join("");
+      document.querySelectorAll("[data-filter]").forEach((button) => {
+        button.addEventListener("click", () => renderBookings(button.dataset.filter));
+      });
+      const rows = bookings
+        .map((b, index) => ({ b, index }))
+        .filter(({ b }) => filter === "all" || b[0] === filter);
+      document.getElementById("bookingTable").innerHTML = rows.map(({ b, index }) => {
+        const done = localStorage.getItem(`europe-booking-${index}`) === "1";
+        const priorityClass = b[1] === "第一優先" ? "" : b[1] === "第二優先" ? "mid" : "low";
+        return `
+          <label class="booking-row ${done ? "done" : ""}">
+            <input type="checkbox" data-booking="${index}" ${done ? "checked" : ""}>
+            <div>
+              <div class="item-title">${b[2]}</div>
+              <div class="muted">${b[5]}</div>
+            </div>
+            <span class="priority ${priorityClass}">${b[1]}</span>
+            <span>${b[3]}</span>
+            <a href="${b[4]}" target="_blank" rel="noopener">官方 / 查詢連結</a>
+          </label>
+        `;
+      }).join("");
+      document.querySelectorAll("[data-booking]").forEach((input) => {
+        input.addEventListener("change", () => {
+          localStorage.setItem(`europe-booking-${input.dataset.booking}`, input.checked ? "1" : "0");
+          input.closest(".booking-row").classList.toggle("done", input.checked);
+        });
+      });
+    }
+
+    function renderStays() {
+      document.getElementById("stayGrid").innerHTML = stays.map((s) => `
+        <article class="stay-card">
+          <h3>${s.city}</h3>
+          <p><strong>首選區域：</strong>${s.preferred}</p>
+          <p><strong>備選：</strong>${s.backups.join(" / ")}</p>
+          <div class="criteria">
+            <div><strong>必備</strong><ul class="compact-list">${s.must.map((x) => `<li>${x}</li>`).join("")}</ul></div>
+            <div><strong>避免</strong><ul class="compact-list">${s.avoid.map((x) => `<li>${x}</li>`).join("")}</ul></div>
+          </div>
+          <div class="link-row">
+            ${s.searches.map(([label, href]) => `<a href="${href}" target="_blank" rel="noopener">${label}</a>`).join("")}
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function renderOptions() {
+      document.getElementById("optionGrid").innerHTML = options.map((o, index) => `
+        <article class="option-card">
+          <span class="badge ${index === 0 ? "blue" : index === 1 ? "yellow" : ""}">${o.label}</span>
+          <h3>${o.title}</h3>
+          <ul class="compact-list">${o.body.map((x) => `<li>${x}</li>`).join("")}</ul>
+          <p class="muted">${o.note}</p>
+        </article>
+      `).join("");
+    }
+
+    function renderMap() {
+      if (!window.L) {
+        document.getElementById("routeMap").innerHTML = '<div style="padding:16px">地圖需要網路連線。</div>';
+        return;
+      }
+      const map = L.map("routeMap", { scrollWheelZoom: false }).setView([49.8, -2.1], 5);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 18,
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+      const mainLine = [
+        [42.8805, -8.5457],
+        [41.3874, 2.1686],
+        [55.9533, -3.1883],
+        [51.5074, -0.1278]
+      ];
+      const highlandLoop = [
+        [55.9533, -3.1883],
+        [56.6826, -5.1023],
+        [57.3229, -4.4244],
+        [55.9533, -3.1883]
+      ];
+      const glasgowLine = [
+        [55.9533, -3.1883],
+        [55.8642, -4.2518],
+        [55.9533, -3.1883]
+      ];
+      L.polyline(mainLine, { color: "#b84a3a", weight: 4, opacity: 0.9, dashArray: "8 8" }).addTo(map).bindPopup("主要移動：Spain → Barcelona → Edinburgh → London");
+      L.polyline(highlandLoop, { color: "#2f6f8f", weight: 4, opacity: 0.9 }).addTo(map).bindPopup("Highlands 一日團：Glencoe / Loch Ness");
+      L.polyline(glasgowLine, { color: "#1f6b55", weight: 4, opacity: 0.85 }).addTo(map).bindPopup("Day 6 Glasgow 備案");
+      routeStops.forEach(([name, lat, lng, note], index) => {
+        L.marker([lat, lng]).addTo(map).bindPopup(`<strong>${index + 1}. ${name}</strong><br>${note}`);
+      });
+      map.fitBounds(L.latLngBounds([...mainLine, ...highlandLoop, ...glasgowLine]), { padding: [28, 28] });
+    }
+
+    function renderRouteSteps() {
+      const steps = [
+        ["1", "西班牙目前城市 → Barcelona", "以 Barcelona 收尾西班牙段；若從 Santiago 出發，國內線通常比長途鐵路省心。"],
+        ["2", "Barcelona → Edinburgh", "查 BCN → EDI 直飛；Vueling / easyJet / Ryanair 都要把行李費算進總價。"],
+        ["3", "Edinburgh 作基地", "New Town / Haymarket 住 4 晚，不自駕，用一日團看高地。"],
+        ["4", "Edinburgh → London", "若住倫敦市中心，火車到 King’s Cross 通常比飛機少折騰。"]
+      ];
+      document.getElementById("routeSteps").innerHTML = steps.map(([n, title, body]) => `
+        <div class="route-step"><div class="dot">${n}</div><div><strong>${title}</strong><div class="muted">${body}</div></div></div>
+      `).join("");
+    }
+
+    renderDays();
+    renderBookings();
+    renderStays();
+    renderOptions();
+    renderRouteSteps();
+    renderMap();
+  </script>
+</body>
+</html>
