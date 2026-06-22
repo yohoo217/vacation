@@ -124,7 +124,7 @@
         <button type="button" id="journeyPlay">暫停</button>
         <button type="button" id="journeyNext">下一日</button>
       </div>
-      <div class="meta-box">只保留 Porto 到 Santiago 的朝聖路段，並以 Porto 起算為 Day 1、Day 15 抵達 Santiago 作為最後一天。目前 6/21 已到 Vilanova de Arousa，實住 GUESTS HOUSE SAL E PEDRA：累計約 194.0 / 218.5 km，完成約 89%。6/22 船票已訂：La Barca del Peregrino 11:00，Vilanova de Arousa → Pontecesures；10:45 前到 Mar Santiago Maritime Station。距離仍以 Google Maps、Gronze / Wise Pilgrim 與現場黃色箭頭為準。</div>
+      <div class="meta-box">只保留 Porto 到 Santiago 的朝聖路段，並以 Porto 起算為 Day 1、Day 15 抵達 Santiago 作為最後一天。目前 6/22 船後實住 A Casa Da Meixida（Padrón 北側）：累計約 201.0 / 218.5 km，完成約 92%。6/23 進 Santiago，住宿 Rúa do Franco 58（Apartment in Casa Iacobus / Room in Santiago de Compostela）。距離仍以 Google Maps、Gronze / Wise Pilgrim 與現場黃色箭頭為準。</div>
       <div class="journey-list" id="journeyList"></div>
     </aside>
   </section>
@@ -151,10 +151,10 @@ const journeyStops=[
   {day:'Day 9',place:'O Porrino',stay:'Alojamientos Central',from:'Tui',kmText:'16.0 km',km:16.0,route:'central',note:'2026/6/16-6/17 實住兩晚 Alojamientos Central；經 Ribadelouro、Orbenlle，建議走 As Gandaras / Rio Louro 替代線避開 O Porrino 工業區。',lat:42.1616,lng:-8.6199},
   {day:'Day 10',place:'Redondela',stay:'Rua do Medio',from:'O Porrino',kmText:'16.4 km',km:16.4,route:'central',note:'6/18 住宿 Rua do Medio；經 Mos、Santiaguino 下到 Redondela，Redondela 與海岸線匯合，人流開始增加。',lat:42.2840,lng:-8.6096},
   {day:'Day 11',place:'Pontevedra',stay:'Galicia Palace',from:'Redondela',kmText:'19.6 km',km:19.6,route:'central',note:'建議住宿 Galicia Palace / Rias Bajas；經 Cesantes、Arcade、Pontesampaio 到 Pontevedra，Arcade 可午餐，Pontesampaio 石橋值得短停。',lat:42.4310,lng:-8.6444},
-  {day:'Day 12',place:'Armenteira',stay:'Casa Rural Manuel y Sofia',from:'Pontevedra',kmText:'20.5 km',km:20.5,route:'spiritual',note:'2026/6/20 今日實住 Casa Rural Manuel y Sofia；已到 Armenteira，今晚優先訂 6/22 Traslatio 船票。',lat:42.4590,lng:-8.7466},
+  {day:'Day 12',place:'Armenteira',stay:'Casa Rural Manuel y Sofia',from:'Pontevedra',kmText:'20.5 km',km:20.5,route:'spiritual',note:'2026/6/20 今日實住 Casa Rural Manuel y Sofia；已到 Armenteira，6/22 Traslatio 船票已訂。',lat:42.4590,lng:-8.7466},
   {day:'Day 13',place:'Vilanova de Arousa',stay:'GUESTS HOUSE SAL E PEDRA',from:'Armenteira',kmText:'23-24 km',km:23.5,route:'spiritual',note:'2026/6/21 今日實住 GUESTS HOUSE SAL E PEDRA；已走到 Vilanova de Arousa，明天直接去港口搭 Traslatio 船。',lat:42.5621,lng:-8.8278},
-  {day:'Day 14',place:'A Escravitude / Padrón',stay:'Villa Vieira / O Lagar de Jesus 或 Padrón',from:'Vilanova de Arousa',kmText:'船 1.5 hr + 步行 8-10 km',km:8.5,route:'spiritual',note:'6/22 已訂 La Barca del Peregrino 11:00，從 Vilanova 搭 Traslatio 船到 Pontecesures；下船後先走到 Padrón 補給 / 蓋章，再依體力決定 A Escravitude 或 Padrón。',lat:42.7232,lng:-8.6533},
-  {day:'Day 15',place:'Santiago de Compostela',stay:'Hospederia San Martin Pinario',from:'A Escravitude / Padrón',kmText:'16.0 km 或 22-24 km',km:16.0,route:'rejoin',note:'6/23 進 Santiago；A Escravitude 起約 16 km，若前晚住 Padrón 則約 22-24 km。',lat:42.8805,lng:-8.5457}
+  {day:'Day 14',place:'Padrón / A Casa Da Meixida',stay:'A Casa Da Meixida',from:'Vilanova de Arousa',kmText:'船 1.5 hr + 步行 5-7 km',km:7.0,route:'spiritual',note:'6/22 已訂 La Barca del Peregrino 11:00，從 Vilanova 搭 Traslatio 船到 Pontecesures；今日實住 A Casa Da Meixida（Aldea Muíños 25, Padrón），周邊補給較少。',lat:42.7735,lng:-8.6508},
+  {day:'Day 15',place:'Santiago de Compostela',stay:'Apartment in Casa Iacobus / Room in Santiago de Compostela',from:'A Casa Da Meixida / Padrón 北側',kmText:'17-20 km',km:17.5,route:'rejoin',note:'6/23 進 Santiago；住宿 Rúa do Franco 58，check-in after 15:00，checkout Thu Jun 25 11:00。',lat:42.8775,lng:-8.5458}
 ];
 const centralLine=[
   [41.1496,-8.6109],[41.1677,-8.6048],[41.2134,-8.6131],[41.2475,-8.6551],
@@ -174,8 +174,8 @@ const boatLine=[
   [42.5962,-8.7650],[42.6307,-8.7657],[42.6764,-8.7234],[42.7207,-8.6510]
 ];
 const rejoinLine=[
-  [42.7207,-8.6510],[42.7380,-8.6602],[42.8013,-8.6242],[42.8441,-8.5797],
-  [42.8574,-8.5575],[42.8805,-8.5457]
+  [42.7207,-8.6510],[42.7380,-8.6602],[42.7735,-8.6508],[42.8013,-8.6242],
+  [42.8441,-8.5797],[42.8574,-8.5575],[42.8775,-8.5458]
 ];
 let journeyIndex=0;
 let journeyPlaying=true;
@@ -195,7 +195,7 @@ function safeInit(){
   }).addTo(map);
   drawSegments();
   renderJourneyPins();
-  setJourney(12,false);
+  setJourney(13,false);
   toggleJourney(true);
 }
 function drawSegments(){
