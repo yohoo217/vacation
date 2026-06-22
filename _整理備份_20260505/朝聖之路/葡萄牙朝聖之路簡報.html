@@ -1,972 +1,430 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
+<!doctype html>
+<html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>葡萄牙朝聖之路 (Camino Portugués) 22-23天彈性計畫</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700;900&display=swap');
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:'Noto Sans TC',sans-serif;background:#1a1c18;color:#f0f2ea;overflow-x:hidden;}
-  .slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:60px 40px;position:relative;}
-  
-  /* SLIDE 1 - Cover */
-  #s1{background:linear-gradient(180deg,#1a1c18 0%,#28311b 100%);}
-  #s1 .hero{width:100%;max-width:900px;border-radius:24px;overflow:hidden;position:relative;box-shadow:0 0 80px rgba(234,179,8,0.3);}
-  #s1 .hero img{width:100%;display:block;height:600px;object-fit:cover;}
-  #s1 .hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(26,28,24,0.95) 0%,transparent 60%);display:flex;flex-direction:column;justify-content:flex-end;padding:40px;}
-  #s1 h1{font-size:3rem;font-weight:900;background:linear-gradient(135deg,#fef08a 0%,#eab308 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-  #s1 p{font-size:1.1rem;color:#d1d5db;margin-top:8px;}
-  .badge{display:inline-block;background:rgba(234,179,8,0.2);border:1px solid #eab308;border-radius:99px;padding:6px 18px;font-size:0.9rem;color:#fde047;margin-top:16px;}
-  
-  /* SLIDES - Routes */
-  #s2{background:linear-gradient(135deg,#1c2118 0%,#293623 100%);}
-  #s3{background:linear-gradient(135deg,#232936 0%,#181c21 100%);}
-  #s4{background:linear-gradient(135deg,#362a23 0%,#211918 100%);}
-  #s5{background:linear-gradient(135deg,#1a2e35 0%,#0f172a 100%);} /* Boat */
-  #s6{background:linear-gradient(135deg,#351a1a 0%,#2a0f0f 100%);} /* Barcelona */
-  .slide-title{font-size:2.2rem;font-weight:900;margin-bottom:8px;color:#fef08a;}
-  .slide-sub{font-size:1.1rem;color:#9ca3af;margin-bottom:32px;}
-  
-  .content-grid{display:grid;grid-template-columns:1fr;gap:24px;max-width:980px;width:100%;align-items:start;}
-  .photo-box{display:none;}
-  .photo-box img{width:100%;height:100%;object-fit:cover;display:block;}
-  .info-box{display:flex;flex-direction:column;gap:12px;}
-  
-  .day-card{background:rgba(255,255,255,0.05);border-radius:14px;padding:14px 18px;border-left:4px solid #eab308;transition:transform 0.2s;}
-  .day-card:hover{transform:translateX(5px);background:rgba(255,255,255,0.08);}
-  .day-card.flight{border-color:#60a5fa; background:rgba(96,165,250,0.05);}
-  .day-card.boat{border-color:#34d399; background:rgba(52,211,153,0.05);}
-  .day-card.city{border-color:#f472b6; background:rgba(244,114,182,0.05);}
-  .day-label{font-size:0.85rem;font-weight:700;color:#eab308;margin-bottom:4px;}
-  .day-card.flight .day-label{color:#60a5fa;}
-  .day-card.boat .day-label{color:#34d399;}
-  .day-card.city .day-label{color:#f472b6;}
-  .day-text{font-size:1rem;line-height:1.5;}
-  .route-line{font-weight:700;color:#f8fafc;margin-bottom:8px;}
-  .note-line{font-size:0.86rem;color:#cbd5e1;margin-top:8px;line-height:1.45;}
-  .albergue{display:inline-block;margin-top:6px;font-size:0.8rem;color:#a3e635;background:rgba(163,230,53,0.1);padding:4px 8px;border-radius:6px;border:1px solid rgba(163,230,53,0.3);}
-  .transport{display:inline-block;margin-top:6px;font-size:0.8rem;color:#93c5fd;background:rgba(96,165,250,0.1);padding:4px 8px;border-radius:6px;border:1px solid rgba(96,165,250,0.3);}
-  .link-map{color:#86efac;background:rgba(52,168,83,0.15);border:1px solid rgba(52,168,83,0.4);}
-  .link-agoda{color:#fca5a5;background:rgba(225,45,66,0.15);border:1px solid rgba(225,45,66,0.4);}
-  .link-booking{color:#93c5fd;background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.4);}
-  .link-phone{color:#fde68a;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.4);}
-  .decision{display:inline-block;margin-top:6px;font-size:0.8rem;color:#fef3c7;background:rgba(245,158,11,0.12);padding:4px 8px;border-radius:6px;border:1px solid rgba(245,158,11,0.35);}
-  
-  /* SLIDE 7 - Map */
-  #s7{background:#1a1c18; padding: 100px 40px;}
-  .route-map-container{display:flex;gap:40px;max-width:1100px;width:100%;height:600px;}
-  .map-box{flex:1; border-radius:20px; overflow:hidden; border:1px solid rgba(255,255,255,0.1);}
-  .stats-box{flex:0.6; display:flex; flex-direction:column; justify-content:center; gap:20px;}
-  .stat-card{background:rgba(255,255,255,0.05);padding:24px;border-radius:16px;}
-  .stat-card h3{font-size:1rem;color:#9ca3af;margin-bottom:8px;}
-  .stat-card .num{font-size:2.5rem;font-weight:900;color:#eab308;}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>葡萄牙朝聖之路簡報</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #18251f;
+      --muted: #5f6f66;
+      --paper: #f5efe2;
+      --surface: #fffaf0;
+      --line: #d9cfbc;
+      --green: #1f6b55;
+      --blue: #2f6f8f;
+      --gold: #b4771f;
+      --red: #a23b30;
+      --shadow: 0 16px 42px rgba(31, 37, 32, 0.14);
+    }
 
-  /* SLIDE 8 - Preparation */
-  #s8{background:linear-gradient(135deg,#1f2937 0%,#111827 100%);}
-  .prep-grid{display:grid;grid-template-columns:repeat(3, 1fr);gap:24px;max-width:1000px;width:100%;}
-  .prep-card{background:rgba(255,255,255,0.05);border-radius:18px;padding:30px;border:1px solid rgba(255,255,255,0.1);}
-  .prep-card h3{font-size:1.4rem;margin-bottom:16px;color:#a3e635;}
-  .prep-card ul{list-style:none;display:flex;flex-direction:column;gap:12px;}
-  .prep-card li{font-size:1rem;color:#d1d5db;padding-left:28px;position:relative;line-height:1.5;}
-  .prep-card li::before{content:'✓';position:absolute;left:0;color:#a3e635;font-weight:bold;}
+    * { box-sizing: border-box; }
 
-  /* NAV */
-  .nav{position:fixed;right:24px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:12px;z-index:999;}
-  .nav-dot{width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,0.3);cursor:pointer;transition:all 0.3s;}
-  .nav-dot.active,.nav-dot:hover{background:#eab308;transform:scale(1.3);}
-  .section-num{position:absolute;top:40px;right:40px;font-size:0.9rem;color:rgba(255,255,255,0.3);font-weight:bold;}
-  .inline-panel{margin-top:12px;background:rgba(15,23,42,0.42);border:1px solid rgba(255,255,255,0.1);border-radius:12px;overflow:hidden;}
-  .inline-panel summary{cursor:pointer;list-style:none;padding:10px 12px;font-size:0.86rem;font-weight:900;color:#fde68a;background:rgba(245,158,11,0.08);}
-  .inline-panel summary::-webkit-details-marker{display:none;}
-  .inline-body{padding:12px;display:flex;flex-direction:column;gap:12px;}
-  .detail-list{list-style:none;display:flex;flex-direction:column;gap:6px;}
-  .detail-list li{font-size:0.86rem;line-height:1.45;color:#d1d5db;}
-  .stay-meta{font-size:0.82rem;color:#9ca3af;line-height:1.45;}
-  .option-list{display:flex;flex-direction:column;gap:8px;}
-  .option{background:rgba(15,23,42,0.55);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px;}
-  .option-head{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:6px;}
-  .option-name{font-weight:800;color:#f8fafc;font-size:0.9rem;}
-  .price-band{font-size:0.75rem;font-weight:900;border-radius:999px;padding:3px 8px;}
-  .band-low{color:#bbf7d0;background:rgba(34,197,94,0.16);}
-  .band-mid{color:#bfdbfe;background:rgba(59,130,246,0.16);}
-  .band-high{color:#fde68a;background:rgba(245,158,11,0.16);}
-  .band-pilgrim{color:#ddd6fe;background:rgba(139,92,246,0.18);}
-  .option-note{font-size:0.82rem;color:#cbd5e1;line-height:1.45;margin-bottom:8px;}
-  .mini-links{display:flex;gap:8px;flex-wrap:wrap;}
-  .mini-links a{font-size:0.76rem;font-weight:800;padding:5px 8px;border-radius:6px;text-decoration:none;}
-  .table-wrap{overflow-x:auto;border:1px solid rgba(255,255,255,0.08);border-radius:10px;}
-  .stay-table{width:100%;border-collapse:collapse;min-width:760px;background:rgba(15,23,42,0.35);}
-  .stay-table th,.stay-table td{padding:9px 10px;border-bottom:1px solid rgba(255,255,255,0.08);text-align:left;vertical-align:top;font-size:0.8rem;line-height:1.45;}
-  .stay-table th{color:#fde68a;background:rgba(245,158,11,0.1);font-size:0.76rem;letter-spacing:0;font-weight:900;}
-  .stay-table tr:last-child td{border-bottom:0;}
-  .stay-table .option-name{font-size:0.82rem;}
-  .bath-ok{color:#bbf7d0;font-weight:900;}
-  .bath-check{color:#fde68a;font-weight:900;}
-  .bath-warn{color:#fca5a5;font-weight:900;}
-  .table-links{display:flex;gap:6px;flex-wrap:wrap;}
-  .table-links a{font-size:0.72rem;font-weight:800;padding:4px 7px;border-radius:6px;text-decoration:none;white-space:nowrap;}
-  .stay-map{border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;background:rgba(15,23,42,0.35);}
-  .stay-map iframe{width:100%;height:260px;border:0;display:block;}
-  .stay-map-head{padding:9px 10px;color:#fde68a;background:rgba(245,158,11,0.1);font-size:0.76rem;font-weight:900;}
-  .stay-map-links{display:flex;gap:6px;flex-wrap:wrap;padding:10px;}
-  .stay-map-links a{font-size:0.72rem;font-weight:800;padding:4px 7px;border-radius:6px;text-decoration:none;white-space:nowrap;}
-  .route-compare{background:#111827;padding:80px 40px;}
-  .compare-inner{width:100%;max-width:1180px;margin:0 auto;}
-  .compare-title{font-size:2rem;font-weight:900;color:#fef08a;margin-bottom:8px;}
-  .compare-sub{font-size:0.98rem;color:#cbd5e1;line-height:1.6;margin-bottom:24px;}
-  .progress-banner{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 0 22px;}
-  .progress-banner div{border:1px solid rgba(34,197,94,0.35);background:rgba(34,197,94,0.10);border-radius:10px;padding:12px 14px;}
-  .progress-banner span{display:block;font-size:0.72rem;font-weight:900;color:#bbf7d0;text-transform:uppercase;letter-spacing:0;}
-  .progress-banner strong{display:block;margin-top:4px;font-size:1.2rem;color:#fef08a;}
-  .compare-grid{display:grid;grid-template-columns:repeat(3, 1fr);gap:22px;align-items:start;}
-  .compare-column{border:1px solid rgba(255,255,255,0.1);border-radius:14px;overflow:hidden;background:rgba(255,255,255,0.04);}
-  .compare-head{padding:16px 18px;background:rgba(245,158,11,0.1);border-bottom:1px solid rgba(255,255,255,0.08);}
-  .compare-head h3{font-size:1.2rem;color:#fde68a;margin-bottom:6px;}
-  .compare-head p{font-size:0.86rem;color:#d1d5db;line-height:1.5;}
-  .walk-table-wrap{overflow-x:auto;border:1px solid rgba(255,255,255,0.1);border-radius:14px;margin-bottom:24px;background:rgba(255,255,255,0.04);}
-  .walk-table{width:100%;min-width:820px;border-collapse:collapse;}
-  .walk-table th,.walk-table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.08);text-align:left;vertical-align:top;font-size:0.82rem;line-height:1.45;}
-  .walk-table th{color:#fde68a;background:rgba(245,158,11,0.1);font-weight:900;}
-  .walk-table tr:last-child td{border-bottom:0;}
-  .walk-route{font-weight:900;color:#f8fafc;}
-  .walk-meta{color:#bfdbfe;font-weight:900;white-space:nowrap;}
-  .difficulty{display:inline-block;border-radius:999px;padding:3px 8px;font-size:0.72rem;font-weight:900;white-space:nowrap;}
-  .diff-easy{color:#bbf7d0;background:rgba(34,197,94,0.16);}
-  .diff-mid{color:#fde68a;background:rgba(245,158,11,0.16);}
-  .diff-hard{color:#fca5a5;background:rgba(248,113,113,0.16);}
-  .route-link{display:inline-block;color:#86efac;background:rgba(52,168,83,0.15);border:1px solid rgba(52,168,83,0.4);border-radius:6px;padding:4px 7px;font-size:0.72rem;font-weight:900;text-decoration:none;white-space:nowrap;}
-  .route-actions{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px;}
-  .compare-head .route-actions{margin:10px 0 0;}
-  .leg-meta{color:#bfdbfe;font-size:0.72rem;font-weight:900;margin-top:3px;}
-  .route-stay-info{margin-top:5px;color:#cbd5e1;font-size:0.72rem;line-height:1.45;}
-  .route-stay-links{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px;}
-  .route-stay-links a{font-size:0.7rem;font-weight:900;padding:4px 7px;border-radius:6px;text-decoration:none;white-space:nowrap;}
-  .route-table{width:100%;border-collapse:collapse;}
-  .route-table th,.route-table td{padding:9px 10px;border-bottom:1px solid rgba(255,255,255,0.08);text-align:left;vertical-align:top;font-size:0.78rem;line-height:1.45;}
-  .route-table th{color:#fde68a;background:rgba(15,23,42,0.48);font-weight:900;}
-  .route-table tr:last-child td{border-bottom:0;}
-  .route-table .place{color:#f8fafc;font-weight:800;}
-  .route-table .note{color:#9ca3af;font-size:0.72rem;margin-top:2px;}
-  @media (max-width:900px){
-    .content-grid,.prep-grid,.compare-grid{grid-template-columns:1fr;}
-    .route-map-container{flex-direction:column;height:auto;}
-    .map-box{min-height:360px;}
-    #s1 .hero img{height:460px;}
-  }
+    html { scroll-behavior: smooth; }
 
-  /* === Mobile Friendly === */
-  @media (max-width:768px){
-    body{font-size:16px;}
-    .slide{padding:40px 18px;}
-    .slide-title{font-size:1.6rem;}
-    .compare-grid{grid-template-columns:1fr!important;gap:16px;}
-    .walk-table-wrap{font-size:0.8rem;}
-    .route-table th,.route-table td{padding:8px 6px;font-size:0.78rem;}
-    .day-card{padding:14px;}
-    .day-label{font-size:0.9rem;}
-    .prep-grid{grid-template-columns:1fr!important;}
-    .prep-card{padding:20px;}
-    .route-map-container{flex-direction:column;height:auto;}
-    .map-box{min-height:320px;}
-    .mini-links a,.table-links a,.route-stay-links a{min-height:36px;display:inline-flex;align-items:center;padding:6px 10px;font-size:0.78rem;}
-    .nav{right:10px;gap:8px;}
-    .nav-dot{width:10px;height:10px;}
-    .section-num{display:none;}
-    .compare-column{font-size:0.82rem;}
-    .route-link{padding:6px 10px;font-size:0.78rem;}
-  }
-  .city-feat{font-size:0.72rem;color:#a3e635;margin-top:4px;line-height:1.4;}
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", sans-serif;
+      line-height: 1.55;
+    }
 
-  /* === Route Tabs === */
-  .route-tabs-bar{position:sticky;top:0;z-index:500;display:flex;gap:0;background:#0f172a;border-bottom:2px solid rgba(255,255,255,0.08);overflow-x:auto;-webkit-overflow-scrolling:touch;}
-  .route-tab-btn{flex:1;min-width:90px;padding:14px 10px;font-size:0.9rem;font-weight:900;color:#9ca3af;background:transparent;border:none;cursor:pointer;transition:all 0.2s;border-bottom:3px solid transparent;white-space:nowrap;font-family:inherit;}
-  .route-tab-btn:nth-child(1).active{color:#fde68a;border-bottom-color:#eab308;background:rgba(234,179,8,0.08);}
-  .route-tab-btn:nth-child(2).active{color:#6ee7b7;border-bottom-color:#34d399;background:rgba(52,211,153,0.08);}
-  .route-tab-btn:nth-child(3).active{color:#93c5fd;border-bottom-color:#60a5fa;background:rgba(96,165,250,0.08);}
-  .route-tab-btn:nth-child(4).active{color:#a3e635;border-bottom-color:#84cc16;background:rgba(163,230,53,0.08);}
-  .route-tab-btn:hover{color:#f8fafc;background:rgba(255,255,255,0.05);}
-  .tab-panel{display:none;animation:fadeIn 0.2s ease;}
-  .tab-panel.active{display:block;}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
-  /* Mobile: full width single column for route panels */
-  @media(max-width:768px){
-    .compare-grid{grid-template-columns:1fr!important;}
-    .route-tab-btn{font-size:0.8rem;padding:12px 8px;}
-    .route-compare{padding:0!important;}
-    .compare-inner{padding:16px!important;}
-    .compare-title{font-size:1.4rem;}
-    .compare-sub{font-size:0.85rem;}
-    .progress-banner{grid-template-columns:1fr;}
-    .route-table th,.route-table td{font-size:0.78rem;padding:8px 6px;}
-    .route-table .leg-meta{font-size:0.68rem;}
-    .city-feat{font-size:0.7rem;}
-    .walk-table{min-width:0!important;font-size:0.78rem;}
-    .walk-table th,.walk-table td{padding:7px 5px;}
-  }
-</style>
+    a { color: inherit; }
+
+    .slide {
+      min-height: 100vh;
+      display: grid;
+      align-items: center;
+      padding: 54px min(6vw, 64px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .slide-inner {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+    }
+
+    .cover {
+      color: white;
+      background:
+        linear-gradient(90deg, rgba(20, 43, 35, 0.96), rgba(20, 43, 35, 0.58)),
+        url("camino_cover.png") center/cover;
+    }
+
+    .kicker {
+      margin: 0 0 12px;
+      color: var(--gold);
+      font-weight: 900;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .cover .kicker { color: #f5d17b; }
+
+    h1,
+    h2 {
+      margin: 0;
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      max-width: 860px;
+      font-size: clamp(2.6rem, 8vw, 6.4rem);
+    }
+
+    h2 {
+      font-size: clamp(2rem, 5vw, 4.4rem);
+    }
+
+    .lead,
+    .sub {
+      max-width: 760px;
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .cover .lead { color: rgba(255, 255, 255, 0.86); }
+
+    .top-actions,
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .top-actions a,
+    .actions a {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      padding: 10px 13px;
+      text-decoration: none;
+      font-weight: 900;
+      border: 1px solid rgba(255,255,255,0.36);
+      background: rgba(255,255,255,0.12);
+      color: white;
+      backdrop-filter: blur(10px);
+    }
+
+    .actions a {
+      color: var(--ink);
+      border-color: var(--line);
+      background: var(--surface);
+    }
+
+    .actions a.primary {
+      color: white;
+      border-color: var(--green);
+      background: var(--green);
+    }
+
+    .metric-grid,
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .metric,
+    .card,
+    .table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .metric {
+      min-height: 120px;
+      padding: 18px;
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 1.5rem;
+      line-height: 1.1;
+    }
+
+    .card {
+      padding: 18px;
+    }
+
+    .card h3 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .card p {
+      margin: 9px 0 0;
+      color: var(--muted);
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .tag {
+      border-radius: 999px;
+      padding: 5px 9px;
+      color: white;
+      background: var(--green);
+      font-size: 0.78rem;
+      font-weight: 900;
+    }
+
+    .tag.blue { background: var(--blue); }
+    .tag.gold { background: var(--gold); }
+    .tag.red { background: var(--red); }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin-top: 26px;
+    }
+
+    table {
+      width: 100%;
+      min-width: 820px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 13px 14px;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid var(--line);
+    }
+
+    th {
+      color: #33423a;
+      background: #efe5d3;
+      font-size: 0.84rem;
+      text-transform: uppercase;
+    }
+
+    td {
+      background: rgba(255, 250, 240, 0.78);
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .route {
+      display: block;
+      font-weight: 900;
+    }
+
+    .note {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(280px, 0.75fr);
+      gap: 22px;
+      align-items: start;
+      margin-top: 28px;
+    }
+
+    .photo-box {
+      min-height: 420px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      background: #d9e5d8;
+    }
+
+    .photo-box img {
+      width: 100%;
+      height: 100%;
+      min-height: 420px;
+      object-fit: cover;
+      display: block;
+    }
+
+    @media (max-width: 880px) {
+      .slide { min-height: auto; padding: 38px 18px; }
+      .metric-grid,
+      .card-grid,
+      .split { grid-template-columns: 1fr; }
+      .photo-box,
+      .photo-box img { min-height: 280px; }
+    }
+  </style>
 </head>
 <body>
-<nav class="nav">
-  <div class="nav-dot active" onclick="goto(0)" title="建議住宿路線"></div>
-  <div class="nav-dot" onclick="goto(1)" title="路線總覽"></div>
-  <div class="nav-dot" onclick="goto(2)" title="行前準備"></div>
-</nav>
-<section class="route-compare" id="route-compare-top">
-  <div class="compare-inner">
-    <div class="route-tabs-bar">
-  <button class="route-tab-btn active" onclick="switchTab(0)">🏨 路線1・舒適</button>
-  <button class="route-tab-btn" onclick="switchTab(1)">🛏️ 路線2・庇護所</button>
-  <button class="route-tab-btn" onclick="switchTab(2)">🔀 路線3・混搭</button>
-  <button class="route-tab-btn" onclick="switchTab(3)">📋 步行總表</button>
-</div>
-<div class="compare-inner">
-<div class="compare-title">建議住宿路線總表</div>
-    <div class="compare-sub" style="border-color:rgba(34,197,94,0.45);background:rgba(34,197,94,0.10);color:#bbf7d0;">2026/6/9 實際更新：今晚住 Aerostay Hostel（Moreira da Maia / Porto Airport 周邊）。為了維持每日 15-20 km，明天不只走到 Vilarinho，改為直接走到 São Miguel de Arcos / Arcos，約 16-17 km。</div>
-    <div class="compare-sub">以下以 Porto 到 Santiago 的朝聖主行程為主，並以 Porto 起算為 Day 1、Day 15 抵達 Santiago 作為最後一天；目前 6/22 船後住 A Casa Da Meixida，約完成 92%，先列每日步行時間、距離與 Google Maps 路線，再分成「全程住旅館/民宿」與「全程住朝聖者旅館/庇護所」兩種走法。主路線距離已按 Gronze / Variante Espiritual 分段重新核對；A/B 住宿間距離為住宿點偏移後的實用估算。地圖連結供定位與估算使用，實際步行仍以 Camino 黃箭頭、Gronze / Wise Pilgrim 路線與當日路況為準。</div>
-    <div class="progress-banner">
-      <div><span>目前完成度</span><strong>92%</strong></div>
-      <div><span>已走距離</span><strong>170.5 km</strong></div>
-      <div><span>總距離</span><strong>218.5 km</strong></div>
-    </div>
-    <div class="route-actions">
-      <a class="route-link" target="_blank" href="https://maps.google.com/maps?saddr=Aerostay+Hostel,Moreira+da+Maia,Portugal&amp;daddr=Sao+Miguel+de+Arcos,Portugal+to:Barcelos,Portugal+to:Balugaes,Portugal+to:Ponte+de+Lima,Portugal+to:Rubiaes,Portugal+to:Tui,Spain+to:O+Porrino,Spain+to:Redondela,Spain+to:Pontevedra,Spain+to:Armenteira,Spain+to:Ribadumia,Spain+to:Vilanova+de+Arousa,Spain+to:A+Casa+Da+Meixida,Padron,Spain+to:Rua+do+Franco+58,Santiago+de+Compostela,Spain&amp;dirflg=w">主路線整體地圖</a>
-    </div>
-    <div id="tab-0" class="tab-panel active">
-  <div class="compare-grid" style="grid-template-columns:1fr;">
-    <div class="compare-column">
-        <div class="compare-head">
-          <h3>路線 1：舒適優先</h3>
-          <p>在星號名單中，優先為您挑選旅館、套房與民宿，確保沿途擁有較佳的睡眠品質與私人衛浴。</p>
-          <div class="route-actions"><a class="route-link" target="_blank" href="https://maps.google.com/maps?saddr=Aerostay+Hostel,Moreira+da+Maia,Portugal&amp;daddr=Sao+Miguel+de+Arcos,Portugal+to:Barcelos,Portugal+to:Balugaes,Portugal+to:Ponte+de+Lima,Portugal+to:Rubiaes,Portugal+to:Tui,Spain+to:O+Porrino,Spain+to:Redondela,Spain+to:Pontevedra,Spain+to:Armenteira,Spain+to:Ribadumia,Spain+to:Vilanova+de+Arousa,Spain+to:A+Casa+Da+Meixida,Padron,Spain+to:Rua+do+Franco+58,Santiago+de+Compostela,Spain&amp;dirflg=w">舒適路線總地圖</a></div>
-        </div>
-        <table class="route-table">
-<thead><tr><th>日程</th><th>落腳點</th><th>建議住宿</th></tr></thead>
-<tbody>
-<tr><td>Day 1</td><td>Porto<div class="city-feat">🏛️ 世界遺產老城、杜羅河、波特酒窖、São Bento 車站磁磚壁畫</div></td><td><span class="place">Hotel Spot Family Suites Porto</span><span title="旅館" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">已完成的抵達整理日</div><div class="leg-meta">抵達日：市區準備約 1-2 hr / 2-4 km</div></td></tr>
-<tr><td>Day 2</td><td>Moreira da Maia<div class="city-feat">🏘️ 機場鄰近市郊、平路起步熱身、補給便利</div></td><td><span class="place">Aerostay Hostel</span><span title="旅館" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">今晚已住 Aerostay；明天直接走 16-17 km 到 Arcos</div><div class="leg-meta">今日休整 / 採買補給</div></td></tr>
-<tr><td>Day 3</td><td>São Miguel de Arcos / Arcos<div class="city-feat">🌉 Ponte de Arcos 石橋、鄉村聚落、比 Rates 更舒服的停留點</div></td><td><span class="place">Quinta São Miguel de Arcos / Villa d'Arcos</span><span title="庇護所" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🛏️</span><div class="note">已抵達 Quinta，住宿舒服；Arcos 是中央線合理停留點</div><div class="leg-meta">Aerostay Hostel -> Arcos：約 4.5-5.5 hr / 16-17 km</div></td></tr>
-<tr><td>Day 4</td><td>Barcelos<div class="city-feat">🐓 葡萄牙公雞傳說發源地！週四露天市集、彩色陶瓷工藝品必看</div></td><td><span class="place">In Barcelos Hostel & Guest House</span><span title="青年旅館" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">2026/6/11 今日實住；Albergue Cidade de Barcelos 改為庇護所備案</div><div class="leg-meta">Arcos -> Barcelos：約 3-4 hr / 11-13 km</div></td></tr>
-<tr><td>Day 5</td><td>Balugães / Vitorino dos Piães<div class="city-feat">🌿 傳統農村聚落、葡萄園與丘陵，Casa da Fernanda 一帶很受歡迎</div></td><td><span class="place">Quinta da Cancela</span><span title="民宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏡</span><div class="note">2026/6/12 今日實住，住宿不錯；補給不便，先確認晚餐早餐</div><div class="leg-meta">Barcelos -> Balugães：約 4-5 hr / 15 km</div></td></tr>
-<tr><td>Day 6</td><td>Ponte de Lima<div class="city-feat">🌉 葡萄牙最古老城鎮(1125年)、羅馬橋、Lima河畔週市</div></td><td><span class="place">Vila de Ponte Guest House</span><span title="民宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏡</span><div class="note">2026/6/13 今日實住；ARC MY OTEL / 庇護所改為備案</div><div class="leg-meta">Balugães -> Ponte de Lima：約 5-6 hr / 18 km</div></td></tr>
-<tr><td>Day 7</td><td>Rubiães<div class="city-feat">⛰️ 翻越 Labruja 山脊後的山中小村，夜晚涼爽</div></td><td><span class="place">Casa de S Sebastião</span><span title="民宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏡</span><div class="note">2026/6/14 實際走到 Rubiães；已完成 Labruja 主要爬升；進度約 36%</div><div class="leg-meta">Ponte de Lima -> Rubiães：約 4.75-6 hr / 17.4 km</div></td></tr>
-<tr><td>Day 8</td><td>Tui<div class="city-feat">🏰 進入西班牙第一城，過橋後時區快 1 小時</div></td><td><span class="place">La Sigrina Hostal</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">2026/6/15 昨日實住；經 Fontoura、Valença 城塞後跨 Miño 河，Tui 起每天 2 章</div><div class="leg-meta">Rubiães -> Tui：約 4.75-5.5 hr / 19.1 km</div></td></tr>
-<tr><td>Day 9</td><td>O Porriño<div class="city-feat">🪨 加利西亞花崗岩小城，建議走替代路線避開工業區</div></td><td><span class="place">Alojamientos Central</span><span title="民宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏡</span><div class="note">2026/6/16-6/17 實住兩晚；經 Ribadelouro、Orbenlle，走 As Gándaras / río Louro 替代線避工業區</div><div class="leg-meta">Tui -> O Porriño：約 4-5 hr / 16 km</div></td></tr>
-<tr><td>Day 10</td><td>Redondela<div class="city-feat">🚂 內陸線與海岸線在此匯合，人流增加</div></td><td><span class="place">Rua do Medio</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">6/18 住宿；經 Mos、Santiaguiño，Redondela 與海岸線匯合</div><div class="leg-meta">O Porriño -> Redondela：約 4-5 hr / 16.4 km</div></td></tr>
-<tr><td>Day 11</td><td>Pontevedra<div class="city-feat">🏛️ 加利西亞最美中世紀老城，準備轉入靈性變體</div></td><td><span class="place">Galicia Palace</span><span title="旅館" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">建議住宿；經 Cesantes、Arcade、Pontesampaio，石橋值得短停</div><div class="leg-meta">Redondela -> Pontevedra：約 5-6 hr / 19.6 km</div></td></tr>
-<tr><td>Day 12</td><td>Armenteira<div class="city-feat">🕊️ 12世紀修道院，經 Combarro 後爬升進山谷</div></td><td><span class="place">Casa Rural Manuel y Sofía</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">2026/6/20 今日實住；已到 Armenteira；6/22 船票已訂</div><div class="leg-meta">Pontevedra -> Armenteira：約 5.5-7 hr / 20-21 km</div></td></tr>
-<tr><td>Day 13</td><td>Vilanova de Arousa<div class="city-feat">⛵ 海邊港口、Traslatio 上船前夜，補給比水石之路村落方便</div></td><td><span class="place">GUESTS HOUSE SAL E PEDRA</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">2026/6/21 今日實住；已到 Vilanova，明天直接去港口搭船</div><div class="leg-meta">Armenteira -> Vilanova：約 6-7 hr / 23-24 km</div></td></tr>
-<tr><td>Day 14</td><td>Padrón / A Casa Da Meixida<div class="city-feat">⛴️ Vilanova 搭 Traslatio 船，下船 Pontecesures 後往 Padrón 北側住宿</div></td><td><span class="place">A Casa Da Meixida</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">6/22 今日實住；Aldea Muíños 25，周邊補給較少</div><div class="leg-meta">Vilanova + 船 + A Casa Da Meixida：船 1.5 hr + 步行約 5-7 km</div></td></tr>
-<tr><td>Day 15</td><td>Santiago<div class="city-feat">⛪ 終點！Obradoiro 廣場、Compostela 證書、Botafumeiro 巨型熏香爐</div></td><td><span class="place">Apartment in Casa Iacobus / Room in Santiago de Compostela</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">6/23 入住 Rúa do Franco 58；check-in after 15:00</div><div class="leg-meta">A Casa Da Meixida -> Santiago：約 4.5-5.5 hr / 17-20 km</div></td></tr>
-<tr><td>朝聖後</td><td>Santiago<div class="city-feat">🧺 緩衝、洗衣、辦證書、大教堂與屋頂導覽</div></td><td><span class="place">Apartment in Casa Iacobus / Room in Santiago de Compostela</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">6/24 續住 Rúa do Franco 58；6/25 11:00 前退房</div><div class="leg-meta">市區散步 0-5 km / 緩衝日</div></td></tr>
-</tbody>
-</table>
-      </div>
-      
-  </div>
-</div>
-<div id="tab-1" class="tab-panel">
-  <div class="compare-grid" style="grid-template-columns:1fr;">
-    <div class="compare-column">
-        <div class="compare-head" style="background:rgba(52,211,153,0.1);">
-          <h3 style="color:#6ee7b7;">路線 2：庇護所優先</h3>
-          <p>在星號名單中，優先挑選朝聖者庇護所或青年旅館，讓您能深度體驗 Camino 的交流氛圍。</p>
-          <div class="route-actions"><a class="route-link" target="_blank" href="https://maps.google.com/maps?saddr=Aerostay+Hostel,Moreira+da+Maia,Portugal&amp;daddr=Sao+Miguel+de+Arcos,Portugal+to:Barcelos,Portugal+to:Balugaes,Portugal+to:Ponte+de+Lima,Portugal+to:Rubiaes,Portugal+to:Tui,Spain+to:O+Porrino,Spain+to:Redondela,Spain+to:Pontevedra,Spain+to:Armenteira,Spain+to:Ribadumia,Spain+to:Vilanova+de+Arousa,Spain+to:A+Casa+Da+Meixida,Padron,Spain+to:Rua+do+Franco+58,Santiago+de+Compostela,Spain&amp;dirflg=w">庇護所路線總地圖</a></div>
-        </div>
-        <table class="route-table">
-<thead><tr><th>日程</th><th>落腳點</th><th>建議住宿</th></tr></thead>
-<tbody>
-<tr><td>Day 1</td><td>Porto<div class="city-feat">🏛️ 世界遺產老城、杜羅河、波特酒窖、São Bento 車站磁磚壁畫</div></td><td><span class="place">Hotel Spot Family Suites Porto</span><span title="旅館" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">已完成的抵達整理日</div><div class="leg-meta">抵達日：市區準備約 1-2 hr / 2-4 km</div></td></tr>
-<tr><td>Day 2</td><td>Moreira da Maia<div class="city-feat">🏘️ 機場鄰近市郊、平路起步熱身、補給便利</div></td><td><span class="place">Aerostay Hostel</span><span title="旅館" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">今晚已住 Aerostay；明天直接走 16-17 km 到 Arcos</div><div class="leg-meta">今日休整 / 採買補給</div></td></tr>
-<tr><td>Day 3</td><td>São Miguel de Arcos / Arcos<div class="city-feat">🌉 Ponte de Arcos 石橋、鄉村聚落、比 Rates 更舒服的停留點</div></td><td><span class="place">Quinta São Miguel de Arcos / Villa d'Arcos</span><span title="庇護所" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🛏️</span><div class="note">已抵達 Quinta，住宿舒服；Arcos 是中央線合理停留點</div><div class="leg-meta">Aerostay Hostel -> Arcos：約 4.5-5.5 hr / 16-17 km</div></td></tr>
-<tr><td>Day 4</td><td>Barcelos<div class="city-feat">🐓 葡萄牙公雞傳說發源地！週四露天市集、彩色陶瓷工藝品必看</div></td><td><span class="place">In Barcelos Hostel & Guest House</span><span title="青年旅館" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">2026/6/11 今日實住；Albergue Cidade de Barcelos 改為庇護所備案</div><div class="leg-meta">Arcos -> Barcelos：約 3-4 hr / 11-13 km</div></td></tr>
-<tr><td>Day 5</td><td>Balugães / Vitorino dos Piães<div class="city-feat">🌿 傳統農村聚落、葡萄園與丘陵，Casa da Fernanda 一帶很受歡迎</div></td><td><span class="place">Quinta da Cancela</span><span title="民宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏡</span><div class="note">2026/6/12 今日實住，住宿不錯；補給不便，先確認晚餐早餐</div><div class="leg-meta">Barcelos -> Balugães：約 4-5 hr / 15 km</div></td></tr>
-<tr><td>Day 6</td><td>Ponte de Lima<div class="city-feat">🌉 葡萄牙最古老城鎮(1125年)、羅馬橋、Lima河畔週市</div></td><td><span class="place">Vila de Ponte Guest House</span><span title="民宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏡</span><div class="note">2026/6/13 今日實住；ARC MY OTEL / 庇護所改為備案</div><div class="leg-meta">Balugães -> Ponte de Lima：約 5-6 hr / 18 km</div></td></tr>
-<tr><td>Day 7</td><td>Rubiães<div class="city-feat">⛰️ 翻越 Labruja 山脊後的山中小村，夜晚涼爽</div></td><td><span class="place">Casa de S Sebastião</span><span title="民宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏡</span><div class="note">2026/6/14 實際走到 Rubiães；已完成 Labruja 主要爬升；進度約 36%</div><div class="leg-meta">Ponte de Lima -> Rubiães：約 4.75-6 hr / 17.4 km</div></td></tr>
-<tr><td>Day 8</td><td>Tui<div class="city-feat">🏰 進入西班牙第一城，過橋後時區快 1 小時</div></td><td><span class="place">La Sigrina Hostal</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">2026/6/15 昨日實住；經 Fontoura、Valença 城塞後跨 Miño 河，Tui 起每天 2 章</div><div class="leg-meta">Rubiães -> Tui：約 4.75-5.5 hr / 19.1 km</div></td></tr>
-<tr><td>Day 9</td><td>O Porriño<div class="city-feat">🪨 加利西亞花崗岩小城，建議走替代路線避開工業區</div></td><td><span class="place">Alojamientos Central</span><span title="民宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏡</span><div class="note">2026/6/16-6/17 實住兩晚；經 Ribadelouro、Orbenlle，走 As Gándaras / río Louro 替代線避工業區</div><div class="leg-meta">Tui -> O Porriño：約 4-5 hr / 16 km</div></td></tr>
-<tr><td>Day 10</td><td>Redondela<div class="city-feat">🚂 內陸線與海岸線在此匯合，人流增加</div></td><td><span class="place">Rua do Medio</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">6/18 住宿；經 Mos、Santiaguiño，Redondela 與海岸線匯合</div><div class="leg-meta">O Porriño -> Redondela：約 4-5 hr / 16.4 km</div></td></tr>
-<tr><td>Day 11</td><td>Pontevedra<div class="city-feat">🏛️ 加利西亞最美中世紀老城，準備轉入靈性變體</div></td><td><span class="place">Galicia Palace</span><span title="旅館" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">建議住宿；經 Cesantes、Arcade、Pontesampaio，石橋值得短停</div><div class="leg-meta">Redondela -> Pontevedra：約 5-6 hr / 19.6 km</div></td></tr>
-<tr><td>Day 12</td><td>Armenteira<div class="city-feat">🕊️ 12世紀修道院，經 Combarro 後爬升進山谷</div></td><td><span class="place">Casa Rural Manuel y Sofía</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">2026/6/20 今日實住；已到 Armenteira；6/22 船票已訂</div><div class="leg-meta">Pontevedra -> Armenteira：約 5.5-7 hr / 20-21 km</div></td></tr>
-<tr><td>Day 13</td><td>Vilanova de Arousa<div class="city-feat">⛵ 海邊港口、Traslatio 上船前夜，補給比水石之路村落方便</div></td><td><span class="place">GUESTS HOUSE SAL E PEDRA</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">2026/6/21 今日實住；已到 Vilanova，明天直接去港口搭船</div><div class="leg-meta">Armenteira -> Vilanova：約 6-7 hr / 23-24 km</div></td></tr>
-<tr><td>Day 14</td><td>Padrón / A Casa Da Meixida<div class="city-feat">⛴️ Vilanova 搭 Traslatio 船，下船 Pontecesures 後往 Padrón 北側住宿</div></td><td><span class="place">A Casa Da Meixida</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">6/22 今日實住；Aldea Muíños 25，周邊補給較少</div><div class="leg-meta">Vilanova + 船 + A Casa Da Meixida：船 1.5 hr + 步行約 5-7 km</div></td></tr>
-<tr><td>Day 15</td><td>Santiago<div class="city-feat">⛪ 終點！Obradoiro 廣場、Compostela 證書、Botafumeiro 巨型熏香爐</div></td><td><span class="place">Apartment in Casa Iacobus / Room in Santiago de Compostela</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">6/23 入住 Rúa do Franco 58；check-in after 15:00</div><div class="leg-meta">A Casa Da Meixida -> Santiago：約 4.5-5.5 hr / 17-20 km</div></td></tr>
-<tr><td>抵達後</td><td>Santiago<div class="city-feat">🧺 緩衝、洗衣、辦證書、大教堂與屋頂導覽</div></td><td><span class="place">Apartment in Casa Iacobus / Room in Santiago de Compostela</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">6/24 續住 Rúa do Franco 58；6/25 11:00 前退房</div><div class="leg-meta">市區散步 0-5 km / 緩衝日</div></td></tr>
-</tbody>
-</table>
-      </div>
-      
-  </div>
-</div>
-<div id="tab-2" class="tab-panel">
-  <div class="compare-grid" style="grid-template-columns:1fr;">
-    <div class="compare-column">
-        <div class="compare-head" style="background:rgba(96,165,250,0.1);">
-          <h3 style="color:#93c5fd;">路線 3：混搭與第三備案</h3>
-          <p>為您篩選出星號名單中的第三個選項，或是將旅館與青旅交錯安排，達成預算與體力的平衡。</p>
-          <div class="route-actions"><a class="route-link" target="_blank" href="https://maps.google.com/maps?saddr=Aerostay+Hostel,Moreira+da+Maia,Portugal&amp;daddr=Sao+Miguel+de+Arcos,Portugal+to:Barcelos,Portugal+to:Balugaes,Portugal+to:Ponte+de+Lima,Portugal+to:Rubiaes,Portugal+to:Tui,Spain+to:O+Porrino,Spain+to:Redondela,Spain+to:Pontevedra,Spain+to:Armenteira,Spain+to:Ribadumia,Spain+to:Vilanova+de+Arousa,Spain+to:A+Casa+Da+Meixida,Padron,Spain+to:Rua+do+Franco+58,Santiago+de+Compostela,Spain&amp;dirflg=w">混搭路線總地圖</a></div>
-        </div>
-        <table class="route-table">
-<thead><tr><th>日程</th><th>落腳點</th><th>建議住宿</th></tr></thead>
-<tbody>
-<tr><td>Day 1</td><td>Porto<div class="city-feat">🏛️ 世界遺產老城、杜羅河、波特酒窖、São Bento 車站磁磚壁畫</div></td><td><span class="place">Hotel Spot Family Suites Porto</span><span title="旅館" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">已完成的抵達整理日</div><div class="leg-meta">抵達日：市區準備約 1-2 hr / 2-4 km</div></td></tr>
-<tr><td>Day 2</td><td>Moreira da Maia<div class="city-feat">🏘️ 機場鄰近市郊、平路起步熱身、補給便利</div></td><td><span class="place">Aerostay Hostel</span><span title="旅館" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">今晚已住 Aerostay；明天直接走 16-17 km 到 Arcos</div><div class="leg-meta">今日休整 / 採買補給</div></td></tr>
-<tr><td>Day 3</td><td>São Miguel de Arcos / Arcos<div class="city-feat">🌉 Ponte de Arcos 石橋、鄉村聚落、比 Rates 更舒服的停留點</div></td><td><span class="place">Quinta São Miguel de Arcos / Villa d'Arcos</span><span title="庇護所" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🛏️</span><div class="note">已抵達 Quinta，住宿舒服；Arcos 是中央線合理停留點</div><div class="leg-meta">Aerostay Hostel -> Arcos：約 4.5-5.5 hr / 16-17 km</div></td></tr>
-<tr><td>Day 4</td><td>Barcelos<div class="city-feat">🐓 葡萄牙公雞傳說發源地！週四露天市集、彩色陶瓷工藝品必看</div></td><td><span class="place">In Barcelos Hostel & Guest House</span><span title="青年旅館" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">2026/6/11 今日實住；Albergue Cidade de Barcelos 改為庇護所備案</div><div class="leg-meta">Arcos -> Barcelos：約 3-4 hr / 11-13 km</div></td></tr>
-<tr><td>Day 5</td><td>Balugães / Vitorino dos Piães<div class="city-feat">🌿 傳統農村聚落、葡萄園與丘陵，Casa da Fernanda 一帶很受歡迎</div></td><td><span class="place">Quinta da Cancela</span><span title="民宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏡</span><div class="note">2026/6/12 今日實住，住宿不錯；補給不便，先確認晚餐早餐</div><div class="leg-meta">Barcelos -> Balugães：約 4-5 hr / 15 km</div></td></tr>
-<tr><td>Day 6</td><td>Ponte de Lima<div class="city-feat">🌉 葡萄牙最古老城鎮(1125年)、羅馬橋、Lima河畔週市</div></td><td><span class="place">Vila de Ponte Guest House</span><span title="民宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏡</span><div class="note">2026/6/13 今日實住；ARC MY OTEL / 庇護所改為備案</div><div class="leg-meta">Balugães -> Ponte de Lima：約 5-6 hr / 18 km</div></td></tr>
-<tr><td>Day 7</td><td>Rubiães<div class="city-feat">⛰️ 翻越 Labruja 山脊後的山中小村，夜晚涼爽</div></td><td><span class="place">Casa de S Sebastião</span><span title="民宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏡</span><div class="note">2026/6/14 實際走到 Rubiães；已完成 Labruja 主要爬升；進度約 36%</div><div class="leg-meta">Ponte de Lima -> Rubiães：約 4.75-6 hr / 17.4 km</div></td></tr>
-<tr><td>Day 8</td><td>Tui<div class="city-feat">🏰 進入西班牙第一城，過橋後時區快 1 小時</div></td><td><span class="place">La Sigrina Hostal</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">2026/6/15 昨日實住；經 Fontoura、Valença 城塞後跨 Miño 河，Tui 起每天 2 章</div><div class="leg-meta">Rubiães -> Tui：約 4.75-5.5 hr / 19.1 km</div></td></tr>
-<tr><td>Day 9</td><td>O Porriño<div class="city-feat">🪨 加利西亞花崗岩小城，建議走替代路線避開工業區</div></td><td><span class="place">Alojamientos Central</span><span title="民宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏡</span><div class="note">2026/6/16-6/17 實住兩晚；經 Ribadelouro、Orbenlle，走 As Gándaras / río Louro 替代線避工業區</div><div class="leg-meta">Tui -> O Porriño：約 4-5 hr / 16 km</div></td></tr>
-<tr><td>Day 10</td><td>Redondela<div class="city-feat">🚂 內陸線與海岸線在此匯合，人流增加</div></td><td><span class="place">Rua do Medio</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">6/18 住宿；經 Mos、Santiaguiño，Redondela 與海岸線匯合</div><div class="leg-meta">O Porriño -> Redondela：約 4-5 hr / 16.4 km</div></td></tr>
-<tr><td>Day 11</td><td>Pontevedra<div class="city-feat">🏛️ 加利西亞最美中世紀老城，準備轉入靈性變體</div></td><td><span class="place">Galicia Palace</span><span title="旅館" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">建議住宿；經 Cesantes、Arcade、Pontesampaio，石橋值得短停</div><div class="leg-meta">Redondela -> Pontevedra：約 5-6 hr / 19.6 km</div></td></tr>
-<tr><td>Day 12</td><td>Armenteira<div class="city-feat">🕊️ 12世紀修道院，經 Combarro 後爬升進山谷</div></td><td><span class="place">Casa Rural Manuel y Sofía</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">2026/6/20 今日實住；已到 Armenteira；6/22 船票已訂</div><div class="leg-meta">Pontevedra -> Armenteira：約 5.5-7 hr / 20-21 km</div></td></tr>
-<tr><td>Day 13</td><td>Vilanova de Arousa<div class="city-feat">⛵ 海邊港口、Traslatio 上船前夜，補給比水石之路村落方便</div></td><td><span class="place">GUESTS HOUSE SAL E PEDRA</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">2026/6/21 今日實住；已到 Vilanova，明天直接去港口搭船</div><div class="leg-meta">Armenteira -> Vilanova：約 6-7 hr / 23-24 km</div></td></tr>
-<tr><td>Day 14</td><td>Padrón / A Casa Da Meixida<div class="city-feat">⛴️ Vilanova 搭 Traslatio 船，下船 Pontecesures 後往 Padrón 北側住宿</div></td><td><span class="place">A Casa Da Meixida</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">6/22 今日實住；Aldea Muíños 25，周邊補給較少</div><div class="leg-meta">Vilanova + 船 + A Casa Da Meixida：船 1.5 hr + 步行約 5-7 km</div></td></tr>
-<tr><td>Day 15</td><td>Santiago<div class="city-feat">⛪ 終點！Obradoiro 廣場、Compostela 證書、Botafumeiro 巨型熏香爐</div></td><td><span class="place">Apartment in Casa Iacobus / Room in Santiago de Compostela</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">6/23 入住 Rúa do Franco 58；check-in after 15:00</div><div class="leg-meta">A Casa Da Meixida -> Santiago：約 4.5-5.5 hr / 17-20 km</div></td></tr>
-<tr><td>抵達後</td><td>Santiago<div class="city-feat">🧺 緩衝、洗衣、辦證書、大教堂與屋頂導覽</div></td><td><span class="place">Apartment in Casa Iacobus / Room in Santiago de Compostela</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">6/24 續住 Rúa do Franco 58；6/25 11:00 前退房</div><div class="leg-meta">市區散步 0-5 km / 緩衝日</div></td></tr>
-</tbody>
-</table>
-      </div>
-    </div>    </div>
-  </div>
-</section>
-
-<!-- SLIDE 7: Map & Stats -->
-<section class="slide" id="s7">
-  <span class="section-num">07 / 08</span>
-  <div class="slide-title" style="margin-bottom:40px;">路線總覽與數據</div>
-  
-  <div class="route-map-container">
-    <div class="stats-box">
-      <div class="stat-card">
-        <h3>總行程天數</h3>
-        <div class="num">22–23 天</div>
-      </div>
-      <div class="stat-card">
-        <h3>實際步行天數</h3>
-        <div class="num">13-14 天</div>
-      </div>
-      <div class="stat-card" style="background:rgba(52,211,153,0.1); border:1px solid #34d399;">
-        <h3 style="color:#6ee7b7;">特殊體驗</h3>
-        <div class="num" style="font-size:1.6rem; color:#a7f3d0;">搭船 (Traslatio)</div>
-      </div>
-      <div class="stat-card" style="background:rgba(234,179,8,0.1); border:1px solid #eab308;">
-        <h3 style="color:#fde047;">每日平均步行</h3>
-        <div class="num" style="font-size:1.8rem;">約 17-18 km</div>
-      </div>
-    </div>
-    <div class="map-box">
-      <iframe src="https://maps.google.com/maps?saddr=Aerostay+Hostel,Moreira+da+Maia,Portugal&amp;daddr=Sao+Miguel+de+Arcos,Portugal+to:Barcelos,Portugal+to:Balugaes,Portugal+to:Ponte+de+Lima,Portugal+to:Rubiaes,Portugal+to:Tui,Spain+to:O+Porrino,Spain+to:Redondela,Spain+to:Pontevedra,Spain+to:Armenteira,Spain+to:Ribadumia,Spain+to:Vilanova+de+Arousa,Spain+to:A+Casa+Da+Meixida,Padron,Spain+to:Rua+do+Franco+58,Santiago+de+Compostela,Spain&amp;output=embed&amp;hl=zh-TW" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-    </div>
-  </div>
-</section>
-
-
-<!-- SLIDE 8: Preparation -->
-<section class="slide" id="s8">
-  <span class="section-num">08 / 08</span>
-  <div class="slide-title" style="margin-bottom:40px;">行前準備與搭船須知</div>
-  <div class="prep-grid">
-    <div class="prep-card">
-      <h3>🎒 裝備與護照建議</h3>
-      <ul>
-        <li><strong>鞋子</strong>：已穿開的防水登山鞋或越野跑鞋，襪子買美麗諾羊毛襪（防起水泡關鍵）。</li>
-        <li><strong>朝聖者護照</strong>：抵達 Porto (Day 1) 時在主教座堂購買。沿途在咖啡廳、教堂、庇護所蓋章。</li>
-        <li><strong>最後 100 公里</strong>：進入西班牙後，每天必須蓋 2 個章才能換取證書。</li>
-      </ul>
-    </div>
-    <div class="prep-card" style="border-color:#34d399; background:rgba(52,211,153,0.05);">
-      <h3 style="color:#6ee7b7;">⛴️ 靈性變體搭船須知 (Traslatio)</h3>
-      <ul>
-        <li><strong>營運時間</strong>：船班主要在 3月到10月營運；6/22 船班需視當日潮汐與即時空位決定。</li>
-        <li><strong>目前狀態</strong>：6/22 船後實住 A Casa Da Meixida；6/23 入住 Santiago Rúa do Franco 58，6/25 11:00 前退房。</li>
-        <li><strong>船程費用</strong>：單趟常見約 32 歐元，航程約 1-1.5 小時，船上可蓋特殊朝聖章。</li>
-      </ul>
-    </div>
-    <div class="prep-card" style="grid-column: 1 / -1; border-color:#60a5fa; background:rgba(96,165,250,0.05);">
-      <h3 style="color:#93c5fd;">☀️ 六月氣候與注意事項</h3>
-      <ul>
-        <li><strong>氣溫</strong>：Porto 六月約 14-24°C，Santiago / Galicia 通常更涼一些；早晚薄外套，白天短袖或薄長袖即可。</li>
-        <li><strong>降雨</strong>：北葡六月已偏乾，但 Galicia 仍常有陣雨、霧雨或雲層；輕量雨衣、防水背包套必帶。</li>
-        <li><strong>日照</strong>：六月白晝約 15 小時，UV 可到高等級；帽子、太陽眼鏡、防曬乳、薄長袖比雨傘更實用。</li>
-        <li><strong>補水</strong>：白天可到 25°C 以上，柏油與開闊路段會更曬；每天至少 1.5-2L 水，長段加電解質或鹽糖。</li>
-        <li><strong>鞋襪</strong>：早晨濕氣、午後熱、石板路與下坡都容易磨腳；美麗諾襪、凡士林/防磨膏、Compeed 建議隨身。</li>
-        <li><strong>出發時間</strong>：建議 07:00-08:00 出發，避開中午高 UV；Day 3、Day 7、Day 8、Day 12、Day 15 距離或爬升較明顯，更適合早走。</li>
-      </ul>
-    </div>
-    <div class="prep-card" style="grid-column: 1 / -1; border-color:#eab308; background:rgba(234,179,8,0.05);">
-      <h3 style="color:#fde047;">💡 寄送行李服務</h3>
-      <p style="color:#d1d5db; line-height:1.6;">如果覺得背包還是太重，可以使用沿途的<strong>行李寄送服務 (Correos 或是 Tui Trans)</strong>，每天約花費 5-7 歐元。他們也支援「靈性變體」路線，會直接將您的行李送到下一間庇護所（連搭船那天也會幫您載到對岸！），讓您輕鬆上路。</p>
-    </div>
-  </div>
-</section>
-
-
-<!-- SLIDE 1: Cover -->
-<section class="slide" id="s1">
-  <div class="hero">
-    <img src="camino_cover.png" alt="朝聖之路封面">
-    <div class="hero-overlay">
+  <section class="slide cover">
+    <div class="slide-inner">
+      <p class="kicker">Camino Portugues Central + Variante Espiritual</p>
       <h1>葡萄牙朝聖之路</h1>
-      <p>靈性變體路線 (Variante Espiritual) ｜ 22–23 天彈性計畫 (含新加坡轉機停留與巴塞隆納)</p>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;">
-        <span class="badge">⛴️ 朝聖船遊 Ulla 河</span>
-        <span class="badge">🇬🇧 6/6 去程、7/8 回程 (長榮/倫敦進出)</span>
-        <span class="badge">🇪🇸 Barcelona 兩天 + Scotland 四晚</span>
-        <span class="badge">🚶 主要步行日 15-20 km</span>
-      
-  </div>
-</div>
-<div id="tab-3" class="tab-panel">
-<div class="walk-table-wrap">
-      <table class="walk-table">
-        <thead>
-          <tr>
-            <th>日程</th>
-            <th>步行 / 移動路線</th>
-            <th>時間與距離</th>
-            <th>難易度</th>
-            <th>地圖路線</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>Day 1</td><td><span class="walk-route">Porto 市區準備日</span><div class="note">主教座堂、採買、試走黃箭頭</div></td><td><span class="walk-meta">1-2 hr / 2-4 km</span></td><td><span class="difficulty diff-easy">輕鬆</span><div class="note">市區短程移動</div></td><td><a class="route-link" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Porto%20Cathedral%20Porto%20Portugal">市區地圖</a></td></tr>
-          <tr><td>Day 2</td><td><span class="walk-route">Porto / 機場周邊 -> Aerostay Hostel</span></td><td><span class="walk-meta">今日休整；明天 16-17 km</span></td><td><span class="difficulty diff-easy">休整</span><div class="note">已住 Aerostay，補水與採買</div></td><td><a class="route-link" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Aerostay%20Hostel%20Moreira%20da%20Maia">住宿地圖</a></td></tr>
-          <tr><td>Day 3</td><td><span class="walk-route">Aerostay Hostel -> São Miguel de Arcos / Arcos</span><div class="note">經 Vairão、Vilarinho，停在 Arcos</div></td><td><span class="walk-meta">4.5-5.5 hr / 16-17 km</span></td><td><span class="difficulty diff-mid">中等</span><div class="note">第一個完整步行日，但不硬推太遠</div></td><td><a class="route-link" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=Aerostay%20Hostel%2C%20Moreira%20da%20Maia%2C%20Portugal&destination=S%C3%A3o%20Miguel%20de%20Arcos%2C%20Portugal&travelmode=walking">地圖路線</a></td></tr>
-          <tr><td>Day 4</td><td><span class="walk-route">São Miguel de Arcos / Arcos -> Barcelos</span></td><td><span class="walk-meta">3-4 hr / 11-13 km</span></td><td><span class="difficulty diff-mid">中低</span><div class="note">農村路與地方道路交錯</div></td><td><a class="route-link" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=S%C3%A3o%20Miguel%20de%20Arcos%2C%20Portugal&destination=Barcelos%2C%20Portugal&travelmode=walking">地圖路線</a></td></tr>
-          <tr><td>Day 5</td><td><span class="walk-route">Barcelos -> Balugães</span></td><td><span class="walk-meta">4-5 hr / 15 km</span></td><td><span class="difficulty diff-mid">中等</span><div class="note">葡萄園丘陵，開始有明顯起伏</div></td><td><a class="route-link" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=Barcelos%2C%20Portugal&destination=Balug%C3%A3es%2C%20Portugal&travelmode=walking">地圖路線</a></td></tr>
-          <tr><td>Day 6</td><td><span class="walk-route">Balugães -> Ponte de Lima</span></td><td><span class="walk-meta">5-6 hr / 18 km</span></td><td><span class="difficulty diff-mid">中等</span><div class="note">距離較長，仍屬可控</div></td><td><a class="route-link" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=Balug%C3%A3es%2C%20Portugal&destination=Ponte%20de%20Lima%2C%20Portugal&travelmode=walking">地圖路線</a></td></tr>
-          <tr><td>Day 7</td><td><span class="walk-route">Ponte de Lima -> Rubiães</span><div class="note">Labruja 爬升日，實際已走到 Rubiães</div></td><td><span class="walk-meta">4.75-6 hr / 17.4 km</span></td><td><span class="difficulty diff-hard">中高</span><div class="note">Labruja 是全線主要爬升</div></td><td><a class="route-link" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=Ponte%20de%20Lima%2C%20Portugal&destination=Rubi%C3%A3es%2C%20Portugal&travelmode=walking">地圖路線</a></td></tr>
-          <tr><td>Day 8</td><td><span class="walk-route">Rubiães -> Tui</span><div class="note">跨越葡西邊界，西班牙時間快 1 小時</div></td><td><span class="walk-meta">4.75-5.5 hr / 19.1 km</span></td><td><span class="difficulty diff-easy">輕鬆</span><div class="note">起伏溫和、服務較密</div></td><td><a class="route-link" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=Rubi%C3%A3es%2C%20Portugal&destination=Tui%2C%20Spain&travelmode=walking">地圖路線</a></td></tr>
-          <tr><td>Day 9</td><td><span class="walk-route">Tui -> O Porriño</span><div class="note">建議走替代線避開工業區</div></td><td><span class="walk-meta">4-5 hr / 16 km</span></td><td><span class="difficulty diff-mid">中低</span><div class="note">難在都市/柏油與路線選擇</div></td><td><a class="route-link" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=Tui%2C%20Spain&destination=O%20Porri%C3%B1o%2C%20Spain&travelmode=walking">地圖路線</a></td></tr>
-          <tr><td>Day 10</td><td><span class="walk-route">O Porriño -> Redondela</span></td><td><span class="walk-meta">4-5 hr / 16.4 km</span></td><td><span class="difficulty diff-mid">中等</span><div class="note">Mos / Santiaguiño 一帶有爬升</div></td><td><a class="route-link" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=O%20Porri%C3%B1o%2C%20Spain&destination=Redondela%2C%20Spain&travelmode=walking">地圖路線</a></td></tr>
-          <tr><td>Day 11</td><td><span class="walk-route">Redondela -> Pontevedra</span></td><td><span class="walk-meta">5-6 hr / 19.6 km</span></td><td><span class="difficulty diff-mid">中等</span><div class="note">兩段漸進爬升，整體不難</div></td><td><a class="route-link" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=Redondela%2C%20Spain&destination=Pontevedra%2C%20Spain&travelmode=walking">地圖路線</a></td></tr>
-          <tr><td>Day 12</td><td><span class="walk-route">Pontevedra -> Armenteira</span><div class="note">經 Combarro，開始 Variante Espiritual 爬升</div></td><td><span class="walk-meta">5.5-7 hr / 20-21 km</span></td><td><span class="difficulty diff-hard">中高</span><div class="note">20 km 級加爬升，早出發</div></td><td><a class="route-link" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=Pontevedra%2C%20Spain&destination=Armenteira%2C%20Spain&travelmode=walking">地圖路線</a></td></tr>
-          <tr><td>Day 13</td><td><span class="walk-route">Armenteira -> Vilanova de Arousa</span><div class="note">Ruta da Pedra e da Auga 後續推到港口</div></td><td><span class="walk-meta">6-7 hr / 23-24 km</span></td><td><span class="difficulty diff-hard">中高</span><div class="note">今天較長；已住 Vilanova，明天省掉港口前步行</div></td><td><a class="route-link" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=Armenteira%2C%20Spain&destination=GUESTS%20HOUSE%20SAL%20E%20PEDRA%20Vilanova%20de%20Arousa&travelmode=walking">地圖路線</a></td></tr>
-          <tr><td>Day 14</td><td><span class="walk-route">Vilanova -> 船 -> A Casa Da Meixida</span><div class="note">船班已訂；地圖為下船後步行到住宿</div></td><td><span class="walk-meta">船 1.5 hr + 步行 5-7 km</span></td><td><span class="difficulty diff-mid">中等</span><div class="note">A Casa Da Meixida 周邊補給較少，先確認晚餐早餐</div></td><td><a class="route-link" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=Pontecesures%2C%20Spain&destination=A%20Casa%20Da%20Meixida%20Padron%20Spain&travelmode=walking">步行地圖</a></td></tr>
-          <tr><td>Day 15</td><td><span class="walk-route">A Casa Da Meixida -> Santiago de Compostela</span></td><td><span class="walk-meta">4.5-5.5 hr / 17-20 km</span></td><td><span class="difficulty diff-mid">中等</span><div class="note">最後一天進城，O Milladoiro 是進城前最後大補給點</div></td><td><a class="route-link" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=A%20Casa%20Da%20Meixida%20Padron%20Spain&destination=Rua%20do%20Franco%2058%20Santiago%20de%20Compostela%20Spain&travelmode=walking">地圖路線</a></td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="compare-grid">
-      <div class="compare-column">
-        <div class="compare-head">
-          <h3>路線 1：舒適優先</h3>
-          <p>在星號名單中，優先為您挑選旅館、套房與民宿，確保沿途擁有較佳的睡眠品質與私人衛浴。</p>
-          <div class="route-actions"><a class="route-link" target="_blank" href="https://maps.google.com/maps?saddr=Aerostay+Hostel,Moreira+da+Maia,Portugal&amp;daddr=Sao+Miguel+de+Arcos,Portugal+to:Barcelos,Portugal+to:Balugaes,Portugal+to:Ponte+de+Lima,Portugal+to:Rubiaes,Portugal+to:Tui,Spain+to:O+Porrino,Spain+to:Redondela,Spain+to:Pontevedra,Spain+to:Armenteira,Spain+to:Ribadumia,Spain+to:Vilanova+de+Arousa,Spain+to:A+Casa+Da+Meixida,Padron,Spain+to:Rua+do+Franco+58,Santiago+de+Compostela,Spain&amp;dirflg=w">舒適路線總地圖</a></div>
-        </div>
-        <table class="route-table">
-<thead><tr><th>日程</th><th>落腳點</th><th>建議住宿</th></tr></thead>
-<tbody>
-<tr><td>Day 1</td><td>Porto<div class="city-feat">🏛️ 世界遺產老城、杜羅河、波特酒窖、São Bento 車站磁磚壁畫</div></td><td><span class="place">Hotel Spot Family Suites Porto</span><span title="旅館" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">已完成的抵達整理日</div><div class="leg-meta">抵達日：市區準備約 1-2 hr / 2-4 km</div></td></tr>
-<tr><td>Day 2</td><td>Moreira da Maia<div class="city-feat">🏘️ 機場鄰近市郊、平路起步熱身、補給便利</div></td><td><span class="place">Aerostay Hostel</span><span title="旅館" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">今晚已住 Aerostay；明天直接走 16-17 km 到 Arcos</div><div class="leg-meta">今日休整 / 採買補給</div></td></tr>
-<tr><td>Day 3</td><td>São Miguel de Arcos / Arcos<div class="city-feat">🌉 Ponte de Arcos 石橋、鄉村聚落、比 Rates 更舒服的停留點</div></td><td><span class="place">Quinta São Miguel de Arcos / Villa d'Arcos</span><span title="庇護所" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🛏️</span><div class="note">已抵達 Quinta，住宿舒服；Arcos 是中央線合理停留點</div><div class="leg-meta">Aerostay Hostel -> Arcos：約 4.5-5.5 hr / 16-17 km</div></td></tr>
-<tr><td>Day 4</td><td>Barcelos<div class="city-feat">🐓 葡萄牙公雞傳說發源地！週四露天市集、彩色陶瓷工藝品必看</div></td><td><span class="place">In Barcelos Hostel & Guest House</span><span title="青年旅館" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">2026/6/11 今日實住；Albergue Cidade de Barcelos 改為庇護所備案</div><div class="leg-meta">Arcos -> Barcelos：約 3-4 hr / 11-13 km</div></td></tr>
-<tr><td>Day 5</td><td>Balugães / Vitorino dos Piães<div class="city-feat">🌿 傳統農村聚落、葡萄園與丘陵，Casa da Fernanda 一帶很受歡迎</div></td><td><span class="place">Quinta da Cancela</span><span title="民宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏡</span><div class="note">2026/6/12 今日實住，住宿不錯；補給不便，先確認晚餐早餐</div><div class="leg-meta">Barcelos -> Balugães：約 4-5 hr / 15 km</div></td></tr>
-<tr><td>Day 6</td><td>Ponte de Lima<div class="city-feat">🌉 葡萄牙最古老城鎮(1125年)、羅馬橋、Lima河畔週市</div></td><td><span class="place">Vila de Ponte Guest House</span><span title="民宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏡</span><div class="note">2026/6/13 今日實住；ARC MY OTEL / 庇護所改為備案</div><div class="leg-meta">Balugães -> Ponte de Lima：約 5-6 hr / 18 km</div></td></tr>
-<tr><td>Day 7</td><td>Rubiães<div class="city-feat">⛰️ 翻越 Labruja 山脊後的山中小村，夜晚涼爽</div></td><td><span class="place">Casa de S Sebastião</span><span title="民宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏡</span><div class="note">2026/6/14 實際走到 Rubiães；已完成 Labruja 主要爬升；進度約 36%</div><div class="leg-meta">Ponte de Lima -> Rubiães：約 4.75-6 hr / 17.4 km</div></td></tr>
-<tr><td>Day 8</td><td>Tui<div class="city-feat">🏰 進入西班牙第一城，過橋後時區快 1 小時</div></td><td><span class="place">La Sigrina Hostal</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">2026/6/15 昨日實住；經 Fontoura、Valença 城塞後跨 Miño 河，Tui 起每天 2 章</div><div class="leg-meta">Rubiães -> Tui：約 4.75-5.5 hr / 19.1 km</div></td></tr>
-<tr><td>Day 9</td><td>O Porriño<div class="city-feat">🪨 加利西亞花崗岩小城，建議走替代路線避開工業區</div></td><td><span class="place">Alojamientos Central</span><span title="民宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏡</span><div class="note">2026/6/16-6/17 實住兩晚；經 Ribadelouro、Orbenlle，走 As Gándaras / río Louro 替代線避工業區</div><div class="leg-meta">Tui -> O Porriño：約 4-5 hr / 16 km</div></td></tr>
-<tr><td>Day 10</td><td>Redondela<div class="city-feat">🚂 內陸線與海岸線在此匯合，人流增加</div></td><td><span class="place">Rua do Medio</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">6/18 住宿；經 Mos、Santiaguiño，Redondela 與海岸線匯合</div><div class="leg-meta">O Porriño -> Redondela：約 4-5 hr / 16.4 km</div></td></tr>
-<tr><td>Day 11</td><td>Pontevedra<div class="city-feat">🏛️ 加利西亞最美中世紀老城，準備轉入靈性變體</div></td><td><span class="place">Galicia Palace</span><span title="旅館" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">建議住宿；經 Cesantes、Arcade、Pontesampaio，石橋值得短停</div><div class="leg-meta">Redondela -> Pontevedra：約 5-6 hr / 19.6 km</div></td></tr>
-<tr><td>Day 12</td><td>Armenteira<div class="city-feat">🕊️ 12世紀修道院，經 Combarro 後爬升進山谷</div></td><td><span class="place">Casa Rural Manuel y Sofía</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">2026/6/20 今日實住；已到 Armenteira；6/22 船票已訂</div><div class="leg-meta">Pontevedra -> Armenteira：約 5.5-7 hr / 20-21 km</div></td></tr>
-<tr><td>Day 13</td><td>Vilanova de Arousa<div class="city-feat">⛵ 海邊港口、Traslatio 上船前夜，補給比水石之路村落方便</div></td><td><span class="place">GUESTS HOUSE SAL E PEDRA</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">2026/6/21 今日實住；已到 Vilanova，明天直接去港口搭船</div><div class="leg-meta">Armenteira -> Vilanova：約 6-7 hr / 23-24 km</div></td></tr>
-<tr><td>Day 14</td><td>Padrón / A Casa Da Meixida<div class="city-feat">⛴️ Vilanova 搭 Traslatio 船，下船 Pontecesures 後往 Padrón 北側住宿</div></td><td><span class="place">A Casa Da Meixida</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">6/22 今日實住；Aldea Muíños 25，周邊補給較少</div><div class="leg-meta">Vilanova + 船 + A Casa Da Meixida：船 1.5 hr + 步行約 5-7 km</div></td></tr>
-<tr><td>Day 15</td><td>Santiago<div class="city-feat">⛪ 終點！Obradoiro 廣場、Compostela 證書、Botafumeiro 巨型熏香爐</div></td><td><span class="place">Apartment in Casa Iacobus / Room in Santiago de Compostela</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">6/23 入住 Rúa do Franco 58；check-in after 15:00</div><div class="leg-meta">A Casa Da Meixida -> Santiago：約 4.5-5.5 hr / 17-20 km</div></td></tr>
-<tr><td>抵達後</td><td>Santiago<div class="city-feat">🧺 緩衝、洗衣、辦證書、大教堂與屋頂導覽</div></td><td><span class="place">Apartment in Casa Iacobus / Room in Santiago de Compostela</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">6/24 續住 Rúa do Franco 58；6/25 11:00 前退房</div><div class="leg-meta">市區散步 0-5 km / 緩衝日</div></td></tr>
-</tbody>
-</table>
-      </div>
-      <div class="compare-column">
-        <div class="compare-head" style="background:rgba(52,211,153,0.1);">
-          <h3 style="color:#6ee7b7;">路線 2：庇護所優先</h3>
-          <p>在星號名單中，優先挑選朝聖者庇護所或青年旅館，讓您能深度體驗 Camino 的交流氛圍。</p>
-          <div class="route-actions"><a class="route-link" target="_blank" href="https://maps.google.com/maps?saddr=Aerostay+Hostel,Moreira+da+Maia,Portugal&amp;daddr=Sao+Miguel+de+Arcos,Portugal+to:Barcelos,Portugal+to:Balugaes,Portugal+to:Ponte+de+Lima,Portugal+to:Rubiaes,Portugal+to:Tui,Spain+to:O+Porrino,Spain+to:Redondela,Spain+to:Pontevedra,Spain+to:Armenteira,Spain+to:Ribadumia,Spain+to:Vilanova+de+Arousa,Spain+to:A+Casa+Da+Meixida,Padron,Spain+to:Rua+do+Franco+58,Santiago+de+Compostela,Spain&amp;dirflg=w">庇護所路線總地圖</a></div>
-        </div>
-        <table class="route-table">
-<thead><tr><th>日程</th><th>落腳點</th><th>建議住宿</th></tr></thead>
-<tbody>
-<tr><td>Day 1</td><td>Porto<div class="city-feat">🏛️ 世界遺產老城、杜羅河、波特酒窖、São Bento 車站磁磚壁畫</div></td><td><span class="place">Hotel Spot Family Suites Porto</span><span title="旅館" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">已完成的抵達整理日</div><div class="leg-meta">抵達日：市區準備約 1-2 hr / 2-4 km</div></td></tr>
-<tr><td>Day 2</td><td>Moreira da Maia<div class="city-feat">🏘️ 機場鄰近市郊、平路起步熱身、補給便利</div></td><td><span class="place">Aerostay Hostel</span><span title="旅館" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">今晚已住 Aerostay；明天直接走 16-17 km 到 Arcos</div><div class="leg-meta">今日休整 / 採買補給</div></td></tr>
-<tr><td>Day 3</td><td>São Miguel de Arcos / Arcos<div class="city-feat">🌉 Ponte de Arcos 石橋、鄉村聚落、比 Rates 更舒服的停留點</div></td><td><span class="place">Quinta São Miguel de Arcos / Villa d'Arcos</span><span title="庇護所" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🛏️</span><div class="note">已抵達 Quinta，住宿舒服；Arcos 是中央線合理停留點</div><div class="leg-meta">Aerostay Hostel -> Arcos：約 4.5-5.5 hr / 16-17 km</div></td></tr>
-<tr><td>Day 4</td><td>Barcelos<div class="city-feat">🐓 葡萄牙公雞傳說發源地！週四露天市集、彩色陶瓷工藝品必看</div></td><td><span class="place">In Barcelos Hostel & Guest House</span><span title="青年旅館" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">2026/6/11 今日實住；Albergue Cidade de Barcelos 改為庇護所備案</div><div class="leg-meta">Arcos -> Barcelos：約 3-4 hr / 11-13 km</div></td></tr>
-<tr><td>Day 5</td><td>Balugães / Vitorino dos Piães<div class="city-feat">🌿 傳統農村聚落、葡萄園與丘陵，Casa da Fernanda 一帶很受歡迎</div></td><td><span class="place">Quinta da Cancela</span><span title="民宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏡</span><div class="note">2026/6/12 今日實住，住宿不錯；補給不便，先確認晚餐早餐</div><div class="leg-meta">Barcelos -> Balugães：約 4-5 hr / 15 km</div></td></tr>
-<tr><td>Day 6</td><td>Ponte de Lima<div class="city-feat">🌉 葡萄牙最古老城鎮(1125年)、羅馬橋、Lima河畔週市</div></td><td><span class="place">Vila de Ponte Guest House</span><span title="民宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏡</span><div class="note">2026/6/13 今日實住；ARC MY OTEL / 庇護所改為備案</div><div class="leg-meta">Balugães -> Ponte de Lima：約 5-6 hr / 18 km</div></td></tr>
-<tr><td>Day 7</td><td>Rubiães<div class="city-feat">⛰️ 翻越 Labruja 山脊後的山中小村，夜晚涼爽</div></td><td><span class="place">Casa de S Sebastião</span><span title="民宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏡</span><div class="note">2026/6/14 實際走到 Rubiães；已完成 Labruja 主要爬升；進度約 36%</div><div class="leg-meta">Ponte de Lima -> Rubiães：約 4.75-6 hr / 17.4 km</div></td></tr>
-<tr><td>Day 8</td><td>Tui<div class="city-feat">🏰 進入西班牙第一城，過橋後時區快 1 小時</div></td><td><span class="place">La Sigrina Hostal</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">2026/6/15 昨日實住；經 Fontoura、Valença 城塞後跨 Miño 河，Tui 起每天 2 章</div><div class="leg-meta">Rubiães -> Tui：約 4.75-5.5 hr / 19.1 km</div></td></tr>
-<tr><td>Day 9</td><td>O Porriño<div class="city-feat">🪨 加利西亞花崗岩小城，建議走替代路線避開工業區</div></td><td><span class="place">Alojamientos Central</span><span title="民宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏡</span><div class="note">2026/6/16-6/17 實住兩晚；經 Ribadelouro、Orbenlle，走 As Gándaras / río Louro 替代線避工業區</div><div class="leg-meta">Tui -> O Porriño：約 4-5 hr / 16 km</div></td></tr>
-<tr><td>Day 10</td><td>Redondela<div class="city-feat">🚂 內陸線與海岸線在此匯合，人流增加</div></td><td><span class="place">Rua do Medio</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">6/18 住宿；經 Mos、Santiaguiño，Redondela 與海岸線匯合</div><div class="leg-meta">O Porriño -> Redondela：約 4-5 hr / 16.4 km</div></td></tr>
-<tr><td>Day 11</td><td>Pontevedra<div class="city-feat">🏛️ 加利西亞最美中世紀老城，準備轉入靈性變體</div></td><td><span class="place">Galicia Palace</span><span title="旅館" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">建議住宿；經 Cesantes、Arcade、Pontesampaio，石橋值得短停</div><div class="leg-meta">Redondela -> Pontevedra：約 5-6 hr / 19.6 km</div></td></tr>
-<tr><td>Day 12</td><td>Armenteira<div class="city-feat">🕊️ 12世紀修道院，經 Combarro 後爬升進山谷</div></td><td><span class="place">Casa Rural Manuel y Sofía</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">2026/6/20 今日實住；已到 Armenteira；6/22 船票已訂</div><div class="leg-meta">Pontevedra -> Armenteira：約 5.5-7 hr / 20-21 km</div></td></tr>
-<tr><td>Day 13</td><td>Vilanova de Arousa<div class="city-feat">⛵ 海邊港口、Traslatio 上船前夜，補給比水石之路村落方便</div></td><td><span class="place">GUESTS HOUSE SAL E PEDRA</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">2026/6/21 今日實住；已到 Vilanova，明天直接去港口搭船</div><div class="leg-meta">Armenteira -> Vilanova：約 6-7 hr / 23-24 km</div></td></tr>
-<tr><td>Day 14</td><td>Padrón / A Casa Da Meixida<div class="city-feat">⛴️ Vilanova 搭 Traslatio 船，下船 Pontecesures 後往 Padrón 北側住宿</div></td><td><span class="place">A Casa Da Meixida</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">6/22 今日實住；Aldea Muíños 25，周邊補給較少</div><div class="leg-meta">Vilanova + 船 + A Casa Da Meixida：船 1.5 hr + 步行約 5-7 km</div></td></tr>
-<tr><td>Day 15</td><td>Santiago<div class="city-feat">⛪ 終點！Obradoiro 廣場、Compostela 證書、Botafumeiro 巨型熏香爐</div></td><td><span class="place">Apartment in Casa Iacobus / Room in Santiago de Compostela</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">6/23 入住 Rúa do Franco 58；check-in after 15:00</div><div class="leg-meta">A Casa Da Meixida -> Santiago：約 4.5-5.5 hr / 17-20 km</div></td></tr>
-<tr><td>抵達後</td><td>Santiago<div class="city-feat">🧺 緩衝、洗衣、辦證書、大教堂與屋頂導覽</div></td><td><span class="place">Apartment in Casa Iacobus / Room in Santiago de Compostela</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">6/24 續住 Rúa do Franco 58；6/25 11:00 前退房</div><div class="leg-meta">市區散步 0-5 km / 緩衝日</div></td></tr>
-</tbody>
-</table>
-      </div>
-      <div class="compare-column">
-        <div class="compare-head" style="background:rgba(96,165,250,0.1);">
-          <h3 style="color:#93c5fd;">路線 3：混搭與第三備案</h3>
-          <p>為您篩選出星號名單中的第三個選項，或是將旅館與青旅交錯安排，達成預算與體力的平衡。</p>
-          <div class="route-actions"><a class="route-link" target="_blank" href="https://maps.google.com/maps?saddr=Aerostay+Hostel,Moreira+da+Maia,Portugal&amp;daddr=Sao+Miguel+de+Arcos,Portugal+to:Barcelos,Portugal+to:Balugaes,Portugal+to:Ponte+de+Lima,Portugal+to:Rubiaes,Portugal+to:Tui,Spain+to:O+Porrino,Spain+to:Redondela,Spain+to:Pontevedra,Spain+to:Armenteira,Spain+to:Ribadumia,Spain+to:Vilanova+de+Arousa,Spain+to:A+Casa+Da+Meixida,Padron,Spain+to:Rua+do+Franco+58,Santiago+de+Compostela,Spain&amp;dirflg=w">混搭路線總地圖</a></div>
-        </div>
-        <table class="route-table">
-<thead><tr><th>日程</th><th>落腳點</th><th>建議住宿</th></tr></thead>
-<tbody>
-<tr><td>Day 1</td><td>Porto<div class="city-feat">🏛️ 世界遺產老城、杜羅河、波特酒窖、São Bento 車站磁磚壁畫</div></td><td><span class="place">Hotel Spot Family Suites Porto</span><span title="旅館" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">已完成的抵達整理日</div><div class="leg-meta">抵達日：市區準備約 1-2 hr / 2-4 km</div></td></tr>
-<tr><td>Day 2</td><td>Moreira da Maia<div class="city-feat">🏘️ 機場鄰近市郊、平路起步熱身、補給便利</div></td><td><span class="place">Aerostay Hostel</span><span title="旅館" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">今晚已住 Aerostay；明天直接走 16-17 km 到 Arcos</div><div class="leg-meta">今日休整 / 採買補給</div></td></tr>
-<tr><td>Day 3</td><td>São Miguel de Arcos / Arcos<div class="city-feat">🌉 Ponte de Arcos 石橋、鄉村聚落、比 Rates 更舒服的停留點</div></td><td><span class="place">Quinta São Miguel de Arcos / Villa d'Arcos</span><span title="庇護所" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🛏️</span><div class="note">已抵達 Quinta，住宿舒服；Arcos 是中央線合理停留點</div><div class="leg-meta">Aerostay Hostel -> Arcos：約 4.5-5.5 hr / 16-17 km</div></td></tr>
-<tr><td>Day 4</td><td>Barcelos<div class="city-feat">🐓 葡萄牙公雞傳說發源地！週四露天市集、彩色陶瓷工藝品必看</div></td><td><span class="place">In Barcelos Hostel & Guest House</span><span title="青年旅館" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">2026/6/11 今日實住；Albergue Cidade de Barcelos 改為庇護所備案</div><div class="leg-meta">Arcos -> Barcelos：約 3-4 hr / 11-13 km</div></td></tr>
-<tr><td>Day 5</td><td>Balugães / Vitorino dos Piães<div class="city-feat">🌿 傳統農村聚落、葡萄園與丘陵，Casa da Fernanda 一帶很受歡迎</div></td><td><span class="place">Quinta da Cancela</span><span title="民宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏡</span><div class="note">2026/6/12 今日實住，住宿不錯；補給不便，先確認晚餐早餐</div><div class="leg-meta">Barcelos -> Balugães：約 4-5 hr / 15 km</div></td></tr>
-<tr><td>Day 6</td><td>Ponte de Lima<div class="city-feat">🌉 葡萄牙最古老城鎮(1125年)、羅馬橋、Lima河畔週市</div></td><td><span class="place">Vila de Ponte Guest House</span><span title="民宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏡</span><div class="note">2026/6/13 今日實住；ARC MY OTEL / 庇護所改為備案</div><div class="leg-meta">Balugães -> Ponte de Lima：約 5-6 hr / 18 km</div></td></tr>
-<tr><td>Day 7</td><td>Rubiães<div class="city-feat">⛰️ 翻越 Labruja 山脊後的山中小村，夜晚涼爽</div></td><td><span class="place">Casa de S Sebastião</span><span title="民宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏡</span><div class="note">2026/6/14 實際走到 Rubiães；已完成 Labruja 主要爬升；進度約 36%</div><div class="leg-meta">Ponte de Lima -> Rubiães：約 4.75-6 hr / 17.4 km</div></td></tr>
-<tr><td>Day 8</td><td>Tui<div class="city-feat">🏰 進入西班牙第一城，過橋後時區快 1 小時</div></td><td><span class="place">La Sigrina Hostal</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">2026/6/15 昨日實住；經 Fontoura、Valença 城塞後跨 Miño 河，Tui 起每天 2 章</div><div class="leg-meta">Rubiães -> Tui：約 4.75-5.5 hr / 19.1 km</div></td></tr>
-<tr><td>Day 9</td><td>O Porriño<div class="city-feat">🪨 加利西亞花崗岩小城，建議走替代路線避開工業區</div></td><td><span class="place">Alojamientos Central</span><span title="民宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏡</span><div class="note">2026/6/16-6/17 實住兩晚；經 Ribadelouro、Orbenlle，走 As Gándaras / río Louro 替代線避工業區</div><div class="leg-meta">Tui -> O Porriño：約 4-5 hr / 16 km</div></td></tr>
-<tr><td>Day 10</td><td>Redondela<div class="city-feat">🚂 內陸線與海岸線在此匯合，人流增加</div></td><td><span class="place">Rua do Medio</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">6/18 住宿；經 Mos、Santiaguiño，Redondela 與海岸線匯合</div><div class="leg-meta">O Porriño -> Redondela：約 4-5 hr / 16.4 km</div></td></tr>
-<tr><td>Day 11</td><td>Pontevedra<div class="city-feat">🏛️ 加利西亞最美中世紀老城，準備轉入靈性變體</div></td><td><span class="place">Galicia Palace</span><span title="旅館" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">建議住宿；經 Cesantes、Arcade、Pontesampaio，石橋值得短停</div><div class="leg-meta">Redondela -> Pontevedra：約 5-6 hr / 19.6 km</div></td></tr>
-<tr><td>Day 12</td><td>Armenteira<div class="city-feat">🕊️ 12世紀修道院，經 Combarro 後爬升進山谷</div></td><td><span class="place">Casa Rural Manuel y Sofía</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">2026/6/20 今日實住；已到 Armenteira；6/22 船票已訂</div><div class="leg-meta">Pontevedra -> Armenteira：約 5.5-7 hr / 20-21 km</div></td></tr>
-<tr><td>Day 13</td><td>Vilanova de Arousa<div class="city-feat">⛵ 海邊港口、Traslatio 上船前夜，補給比水石之路村落方便</div></td><td><span class="place">GUESTS HOUSE SAL E PEDRA</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">2026/6/21 今日實住；已到 Vilanova，明天直接去港口搭船</div><div class="leg-meta">Armenteira -> Vilanova：約 6-7 hr / 23-24 km</div></td></tr>
-<tr><td>Day 14</td><td>Padrón / A Casa Da Meixida<div class="city-feat">⛴️ Vilanova 搭 Traslatio 船，下船 Pontecesures 後往 Padrón 北側住宿</div></td><td><span class="place">A Casa Da Meixida</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">6/22 今日實住；Aldea Muíños 25，周邊補給較少</div><div class="leg-meta">Vilanova + 船 + A Casa Da Meixida：船 1.5 hr + 步行約 5-7 km</div></td></tr>
-<tr><td>Day 15</td><td>Santiago<div class="city-feat">⛪ 終點！Obradoiro 廣場、Compostela 證書、Botafumeiro 巨型熏香爐</div></td><td><span class="place">Apartment in Casa Iacobus / Room in Santiago de Compostela</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">6/23 入住 Rúa do Franco 58；check-in after 15:00</div><div class="leg-meta">A Casa Da Meixida -> Santiago：約 4.5-5.5 hr / 17-20 km</div></td></tr>
-<tr><td>抵達後</td><td>Santiago<div class="city-feat">🧺 緩衝、洗衣、辦證書、大教堂與屋頂導覽</div></td><td><span class="place">Apartment in Casa Iacobus / Room in Santiago de Compostela</span><span title="住宿" style="font-size:1.1rem; margin-left:6px; vertical-align:middle; cursor:help;">🏨</span><div class="note">6/24 續住 Rúa do Franco 58；6/25 11:00 前退房</div><div class="leg-meta">市區散步 0-5 km / 緩衝日</div></td></tr>
-</tbody>
-</table>
+      <p class="lead">這份簡報只保留朝聖路本體：Porto 出發，經中央線、靈性之路與 Traslatio 船段，Day 15 抵達 Santiago de Compostela。朝聖後旅行已獨立整理。</p>
+      <div class="top-actions">
+        <a href="camino-guide.html">主導覽</a>
+        <a href="camino-stay-map.html">住宿地圖</a>
+        <a href="camino-journey-carousel.html">輪播地圖</a>
+        <a href="../../post-camino-plan.html">朝聖後旅行</a>
       </div>
     </div>
-</div></div>
-    </div>
-  </div>
-</section>
+  </section>
 
-
-<!-- SLIDE 2: Stage 1 -->
-<section class="slide" id="s2">
-  <span class="section-num">02 / 08</span>
-  <div class="slide-title">第一階段：出發與起步</div>
-  <div class="slide-sub">去程航班先列為待議；預計新加坡轉機停留後抵達波多，再開始徒步適應 (Day 1 - Day 4)</div>
-  <div class="content-grid">
-    <div>
-      <div class="photo-box">
-        <img src="camino_path.png" alt="朝聖之路小徑">
+  <section class="slide">
+    <div class="slide-inner">
+      <p class="kicker">Progress</p>
+      <h2>抵達 Santiago，朝聖段完成</h2>
+      <p class="sub">Porto 起算為 Day 1，Day 15 抵達 Santiago。6/23 入住 Rúa do Franco 58；後續休整與城市旅行不列入 Camino 天數。</p>
+      <div class="metric-grid">
+        <div class="metric"><span>總距離</span><strong>約 218.5 km</strong></div>
+        <div class="metric"><span>完成度</span><strong>100%</strong></div>
+        <div class="metric"><span>主要路線</span><strong>中央線 + 靈性之路</strong></div>
+        <div class="metric"><span>最後一天</span><strong>Day 15 Santiago</strong></div>
       </div>
     </div>
-        <div class="info-box">
-      <div class="day-card flight"><div class="day-label">Travel Day (6/6) ｜ 🛫 去程航班與倫敦住宿</div><div class="day-text"><div class="route-line">6/6 台北 (TPE) 08:15 ➔ 倫敦 (LHR) 19:20 (長榮 BR67)</div><span class="decision">去程已確認：抵達倫敦後住一晚。</span><div style="margin-top:8px;background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.3);border-radius:8px;padding:8px 12px;font-size:0.86rem;">🏨 <strong>住宿</strong>：Premier Inn Heathrow Terminal 4</div></div></div>
-      <div class="day-card flight"><div class="day-label">Day 1 (6/8) ｜ 抵達波多與準備</div><div class="day-text"><div class="route-line">抵達波多後，前往主教座堂購買朝聖者護照與採買物資</div><span class="transport">已完成：市區準備、補給與起點章</span><div style="margin-top:8px;background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.3);border-radius:8px;padding:8px 12px;font-size:0.86rem;">🏨 <strong>住宿</strong>：Hotel Spot Family Suites Porto</div></div></div>
-      <div class="day-card"><div class="day-label">Day 2 (6/9) ｜ 今日抵達 / 休整</div><div class="day-text"><div class="route-line">Porto / 機場周邊 ➔ Aerostay Hostel, Moreira da Maia</div><span class="transport">今晚住 Aerostay Hostel；先補水、吃飯、蓋章，明天直接往 Arcos</span><div style="margin-top:8px;background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.3);border-radius:8px;padding:8px 12px;font-size:0.86rem;">🏨 <strong>住宿</strong>：Aerostay Hostel</div></div></div>
-      <div class="day-card"><div class="day-label">Day 3 (6/10) ｜ 步行約 16-17 km</div><div class="day-text"><div class="route-line">Aerostay Hostel ➔ São Miguel de Arcos / Arcos</div></div></div>
-      <div class="day-card"><div class="day-label">Day 4 (6/11) ｜ 步行約 11-13 km</div><div class="day-text"><div class="route-line">São Miguel de Arcos / Arcos ➔ Barcelos</div></div></div>
-    </div>  </div>
-</section>
+  </section>
 
-
-<!-- SLIDE 3: Stage 2 -->
-<section class="slide" id="s3">
-  <span class="section-num">03 / 08</span>
-  <div class="slide-title">第二階段：穿梭葡萄牙鄉村</div>
-  <div class="slide-sub">走過田野與古鎮，感受純樸的葡萄牙風情 (Day 5 - Day 9)</div>
-  <div class="content-grid">
-    <div class="info-box">
-      <div class="day-card"><div class="day-label">Day 5 (6/12) ｜ 步行 15 km</div><div class="day-text"><div class="route-line">Barcelos ➔ Balugães</div></div></div>
-      <div class="day-card"><div class="day-label">Day 6 (6/13) ｜ 步行 18 km</div><div class="day-text"><div class="route-line">Balugães ➔ Ponte de Lima</div></div></div>
-      <div class="day-card"><div class="day-label">Day 7 (6/14) ｜ 步行 17.4 km</div><div class="day-text"><div class="route-line">Ponte de Lima ➔ Rubiães（實際已走到 Rubiães）</div></div></div>
-      <div class="day-card"><div class="day-label">Day 8 (6/15) ｜ 步行 19.1 km</div><div class="day-text"><div class="route-line">Rubiães ➔ Tui（跨越邊界橋抵達西班牙）</div></div></div>
-      <div class="day-card"><div class="day-label">Day 9 (6/16-6/17) ｜ 步行 16 km</div><div class="day-text"><div class="route-line">Tui ➔ O Porriño（建議走風景替代路線）</div></div></div>
-    </div>
-    <div>
-      <div class="photo-box" style="background:#232936; flex-direction:column; text-align:center; padding:40px;">
-        <div style="font-size:6rem; margin-bottom:20px;">🌉🇵🇹➡️🇪🇸</div>
-        <h3 style="color:#fef08a; font-size:1.5rem;">跨越邊界的感動 (Day 9)</h3>
-        <p style="color:#9ca3af; margin-top:10px; line-height:1.6;">走到橋的中間時，您就正式從葡萄牙進入西班牙了！手機時區會自動快一小時喔！</p>
+  <section class="slide">
+    <div class="slide-inner">
+      <p class="kicker">Route Logic</p>
+      <h2>路線分段</h2>
+      <div class="card-grid">
+        <article class="card">
+          <h3>Porto 到 Barcelos</h3>
+          <p>從 Porto 與機場周邊熱身，經 Arcos 接到 Barcelos。這段以平緩鄉村與初期適應為主。</p>
+          <div class="tag-row"><span class="tag">Day 1-4</span><span class="tag gold">起步</span></div>
+        </article>
+        <article class="card">
+          <h3>Barcelos 到 Tui</h3>
+          <p>經 Balugães、Ponte de Lima、Rubiães，翻過 Labruja 後跨境進西班牙 Tui。</p>
+          <div class="tag-row"><span class="tag">Day 5-8</span><span class="tag red">Labruja 爬升</span></div>
+        </article>
+        <article class="card">
+          <h3>Tui 到 Pontevedra</h3>
+          <p>進入 Galicia 後，經 O Porriño、Redondela 到 Pontevedra，準備轉進靈性之路。</p>
+          <div class="tag-row"><span class="tag">Day 9-11</span><span class="tag blue">Galicia</span></div>
+        </article>
+        <article class="card">
+          <h3>靈性之路到 Santiago</h3>
+          <p>Pontevedra 轉 Armenteira、Vilanova 搭船到 Pontecesures，再從 Padrón 北側走進 Santiago。</p>
+          <div class="tag-row"><span class="tag">Day 12-15</span><span class="tag blue">Traslatio 船段</span></div>
+        </article>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-
-<!-- SLIDE 4: Stage 3 -->
-<section class="slide" id="s4">
-  <span class="section-num">04 / 08</span>
-  <div class="slide-title">第三階段：深入加利西亞</div>
-  <div class="slide-sub">迎來西班牙的綠意，準備轉往海岸 (Day 10 - Day 12)</div>
-  <div class="content-grid">
-    <div>
-      <div class="photo-box" style="background:#362a23; flex-direction:column; text-align:center; padding:40px;">
-        <div style="font-size:6rem; margin-bottom:20px;">🌲🏰</div>
-        <h3 style="color:#fef08a; font-size:1.5rem;">西班牙風情</h3>
-        <p style="color:#9ca3af; margin-top:10px; line-height:1.6;">這幾天將走在充滿桉樹的林道中，並抵達擁有絕美中世紀古城的 Pontevedra，為接下來的靈性變體做準備。</p>
-      </div>
-    </div>
-    <div class="info-box">
-      <div class="day-card"><div class="day-label">Day 10 (6/18) ｜ 步行 16.4 km</div><div class="day-text"><div class="route-line">O Porriño ➔ Redondela（與海岸線匯合）</div></div></div>
-      <div class="day-card"><div class="day-label">Day 11 (6/19) ｜ 步行 19.6 km</div><div class="day-text"><div class="route-line">Redondela ➔ Pontevedra（絕美老城區）</div></div></div>
-      <div class="day-card"><div class="day-label">Day 12 (6/20) ｜ 步行約 20-21 km</div><div class="day-text"><div class="route-line">Pontevedra ➔ Combarro ➔ Armenteira（靈性變體爬升日）</div></div></div>
-    </div>
-  </div>
-</section>
-
-
-<!-- SLIDE 5: Stage 4 - Spiritual Variant -->
-<section class="slide" id="s5">
-  <span class="section-num">05 / 08</span>
-  <div class="slide-title">第四階段：靈性變體路線 (搭船)</div>
-  <div class="slide-sub">轉往海岸線，搭乘遊船追尋聖雅各的足跡，Day 15 抵達 Santiago</div>
-  <div class="content-grid">
-    <div class="info-box">
-      <div class="day-card boat"><div class="day-label">Day 13 (6/21) ｜ 步行約 23-24 km</div><div class="day-text"><div class="route-line">Armenteira ➔ Vilanova de Arousa（水石之路後接海邊港口）</div></div></div>
-      <div class="day-card boat"><div class="day-label">Day 14 (6/22) ｜ 船 + 步行約 5-7 km</div><div class="day-text"><div class="route-line">Vilanova ➔ 船 ➔ Pontecesures ➔ A Casa Da Meixida</div></div></div>
-      <div class="day-card boat"><div class="day-label">Day 15 (6/23) ｜ 步行約 17-20 km ｜ 完成度 100%</div><div class="day-text"><div class="route-line">A Casa Da Meixida ➔ Santiago de Compostela</div></div></div>
-      <div class="day-card boat"><div class="day-label">朝聖後 (6/24) ｜ Santiago 緩衝日</div><div class="day-text"><div class="route-line">續住 Rúa do Franco 58，辦 Compostela、洗衣、大教堂 / 屋頂導覽</div><span class="transport">6/25 11:00 前退房</span></div></div>
-    </div>
-    <div>
-      <div class="photo-box">
-        <img src="camino_boat.png" alt="朝聖船">
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- SLIDE 6: Stage 5 - BCN -->
-<section class="slide" id="s6">
-  <span class="section-num">06 / 08</span>
-  <div class="slide-title">第五階段：Santiago 後接 Barcelona 與 Scotland</div>
-  <div class="slide-sub">Santiago 兩晚後，Barcelona 待兩天，再到 Edinburgh / Scotland 四晚，最後前往 London（這些不算 Camino Day）</div>
-  <div class="content-grid">
-    <div>
-      <div class="photo-box">
-        <img src="camino_bcn.png" alt="巴塞隆納聖家堂">
-      </div>
-    </div>
-    <div class="info-box">
-      <div class="day-card"><div class="day-label">Santiago (6/23-6/24) ｜ 住兩晚</div><div class="day-text"><div class="route-line">Rúa do Franco 58，辦 Compostela、洗衣、大教堂 / 屋頂導覽</div><span class="transport">6/25 11:00 前退房後往 Barcelona</span></div></div>
-      <div class="day-card city"><div class="day-label">Barcelona (6/25) ｜ 抵達與休息</div><div class="day-text"><div class="route-line">Santiago ➔ Barcelona，住 Eixample 優先</div><span class="transport">抵達後只排 Gothic Quarter / El Born / Tapas</span></div></div>
-      <div class="day-card city"><div class="day-label">Barcelona (6/26) ｜ 高第重點日</div><div class="day-text"><div class="route-line">Sagrada Família、Casa Batlló、Park Güell</div><span class="transport">中午回住宿休息，避開高溫</span></div></div>
-      <div class="day-card city"><div class="day-label">Scotland (6/27) ｜ Barcelona ➔ Edinburgh</div><div class="day-text"><div class="route-line">BCN ➔ EDI 直飛優先，住 New Town / Haymarket</div><span class="decision">訂票時把行李費算進總價</span></div></div>
-      <div class="day-card city"><div class="day-label">Scotland (6/28-6/30) ｜ Edinburgh + Highlands</div><div class="day-text"><div class="route-line">城堡、市區、高地一日團、Glasgow 或恢復日</div><span class="decision">不自駕；Highlands 優先 Rabbie’s / Timberbush / Discover Scotland</span></div></div>
-      <div class="day-card flight"><div class="day-label">London (7/1) ｜ Edinburgh ➔ London</div><div class="day-text"><div class="route-line">火車到 King’s Cross 優先；若接機場再考慮飛機</div><span class="decision">7/8 倫敦 LHR 21:35 長榮 BR68 返台</span></div></div>
-    </div>
-  </div>
-</section>
-
-
-<section class="slide" id="s-london" style="background:linear-gradient(135deg,#1a2035 0%,#0f1520 100%);">
-  <span class="section-num">🇬🇧 倫敦回程</span>
-  <div class="slide-title">回程倫敦停留 6 天</div>
-  <div class="slide-sub">Scotland 四晚後，7/1 從 Edinburgh 前往 London；若住市中心火車優先，7/8 搭長榮 BR68 返台。</div>
-  <div class="content-grid">
-    <div class="info-box">
-      <div class="day-card city"><div class="day-label">7/1 ｜ Edinburgh ➔ London</div><div class="day-text"><div class="route-line">Edinburgh Waverley ➔ London King’s Cross 火車優先</div><span class="transport">若要接 Heathrow / Gatwick 國際線，才改查飛機</span></div></div>
-      <div class="day-card city"><div class="day-label">7/2–7/3 ｜ 倫敦市區</div><div class="day-text"><div class="route-line">大英博物館、國家藝廊、泰晤士河畔散步</div><span class="transport">搭地鐵 Piccadilly Line 進市區（約 45 分鐘）</span></div></div>
-      <div class="day-card city"><div class="day-label">7/4–7/6 ｜ 倫敦繼續探索</div><div class="day-text"><div class="route-line">塔橋、塔倫敦、肯辛頓宮、自然史博物館、哈洛德百貨</div><span class="transport">博物館大多免費入場</span></div></div>
-      <div class="day-card city"><div class="day-label">7/7 ｜ 準備返台</div><div class="day-text"><div class="route-line">整理行李，最後的倫敦午餐</div><span class="transport">提前移回 Heathrow 附近住宿，明日清晨出發</span></div></div>
-      <div class="day-card flight"><div class="day-label">7/8 ｜ 🛫 返台</div><div class="day-text"><div class="route-line">長榮航空 BR68 | 倫敦 LHR 21:35 → 台北 TPE</div>
-      <div style="margin-top:8px;background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.3);border-radius:8px;padding:8px 12px;font-size:0.86rem;">
-      🏨 <strong>7/1–7/6 住宿</strong>：Premier Inn Heathrow Terminal 4 
-      ｜ <a href="https://www.agoda.com/zh-tw/premier-inn-heathrow-airport-terminal-4/hotel/london-gb.html?checkIn=2026-07-01&los=5&adults=2" target="_blank" style="color:#93c5fd;font-weight:700;">Agoda 訂房（7/1起5晚）</a></div>
-      </div></div>
-    </div>
-  </div>
-</section>
-<script>
-const slides=['route-compare-top','s7','s8'];
-const dots=document.querySelectorAll('.nav-dot');
-function goto(i){document.getElementById(slides[i]).scrollIntoView({behavior:'smooth'});dots.forEach((d,j)=>d.classList.toggle('active',i===j));}
-const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){const i=slides.indexOf(e.target.id);if(i>=0){dots.forEach((d,j)=>d.classList.toggle('active',i===j));}}});},{threshold:0.5});
-slides.forEach(id=>{const el=document.getElementById(id);if(el)io.observe(el);});
-
-const dayDetails=[
-  ['Travel Day (6/6)','台北 → 倫敦','長榮 BR67 (08:15 - 19:20)。抵達後入住倫敦機場周邊住宿。','準備隔天清晨的班機前往波多。'],
-  ['Day 1 (6/8)','倫敦 / 波多 → Porto 市區準備','抵達後前往市區辦 Credencial，已完成起點準備。','主教座堂周邊熟悉黃箭頭與採買。'],
-  ['Day 2 (6/9)','Porto / 機場周邊 → Aerostay Hostel','今天住 Aerostay Hostel，重點是補水、吃飯、蓋章與休息。','今晚買好明天早餐、水與點心，明天直接走到 Arcos。'],
-  ['Day 3 (6/10)','Aerostay Hostel → Quinta São Miguel de Arcos','已抵達 Quinta São Miguel de Arcos，住宿舒服；Arcos 是中央線上合理停留點，明天接 Barcelos 很順。','Villa d’Arcos 也在同村正線；São Félix Hotel Hillside、Junqueira 76 都偏 Póvoa de Varzim / 海岸線，不建議除非改路線或搭車。'],
-  ['Day 4 (6/11)','São Miguel de Arcos / Arcos → Barcelos','約 11-13 km，作為恢復短日；2026/6/11 今日改住 In Barcelos Hostel & Guest House。','今日實住：In Barcelos Hostel & Guest House；庇護所備案：Albergue Cidade de Barcelos。Barcelos 是大城，建議買好 Day 5 午餐、點心與備用水。'],
-  ['Day 5','Barcelos → Balugães','約 15 km，田野與村落為主，住宿點仍在中央線常見停留帶。','今日實住：Quinta da Cancela，住宿不錯；補給不便，晚餐、早餐與隔天點心先確認。'],
-  ['Day 6','Balugães → Ponte de Lima','約 18 km，抵達葡萄牙經典古鎮。','今日實住：Vila de Ponte Guest House；備案：ARC MY OTEL / Albergue de Peregrinos de Ponte de Lima。隔天 Labruja 爬升，今晚備水與點心。'],
-  ['Day 7','Ponte de Lima → Rubiães','17.4 km，2026/6/14 實際走到 Rubiães；已完成 Labruja 主要爬升；進度約 36%。','今日實住：Casa de S Sebastião；目前累計約 78.9 / 218.5 km，完成約 36%。明天恢復 Rubiães → Tui 約 19.1 km，地形比 Labruja 溫和。'],
-  ['Day 8','Rubiães → Tui','19.1 km，跨過邊界進西班牙，手機時間快 1 小時；2026/6/15 實住 La Sigrina Hostal。','中途經 Fontoura、Paços、Valença；Valença 城塞可短停與補給，跨 Miño 河後進 Tui。庇護所備案：Albergue de Peregrinos de Tui；Tui 起每天 2 章。'],
-  ['Day 9','Tui → O Porriño','16 km，2026/6/16-6/17 實住兩晚 Alojamientos Central；建議走替代路線避開工業區。','經 Ribadelouro、Orbenlle；在 Orbenlle 選 As Gándaras / río Louro 替代線，避開 O Porriño 工業區。庇護所備案：Alojamiento Camino Portugués；抵達後補給。'],
-  ['Day 10','O Porriño → Redondela','16.4 km，Mos / Santiaguiño 一帶有爬升；6/18 住宿 Rua do Medio。','經 Ameiro Longo、Veigadaña、Rúa de Mos、Capilla de Santiaguiño；Mos 可補水，Santiaguiño 是今日爬升。庇護所備案：Santiago de Vilavella。'],
-  ['Day 11','Redondela → Pontevedra','19.6 km，建議住宿 Galicia Palace / Rias Bajas；Pontevedra 老城值得留時間逛。','經 Cesantes、Arcade、Pontesampaio、Paredes；Arcade 可午餐，Pontesampaio 石橋值得短停。庇護所備案：Albergue Virgen Peregrina。'],
-  ['Day 12','Pontevedra → Armenteira','約 20-21 km，2026/6/20 今日實住 Casa Rural Manuel y Sofía。','已到 Armenteira；6/22 La Barca del Peregrino 11:00 船票已訂，明早 10:45 前到 Mar Santiago Maritime Station。'],
-  ['Day 13','Armenteira → Vilanova de Arousa','6/21 約 23-24 km，今日實住 GUESTS HOUSE SAL E PEDRA。','走完水石之路後續推到 Vilanova；住宿在 Rúa Josefina Blanco 18，明天可直接去港口搭 Traslatio 船。'],
-  ['Day 14','Vilanova → 船 → A Casa Da Meixida','6/22 11:00 La Barca Traslatio 船 + 下船後步行約 5-7 km；實住 A Casa Da Meixida。','下船 Pontecesures 後經 Padrón 補給 / 蓋章，再走到 Aldea Muíños 25；住宿周邊補給較少。'],
-  ['Day 15','A Casa Da Meixida → Santiago','6/23 抵達 Santiago；從 A Casa Da Meixida 起約 17-20 km。','經 O Faramello、Rúa de Francos、O Milladoiro；O Milladoiro 是進城前最後大補給點，入住 Rúa do Franco 58。'],
-  ['朝聖後','Santiago 緩衝日','6/24 續住 Rúa do Franco 58，洗衣、恢復、處理證書與大教堂導覽。','住宿截圖顯示 6/25 11:00 前退房；這是 Santiago 第二晚。'],
-  ['Barcelona','Santiago → Barcelona','6/25 從 Santiago 退房後前往 Barcelona；建議住 Eixample。','抵達後只排 Gothic Quarter / El Born 輕鬆散步與 Tapas 晚餐。'],
-  ['Barcelona','Barcelona 高第重點日','6/26 安排 Sagrada Família、Casa Batlló、Park Güell。','中午回住宿休息避熱；Casa Milà 可有可無，腳累就刪。'],
-  ['Scotland','Barcelona → Edinburgh','6/27 BCN → EDI 直飛優先；Edinburgh 住 New Town / Haymarket。','廉航要把登機箱與托運行李算進總價，避免太晚抵達。'],
-  ['Scotland','Edinburgh 市區','6/28 Edinburgh Castle、Royal Mile、St Giles、Victoria Street、Calton Hill。','Arthur’s Seat 有爬坡，剛走完 Camino 腳累可跳過。'],
-  ['Scotland','Highlands 一日團','6/29 Loch Ness + Glencoe + Scottish Highlands 一日團。','不自駕；Isle of Skye 一日團太硬，不建議。'],
-  ['Scotland','Glasgow / 恢復日','6/30 首選 Glasgow 一日遊；腳累則留 Edinburgh 慢玩。','備案：Stirling Castle + Loch Lomond，或 Dean Village / Leith / Botanic Garden。'],
-  ['London','Edinburgh → London','7/1 Edinburgh Waverley → London King’s Cross 火車優先。','7/8 晚上 21:35 由倫敦 LHR 搭 BR68 返台。']
-];
-
-const stayDays=[
-  {day:'Day 1',city:'Porto',options:[['旅館','Hotel Spot Family Suites Porto','已入住/市區準備','有','bath-ok','https://spotfamilysuites.pt'],['青年旅館','Porto Spot Hostel','TWD 1,000-2,400','有','bath-ok','https://www.agoda.com/zh-tw/porto-spot-hostel/hotel/porto-pt.html']]},
-  {day:'Day 2',city:'Moreira da Maia / Aerostay',options:[['青年旅館','⭐ Aerostay Hostel','已入住','可選','bath-check','https://www.booking.com/hotel/pt/aerostay-hostel.zh-tw.html'],['舒適','Solar Antigo Porto Aeroporto','TWD 3,000-4,500','有','bath-ok','https://www.solarantigo.com/portoaeroporto']]},
-  {day:'Day 3',city:'São Miguel de Arcos / Arcos',options:[['實住推薦','⭐ Quinta São Miguel de Arcos','已住，舒服 / 鄉村住宿','有','bath-ok','https://www.booking.com/hotel/pt/quinta-sao-miguel-de-arcos.html'],['同村正線','⭐ Villa d’Arcos','€75-90+ / 房少','有','bath-ok','https://maps.app.goo.gl/KwQvPHJGWe459bwV9?g_st=ic'],['短走備案','Albergue Mosteiro de Vairão','低價/床位','共用','bath-warn','https://www.google.com/maps/search/?api=1&query=Albergue%20Mosteiro%20de%20Vairao'],['短走備案','Casa da Laura Vilarinho','朝聖者私營','共用','bath-warn','https://wisepilgrim.com/en/accommodations/camino-portugues/vilarinho/casa-da-laura'],['加走備案','Albergue de Peregrinos São Pedro de Rates','捐獻/低價','共用','bath-warn','http://www.alberguederates.pt'],['加走備案','O Palhuço Pilgrims Hostel Pedra Furada','捐獻/低價','共用','bath-warn','https://www.cm-barcelos.pt/visitar-barcelos/caminho-de-santiago/albergues/'],['偏海岸不建議','São Félix Hotel Hillside and Nature','Laundos / 偏離中央線','有','bath-ok','https://maps.app.goo.gl/zKWCoPcMA3NWYA5x5?g_st=ic'],['偏海岸不建議','Junqueira 76 - Guest House','Póvoa de Varzim / 偏離中央線','有','bath-ok','https://maps.app.goo.gl/6KwWbaN1C24iFZUg6?g_st=ic']]},
-  {day:'Day 4',city:'Barcelos / Barcelinhos',options:[['今日實住','⭐ In Barcelos Hostel & Guest House','TWD 1,200-2,500','可選','bath-check','https://maps.app.goo.gl/r2D6HRrqNnVsQS8g7?g_st=ic'],['庇護所備案','Albergue Cidade de Barcelos','捐獻/低價','共用','bath-warn','https://www.alberguedebarcelos.com'],['高 CP 備案','Hotel Bagoeira','TWD 2,200-3,500','有','bath-ok','http://bagoeira.com/'],['舒適','Art’Otel Barcelos','TWD 2,500-4,500','有','bath-ok','https://www.booking.com/searchresults.html?ss=Art%27Otel%20Barcelos'],['城市備案','Flag Hotel Barcelos','TWD 1,800-3,500','有','bath-ok','https://www.booking.com/hotel/pt/flag-hotel-barcelos.html'],['前一點備案','Diora Hostel Barcelinhos','低價/床位','共用','bath-warn','http://www.diorahostel.pt/']]},
-  {day:'Day 5',city:'Balugães / Vitorino dos Piães',options:[['今日實住','⭐ Quinta da Cancela','TWD 2,700-3,800','有','bath-ok','https://maps.app.goo.gl/ScxoXc94tvRcZAWW9?g_st=ic'],['朝聖者民宿','⭐ Casa da Fernanda','TWD 1,300-1,800','共用','bath-warn','https://wisepilgrim.com/en/accommodations/camino-portugues/vitorino-dos-piaes/casa-da-fernanda'],['舒適','Quinta de Malta','TWD 3,000-4,800','有','bath-ok','https://www.quintademalta.com']]},
-  {day:'Day 6',city:'Ponte de Lima',options:[['今日實住','⭐ Vila de Ponte Guest House','依現場價格','有','bath-ok','https://maps.app.goo.gl/4rSisqv7QxjVYUz47?g_st=ic'],['高 CP 備案','ARC MY OTEL','TWD 2,600-4,800','有','bath-ok','https://arcmytel.com'],['庇護所備案','Albergue de Peregrinos de Ponte de Lima','TWD 400-900','共用','bath-warn','https://www.cm-pontedelima.pt/pages/417'],['青年旅館','HI Ponte de Lima Pousada de Juventude','TWD 900-2,000','可選','bath-check','https://www.pousadasjuventude.pt']]},
-  {day:'Day 7',city:'Rubiães',options:[['今日實住','⭐ Casa de S Sebastião','依現場價格','有','bath-ok','https://maps.app.goo.gl/JB2wCmnwgb2nRznY6?g_st=ic'],['舒適備案','Quinta do Caminho','TWD 2,600-4,200','有','bath-ok','https://www.gronze.com/portugal/viana-do-castelo/rubiaes/quinta-do-caminho'],['低價備案','Casa das Lages','TWD 1,800-3,200','有','bath-ok','https://www.gronze.com/portugal/viana-do-castelo/rubiaes/casa-lages'],['庇護所備案','Albergue de Peregrinos Rubiães','TWD 350-700','共用','bath-warn','https://www.wisepilgrim.com/en/accommodations/camino-portugues/rubiaes/albergue-de-peregrinos-rubiaes']]},
-  {day:'Day 8',city:'Tui',options:[['昨日實住','⭐ La Sigrina Hostal','依現場價格','有','bath-ok','https://maps.app.goo.gl/auhfF7ndiFthVb8t8?g_st=ic'],['高 CP 備案','A Torre do Xudeu','TWD 2,300-3,800','有','bath-ok','https://www.atorredoxudeu.com'],['庇護所備案','⭐ Albergue de Peregrinos de Tui','TWD 350-700','共用','bath-warn','https://www.caminodesantiago.gal/es/recurso/280380540/albergue-de-peregrinos-de-tui'],['朝聖者','⭐ Ideas Peregrinas','TWD 600-1,600','可選','bath-check','https://ideas-peregrinas.com/']]},
-  {day:'Day 9',city:'O Porriño',options:[['今日實住','⭐ Alojamientos Central','依現場價格','有','bath-ok','https://maps.app.goo.gl/UghjYorNZECByfkK7?g_st=ic'],['低價備案','Pensión Cando','TWD 1,400-2,400','待確認','bath-check','https://alojamientoscando.com'],['庇護所備案','⭐ Alojamiento Camino Portugués','TWD 500-1,600','共用','bath-warn','https://www.gronze.com/galicia/pontevedra/porrino/alojamiento-camino-portugues']]},
-  {day:'Day 10',city:'Redondela',options:[['住宿備案','⭐ Rua do Medio','依現場價格','有','bath-ok','https://maps.app.goo.gl/EFeVxjow1mmDo9sp9?g_st=ic'],['低價備案','Alvear Suites','TWD 1,600-2,800','有','bath-ok','https://alvearsuites.com'],['高 CP 備案','A Casa da Herba','TWD 1,900-3,000','可選','bath-check','https://acasadaherba.com'],['庇護所備案','⭐ Santiago de Vilavella','TWD 500-1,200','共用','bath-warn','http://www.redondelaalbergue.com/']]},
-  {day:'Day 11',city:'Pontevedra',options:[['舒適備案','⭐ Galicia Palace','依現場價格','有','bath-ok','https://maps.app.goo.gl/fj8aLQ8MCWuXZEK27?g_st=ic'],['舒適備案','Rias Bajas Hotel','TWD 3,000-5,000','有','bath-ok','https://hotelriasbajas.com'],['庇護所備案','Albergue Virgen Peregrina','TWD 350-900','共用','bath-warn','https://www.caminodesantiago.gal/es/recurso/280380548/albergue-de-peregrinos-virgen-peregrina'],['青年旅館','Acolá Hostel','TWD 700-2,400','可選','bath-check','https://acolahostel.com/acola-hostel/']]},
-  {day:'Day 12',city:'Armenteira',options:[['今日實住','⭐ Casa Rural Manuel y Sofía','依現場價格','有','bath-ok','https://maps.app.goo.gl/r7MW2YKPyFYwz7JE8?g_st=ic'],['低價備案','Hospedería Monasterio de Armenteira','TWD 1,800-3,200','有','bath-ok','https://www.monasteriodearmenteira.es/la-hospederia-3/'],['庇護所備案','Albergue San Ero de Armenteira','TWD 350-700','共用','bath-warn','https://www.caminodesantiago.gal/es/recurso/180517000216/albergue-de-peregrinos-san-ero-de-armenteira']]},
-  {day:'Day 13',city:'Vilanova de Arousa',options:[['今日實住','⭐ GUESTS HOUSE SAL E PEDRA','依現場價格','有','bath-ok','https://maps.app.goo.gl/kDMjKe54JVQLGUrFA?g_st=ic'],['備案','Hotel Bradomin','依現場查詢','有','bath-ok','https://www.google.com/maps/search/?api=1&query=Hotel%20Bradomin%20Vilanova%20de%20Arousa'],['備案','Vilanova de Arousa guesthouse','依現場查詢','待確認','bath-check','https://www.google.com/maps/search/?api=1&query=Vilanova%20de%20Arousa%20guesthouse']]},
-  {day:'Day 14',city:'Padrón / A Casa Da Meixida',options:[['今日實住','⭐ A Casa Da Meixida','依現場價格','有','bath-ok','https://maps.app.goo.gl/TjaREThbNhQJTzam6?g_st=ic'],['市中心備案','Pensión Buen Camino','TWD 1,500-2,800','待確認','bath-check','https://padronvirtual.com/buencamino.htm'],['庇護所備案','Albergue de Peregrinos de Padrón','低價/床位','共用','bath-warn','https://www.google.com/maps/search/?api=1&query=Albergue%20de%20Peregrinos%20de%20Padron']]},
-  {day:'朝聖後',city:'Santiago de Compostela',options:[['6/23-6/25 實住','⭐ Apartment in Casa Iacobus / Room in Santiago de Compostela','Rúa do Franco 58','有','bath-ok','https://maps.app.goo.gl/DACd312Vj6jE2m2h8?g_st=ic'],['低價備案','Hotel Universal','TWD 2,200-3,800','有','bath-ok','https://hoteluniversalsantiago.com'],['庇護所備案','Seminario Menor','TWD 700-2,000','可選','bath-check','https://seminariomenorsantiago.com']]},
-  {day:'Barcelona',city:'Barcelona / Eixample',options:[['首選區域','⭐ Eixample hotel search','冷氣/電梯/近地鐵','有','bath-ok','https://www.google.com/maps/search/?api=1&query=Eixample%20hotel%20Barcelona%20air%20conditioning%20elevator'],['高 CP','Hotel Constanza Barcelona','TWD 3,500-5,500','有','bath-ok','https://hotelconstanza.com'],['舒適','Praktik Garden Barcelona','TWD 3,800-6,000','有','bath-ok','https://www.hotelpraktikgarden.com']]},
-  {day:'Scotland',city:'Edinburgh / New Town or Haymarket',options:[['首選區域','⭐ New Town hotel search','電梯/交通方便','有','bath-ok','https://www.google.com/maps/search/?api=1&query=Edinburgh%20New%20Town%20hotel%20elevator'],['交通方便','Haymarket hotel search','近 tram / train','有','bath-ok','https://www.google.com/maps/search/?api=1&query=Edinburgh%20Haymarket%20hotel%20near%20tram'],['集合點導向','Waverley Station hotel search','方便火車與一日團','待確認','bath-check','https://www.google.com/maps/search/?api=1&query=Edinburgh%20hotel%20near%20Waverley%20Station%20elevator']]},
-  {day:'London',city:'London',options:[['市中心交通','King’s Cross hotel search','若搭火車抵達方便','有','bath-ok','https://www.google.com/maps/search/?api=1&query=London%20hotel%20near%20King%27s%20Cross'],['回程方便','Heathrow hotel search','接 7/8 BR68','有','bath-ok','https://www.google.com/maps/search/?api=1&query=Heathrow%20Terminal%204%20hotel'],['市區備案','London central hotel search','依預算選區','待確認','bath-check','https://www.google.com/maps/search/?api=1&query=London%20central%20hotel%20elevator']]}
-];
-function enc(q){return encodeURIComponent(q);}
-function maps(q){return `https://www.google.com/maps/search/?api=1&query=${enc(q)}`;}
-function embedMap(q){return `https://maps.google.com/maps?q=${enc(q)}&output=embed&hl=zh-TW`;}
-function multiStopEmbed(stops){
-  if(stops.length<2)return embedMap(stops[0]);
-  const [origin,...rest]=stops;
-  return `https://maps.google.com/maps?saddr=${enc(origin)}&daddr=${rest.map(enc).join('+to:')}&output=embed&hl=zh-TW`;
-}
-function multiStopMaps(stops){
-  if(stops.length<2)return maps(stops[0]);
-  const [origin,...rest]=stops;
-  const destination=rest[rest.length-1];
-  const waypoints=rest.slice(0,-1).map(enc).join('%7C');
-  return `https://www.google.com/maps/dir/?api=1&origin=${enc(origin)}&destination=${enc(destination)}${waypoints ? `&waypoints=${waypoints}` : ''}`;
-}
-const bookingDirect={
-  'Moov Hotel Porto Centro':'https://www.booking.com/hotel/pt/moov-hotel-porto-centro.html',
-  'Zero Box Lodge Porto':'https://www.booking.com/hotel/pt/zero.html',
-  'Porto Spot Hostel':'https://www.booking.com/hotel/pt/porto-spot-hostel.html',
-  'The Passenger Hostel Porto':'https://www.booking.com/hotel/pt/the-passenger-hostel.html',
-  'Aerostay Hostel':'https://www.booking.com/hotel/pt/aerostay-hostel.zh-tw.html',
-  'Park Hotel Porto Aeroporto':'https://www.booking.com/hotel/pt/park-porto-aeroporto.html',
-  'AirPorto Hostel':'https://www.booking.com/hotel/pt/airporto-hostel.html',
-  'Casa Mindela Guesthouse':'https://www.booking.com/hotel/pt/casa-mindela-guest-house.html',
-  'Flag Hotel Barcelos':'https://www.booking.com/hotel/pt/flag-hotel-barcelos.html',
-  'Hotel Bagoeira':'https://www.booking.com/hotel/pt/bagoeirabarcelos.html',
-  'Art\'Otel Barcelos':'https://www.booking.com/hotel/pt/art-39-otel-barcelos.html',
-  'Hotel Império do Norte':'https://www.booking.com/hotel/pt/imperio-do-norte.html',
-  'ARC MY OTEL':'https://www.booking.com/hotel/pt/arc-my-otel.html',
-  'HI Ponte de Lima Pousada de Juventude':'https://www.booking.com/hotel/pt/pousada-de-juventude-de-ponte-de-lima.html',
-  'Quinta das Leiras':'https://www.booking.com/hotel/pt/quinta-da-leiras.html',
-  'A Torre do Xudeu':'https://www.booking.com/hotel/es/a-torre-do-xudeu.html',
-  'Hotel Alfonso I':'https://www.booking.com/hotel/es/alfonso-i.html',
-  'Ideas Peregrinas':'https://www.booking.com/hotel/es/ideas-peregrinas.html',
-  'Pensión Cando':'https://www.booking.com/hotel/es/hospedaje-cando-o-porrino.html',
-  'Alojamientos Central':'https://www.booking.com/hotel/es/alojamiento-central.html',
-  'Alojamiento Camino Portugués':'https://www.booking.com/hotel/es/alojamiento-camino-portugues-porrino.html',
-  'Alvear Suites':'https://www.booking.com/hotel/es/alvear-suites.html',
-  'A Casa da Herba':'https://www.booking.com/hotel/es/a-casa-da-herba.html',
-  'A Conserveira':'https://www.booking.com/hotel/es/a-conserveira.html',
-  'Hotel Madrid':'https://www.booking.com/hotel/es/madrid-pontevedra.html',
-  'Hotel Avenida':'https://www.booking.com/hotel/es/avenida-pontevedra.html',
-  'Rias Bajas Hotel':'https://www.booking.com/hotel/es/rias-bajas.html',
-  'Acolá Hostel':'https://www.booking.com/hotel/es/acola-hostel-pontevedra.html',
-  'Hotel Universal':'https://www.booking.com/hotel/es/husa-universal.html',
-  'Mapoula PR Boutique':'https://www.booking.com/hotel/es/hostal-mapoula.html',
-  'Seminario Menor':'https://www.booking.com/hotel/es/albergue-seminario-menor.html',
-  'The Last Stamp':'https://www.booking.com/hotel/es/the-last-stamp.html',
-  'Acta Antibes Barcelona':'https://www.booking.com/hotel/es/hotelantibesbarcelona.html',
-  'Hotel Constanza Barcelona':'https://www.booking.com/hotel/es/hotelconstanza.html',
-  'Praktik Garden Barcelona':'https://www.booking.com/hotel/es/the-praktik.html',
-  'Casa Gracia Barcelona':'https://www.booking.com/hotel/es/hostel-casa-gracia.html',
-  'Yeah Barcelona Hostel':'https://www.booking.com/hotel/es/yeah-barcelona-hostel.html',
-  'Hotel Pelayo Barcelona':'https://www.booking.com/hotel/es/pelayo.html',
-  'Hotel Jazz Barcelona':'https://www.booking.com/hotel/es/jazz.html',
-  'Hotel Granvia Barcelona':'https://www.booking.com/hotel/es/granvia.html',
-  'Acta BCN 40 Barcelona':'https://www.booking.com/hotel/es/40.html',
-  'Hotel Barcelona Universal':'https://www.booking.com/hotel/es/universal.html'
-};
-const agodaDirect={
-  'Moov Hotel Porto Centro':'https://www.agoda.com/zh-tw/moov-hotel-porto-centro/hotel/porto-pt.html',
-  'Zero Box Lodge Porto':'https://www.agoda.com/zh-tw/zero-box-lodge-porto/hotel/porto-pt.html',
-  'Porto Spot Hostel':'https://www.agoda.com/zh-tw/porto-spot-hostel/hotel/porto-pt.html',
-  'Park Hotel Porto Aeroporto':'https://www.agoda.com/zh-tw/park-hotel-porto-aeroporto/hotel/maia-pt.html',
-  'AirPorto Hostel':'https://www.agoda.com/zh-tw/airporto-hostel/hotel/maia-pt.html',
-  'Casa Mindela Guesthouse':'https://www.agoda.com/zh-tw/casa-mindela-farmhouse/hotel/vila-do-conde-pt.html',
-  'Flag Hotel Barcelos':'https://www.agoda.com/zh-tw/flag-hotel-barcelos/hotel/barcelos-pt.html',
-  'Hotel Bagoeira':'https://www.agoda.com/zh-tw/hotel-bagoeira/hotel/barcelos-pt.html',
-  'Art\'Otel Barcelos':'https://www.agoda.com/zh-tw/art-otel-barcelos/hotel/barcelos-pt.html',
-  'Hotel Império do Norte':'https://www.agoda.com/zh-tw/hotel-imperio-do-norte/hotel/ponte-de-lima-pt.html',
-  'ARC MY OTEL':'https://www.agoda.com/zh-tw/arc-my-otel/hotel/ponte-de-lima-pt.html',
-  'Casa de S Sebastião':'https://maps.app.goo.gl/JB2wCmnwgb2nRznY6?g_st=ic',
-  'Quinta das Leiras':'https://www.agoda.com/zh-tw/quinta-das-leiras-rubiaes/hotel/paredes-de-coura-pt.html',
-  'Alojamientos Central':'https://www.agoda.com/zh-tw/alojamientos-central/hotel/porrino-es.html',
-  'Alvear Suites':'https://www.agoda.com/zh-tw/alvear-suites/hotel/redondela-es.html',
-  'A Conserveira':'https://www.agoda.com/zh-tw/a-conserveira/hotel/redondela-es.html',
-  'Rias Bajas Hotel':'https://www.agoda.com/zh-tw/rias-bajas/hotel/pontevedra-es.html',
-  'Acolá Hostel':'https://www.agoda.com/zh-tw/acola-hostel/hotel/pontevedra-es.html',
-  'Hotel Universal':'https://www.agoda.com/zh-tw/hotel-universal/hotel/santiago-de-compostela-es.html',
-  'Mapoula PR Boutique':'https://www.agoda.com/zh-tw/mapoula-pr-boutique/hotel/santiago-de-compostela-es.html',
-  'Seminario Menor':'https://www.agoda.com/zh-tw/albergue-seminario-menor/hotel/santiago-de-compostela-es.html',
-  'The Last Stamp':'https://www.agoda.com/zh-tw/the-last-stamp/hotel/santiago-de-compostela-es.html',
-  'Acta Antibes Barcelona':'https://www.agoda.com/zh-tw/acta-antibes/hotel/barcelona-es.html',
-  'Hotel Constanza Barcelona':'https://www.agoda.com/zh-tw/hotel-constanza/hotel/barcelona-es.html',
-  'Praktik Garden Barcelona':'https://www.agoda.com/zh-tw/praktik-garden/hotel/barcelona-es.html',
-  'Casa Gracia Barcelona':'https://www.agoda.com/zh-tw/casa-gracia/hotel/barcelona-es.html',
-  'Yeah Barcelona Hostel':'https://www.agoda.com/zh-tw/yeah-barcelona-hostel/hotel/barcelona-es.html',
-  'Hotel Pelayo Barcelona':'https://www.agoda.com/zh-tw/hotel-pelayo/hotel/barcelona-es.html',
-  'Hotel Jazz Barcelona':'https://www.agoda.com/zh-tw/hotel-jazz/hotel/barcelona-es.html',
-  'Hotel Granvia Barcelona':'https://www.agoda.com/zh-tw/hotel-granvia/hotel/barcelona-es.html',
-  'Acta BCN 40 Barcelona':'https://www.agoda.com/zh-tw/acta-bcn-40/hotel/barcelona-es.html',
-  'Hotel Barcelona Universal':'https://www.agoda.com/zh-tw/hotel-barcelona-universal/hotel/barcelona-es.html'
-};
-function stayRow(option, city){
-  const [band,name,price,bathStatus,bathClass,directUrl]=option;
-  const cleanName=name.replace(/^⭐\s*/, '');
-  const query=`${cleanName} ${city}`;
-  const directLink=directUrl ? `<a href="${directUrl}" target="_blank" class="link-phone">住宿直連</a>` : '';
-  const bookingLink=bookingDirect[cleanName] ? `<a href="${bookingDirect[cleanName]}" target="_blank" class="link-booking">Booking直連</a>` : '';
-  const agodaLink=agodaDirect[cleanName] ? `<a href="${agodaDirect[cleanName]}" target="_blank" class="link-agoda">Agoda直連</a>` : '';
-  return `<tr>
-    <td><span class="price-band ${bandClass(band)}">${band}</span></td>
-    <td><span class="option-name">${name}</span></td>
-    <td>${price}</td>
-    <td><span class="${bathClass}">${bathStatus}</span></td>
-    <td><div class="table-links">${directLink}<a href="${maps(query)}" target="_blank" class="link-map">Maps</a>${bookingLink}${agodaLink}</div></td>
-  </tr>`;
-}
-function stayMapBlock(city, options){
-  const stops=options.map(option=>`${option[1].replace(/^⭐\s*/, '')} ${city}`);
-  const mapLinks=options.map(option=>{
-    const cleanName=option[1].replace(/^⭐\s*/, '');
-    const query=`${cleanName} ${city}`;
-    return `<a href="${maps(query)}" target="_blank" class="link-map">${option[1]}</a>`;
-  }).join('');
-  return `<div class="stay-map">
-    <div class="stay-map-head">當日住宿地圖</div>
-    <iframe src="${multiStopEmbed(stops)}" allowfullscreen="" loading="lazy"></iframe>
-    <div class="stay-map-links"><a href="${multiStopMaps(stops)}" target="_blank" class="link-map">全部旅館地圖</a>${mapLinks}</div>
-  </div>`;
-}
-function bandClass(band){
-  if(band.includes('低價'))return 'band-low';
-  if(band.includes('高 CP'))return 'band-mid';
-  if(band.includes('舒適'))return 'band-high';
-  return 'band-pilgrim';
-}
-function routeStayAliases(name){
-  return {
-    'Albergue do Mosteiro de Vairão':'Albergue de Peregrinos do Mosteiro de Vairão'
-  }[name] || name;
-}
-function routeStayMatches(displayName, stayInfo){
-  const normalizeText=text=>text.replace(/^⭐\s*/, '').replace(/[’]/g, "'").trim();
-  const normalized=normalizeText(displayName);
-  const aliases=routeStayAliases(normalized);
-  const direct=stayInfo.get(aliases);
-  if(direct)return [direct];
-  const tokens=normalized.split(/\s*\/\s*/).map(part=>part.trim()).filter(Boolean);
-  const matches=[];
-  stayInfo.forEach((info, cleanName)=>{
-    const clean=normalizeText(cleanName);
-    if(tokens.some(token=>clean.includes(token) || token.includes(clean)) || normalized.includes(clean)){
-      matches.push(info);
-    }
-  });
-  return matches.slice(0, 4);
-}
-function routeStayInfo(){
-  const stayInfo=new Map();
-  stayDays.forEach(day=>{
-    day.options.forEach(option=>{
-      const [band,name,price,bathStatus,bathClass,directUrl]=option;
-      const cleanName=name.replace(/^⭐\s*/, '');
-      stayInfo.set(cleanName,{band,name,price,bathStatus,bathClass,directUrl,city:day.city});
-    });
-  });
-  document.querySelectorAll('.route-table .place').forEach(place=>{
-    const displayName=place.textContent.trim();
-    const matches=routeStayMatches(displayName, stayInfo);
-    if(!matches.length || place.dataset.enriched)return;
-    place.dataset.enriched='true';
-    const details=matches.map(info=>`${info.name.replace(/^⭐\s*/, '')}：${info.band}｜${info.price}｜衛浴：<span class="${info.bathClass}">${info.bathStatus}</span>`).join('<br>');
-    const links=matches.flatMap(info=>{
-      const cleanName=info.name.replace(/^⭐\s*/, '');
-      const query=`${cleanName} ${info.city}`;
-      return [
-        `<a href="${maps(query)}" target="_blank" class="link-map">${cleanName} Maps</a>`,
-        info.directUrl ? `<a href="${info.directUrl}" target="_blank" class="link-phone">${cleanName} 直連</a>` : '',
-        bookingDirect[cleanName] ? `<a href="${bookingDirect[cleanName]}" target="_blank" class="link-booking">${cleanName} Booking</a>` : '',
-        agodaDirect[cleanName] ? `<a href="${agodaDirect[cleanName]}" target="_blank" class="link-agoda">${cleanName} Agoda</a>` : ''
-      ].filter(Boolean);
-    }).join('');
-    place.closest('td').insertAdjacentHTML('beforeend',`
-      <div class="route-stay-info">${details}</div>
-      <div class="route-stay-links">${links}</div>`);
-  });
-}
-function dayKey(text){
-  const match=text.match(/Day\s+\d+(?:\/\d+)?/);
-  return match ? match[0] : '';
-}
-function renderInlineDayPlans(){
-  const detailMap=new Map(dayDetails.map(d=>[d[0],d]));
-  const stayByDay=new Map(stayDays.map(d=>[d.day,d]));
-  document.querySelectorAll('.day-card').forEach(card=>{
-    const label=card.querySelector('.day-label');
-    if(!label)return;
-    const key=dayKey(label.textContent);
-    const detail=detailMap.get(key);
-    const stay=stayByDay.get(key);
-    if(!detail && !stay)return;
-    const detailHtml=detail ? `
-      <ul class="detail-list">
-        <li><strong>行程細節：</strong>${detail[2]}</li>
-        <li><strong>抵達後：</strong>${detail[3]}</li>
-      </ul>` : '';
-    const stayHtml=stay ? (() => {
-      const {city,options}=stay;
-      return `
-      <div class="stay-meta">住宿地點：${city}。Booking / Agoda 只保留已確認或高度可對應的直連；找不到穩定房源頁的項目已移除平台搜尋按鈕。衛浴欄只保留標籤，訂房時仍以房型頁為準。</div>
+  <section class="slide">
+    <div class="slide-inner">
+      <p class="kicker">Day By Day</p>
+      <h2>每日行程總表</h2>
       <div class="table-wrap">
-        <table class="stay-table">
+        <table>
           <thead>
             <tr>
-              <th>價位</th>
-              <th>住宿名稱</th>
-              <th>預估價格</th>
-              <th>獨立衛浴</th>
-              <th>連結</th>
+              <th>日程</th>
+              <th>落腳點</th>
+              <th>住宿</th>
+              <th>距離 / 移動</th>
+              <th>備註</th>
             </tr>
           </thead>
           <tbody>
-            ${options.map(option=>stayRow(option,city)).join('')}
+            <tr><td>Day 1</td><td>Porto</td><td>Hotel Spot Family Suites Porto</td><td>市區準備</td><td>主教座堂、Credencial、補給。</td></tr>
+            <tr><td>Day 2</td><td>Moreira da Maia</td><td>Aerostay Hostel</td><td>休整 / 採買</td><td>6/9 實住，隔天直接往 Arcos。</td></tr>
+            <tr><td>Day 3</td><td>São Miguel de Arcos</td><td>Quinta São Miguel de Arcos</td><td>16-17 km</td><td>已抵達，住宿舒服，仍貼近中央線。</td></tr>
+            <tr><td>Day 4</td><td>Barcelos</td><td>In Barcelos Hostel & Guest House</td><td>11-13 km</td><td>大城補給方便。</td></tr>
+            <tr><td>Day 5</td><td>Balugães / Vitorino dos Piães</td><td>Quinta da Cancela</td><td>約 15 km</td><td>補給較少，前一城先買點心。</td></tr>
+            <tr><td>Day 6</td><td>Ponte de Lima</td><td>Vila de Ponte Guest House</td><td>約 18 km</td><td>古鎮停留，隔天 Labruja 爬升。</td></tr>
+            <tr><td>Day 7</td><td>Rubiães</td><td>Casa de S Sebastião</td><td>17.4 km</td><td>Labruja 為主要爬升日。</td></tr>
+            <tr><td>Day 8</td><td>Tui</td><td>La Sigrina Hostal</td><td>19.1 km</td><td>跨越葡西邊界，Tui 起每天保守蓋 2 章。</td></tr>
+            <tr><td>Day 9</td><td>O Porriño</td><td>Alojamientos Central</td><td>16 km</td><td>6/16-6/17 住兩晚；建議走替代線避工業區。</td></tr>
+            <tr><td>Day 10</td><td>Redondela</td><td>Rua do Medio</td><td>16.4 km</td><td>Mos / Santiaguiño 一帶有爬升。</td></tr>
+            <tr><td>Day 11</td><td>Pontevedra</td><td>Galicia Palace</td><td>19.6 km</td><td>Arcade 可午餐，Pontesampaio 石橋值得短停。</td></tr>
+            <tr><td>Day 12</td><td>Armenteira</td><td>Casa Rural Manuel y Sofía</td><td>20-21 km</td><td>轉入靈性之路，經 Combarro 後爬升。</td></tr>
+            <tr><td>Day 13</td><td>Vilanova de Arousa</td><td>GUESTS HOUSE SAL E PEDRA</td><td>23-24 km</td><td>走到港口前夜，隔天直接上船。</td></tr>
+            <tr><td>Day 14</td><td>Padrón 北側</td><td>A Casa Da Meixida</td><td>船 + 5-7 km</td><td>La Barca 11:00 船票已訂，下船 Pontecesures。</td></tr>
+            <tr><td>Day 15</td><td>Santiago de Compostela</td><td>Apartment in Casa Iacobus / Room in Santiago de Compostela</td><td>17-20 km</td><td>抵達 Obradoiro 廣場，入住 Rúa do Franco 58。</td></tr>
           </tbody>
         </table>
       </div>
-      ${stayMapBlock(city,options)}`;
-    })() : '';
-    card.insertAdjacentHTML('beforeend',`
-      <details class="inline-panel">
-        <summary>展開：行程細節與住宿選項</summary>
-        <div class="inline-body">${detailHtml}${stayHtml}</div>
-      </details>`);
-  });
-}
+    </div>
+  </section>
 
-function switchTab(idx){
-  document.querySelectorAll('.tab-panel').forEach((p,i)=>p.classList.toggle('active',i===idx));
-  document.querySelectorAll('.route-tab-btn').forEach((b,i)=>b.classList.toggle('active',i===idx));
-  localStorage.setItem('camino_tab',idx);
-}
-// Restore last tab
-(function(){
-  const t=parseInt(localStorage.getItem('camino_tab')||'0');
-  if(t>0) switchTab(t);
-})();
+  <section class="slide">
+    <div class="slide-inner">
+      <p class="kicker">Hard Days</p>
+      <h2>比較需要留意的日子</h2>
+      <div class="split">
+        <div class="photo-box"><img src="camino_path.png" alt="Camino path"></div>
+        <div class="card-grid" style="grid-template-columns:1fr;">
+          <article class="card">
+            <h3>Day 7：Ponte de Lima 到 Rubiães</h3>
+            <p>Labruja 是全線主要爬升，早出發、補水、慢走。這天不是距離最長，但起伏最有感。</p>
+          </article>
+          <article class="card">
+            <h3>Day 12：Pontevedra 到 Armenteira</h3>
+            <p>20 km 級加爬升，經 Combarro 後進山。天氣熱時要更早出門。</p>
+          </article>
+          <article class="card">
+            <h3>Day 13：Armenteira 到 Vilanova</h3>
+            <p>水石之路很漂亮，但今日總距離偏長。抵達 Vilanova 後先確認隔天上船時間。</p>
+          </article>
+          <article class="card">
+            <h3>Day 15：進 Santiago</h3>
+            <p>從 A Casa Da Meixida 起走較短，但進城前後容易興奮加速。O Milladoiro 是最後大補給點。</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
 
-renderInlineDayPlans();
-routeStayInfo();
-</script>
-</body>
-</html>
-
+  <section class="slide">
+    <div class="slide-inner">
+      <p class="kicker">Boat And Finish</p>
+      <h2>Traslatio 船段與 Santiago 終點</h2>
+      <div class="split">
+        <div class="card-grid" style="grid-template-columns:1fr;">
+          <article class="card">
+            <h3>船票資訊</h3>
+            <p>La Barca del Peregrino，2026/6/22 11:00，Vilanova de Arousa 到 Pontecesures。建議 10:45 前到 Mar Santiago Maritime Station。</p>
+          </article>
+          <article class="card">
+            <h3>下船後</h3>
+            <p>Pontecesures 下船後經 Padrón 補給 / 蓋章，再走到 A Casa Da Meixida。住宿周邊補給較少。</p>
+          </article>
+          <article class="card">
+            <h3>抵達 Santiago</h3>
+            <p>Day 15 走進 Santiago，先到 Obradoiro 廣場，再安排 Pilgrim Office 辦 Compostela。</p>
+          </article>
+        </div>
+        <div class="photo-box"><img src="camino_boat.png" alt="Traslatio boat"></div>
+      </div>
+      <div class="actions">
+        <a class="primary" href="https://www.google.com/maps/dir/?api=1&origin=A%20Casa%20Da%20Meixida%20Padron%20Spain&destination=Rua%20do%20Franco%2058%20Santiago%20de%20Compostela%20Spain&travelmode=walking" target="_blank" rel="noopener">最後一天地圖</a>
+        <a href="https://www.google.com/maps/search/?api=1&query=Pilgrim%20Reception%20Office%20Santiago%20de%20Compostela" target="_blank" rel="noopener">Pilgrim Office</a>
+        <a href="../../post-camino-plan.html">查看朝聖後旅行</a>
+      </div>
+    </div>
+  </section>
 </body>
 </html>

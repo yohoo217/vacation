@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>朝聖後旅行計畫</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1e2730;
+      --muted: #63717c;
+      --paper: #f4f0e8;
+      --surface: #fffdf8;
+      --line: #d8d0c1;
+      --green: #1f6b55;
+      --blue: #2f6f8f;
+      --plum: #6f4f7c;
+      --red: #a34534;
+      --gold: #b67724;
+      --shadow: 0 16px 42px rgba(38, 42, 45, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", sans-serif;
+      line-height: 1.55;
+    }
+
+    a { color: inherit; }
+
+    .shell {
+      width: min(1120px, calc(100% - 28px));
+      margin: 0 auto;
+    }
+
+    header {
+      min-height: 430px;
+      color: white;
+      display: grid;
+      align-items: end;
+      background:
+        linear-gradient(90deg, rgba(24, 39, 48, 0.96), rgba(24, 39, 48, 0.6)),
+        url("_整理備份_20260505/朝聖之路/camino_cover.png") center/cover;
+    }
+
+    .hero {
+      padding: 34px 0 42px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding-top: 18px;
+    }
+
+    .brand {
+      font-weight: 900;
+    }
+
+    .toplinks,
+    .actions,
+    .quick-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .toplinks a,
+    .actions a,
+    .quick-links a {
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      padding: 9px 12px;
+      text-decoration: none;
+      font-weight: 900;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .toplinks a {
+      color: white;
+      border-color: rgba(255, 255, 255, 0.32);
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(10px);
+    }
+
+    .actions a.primary,
+    .quick-links a.primary {
+      color: white;
+      border-color: var(--green);
+      background: var(--green);
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      max-width: 850px;
+      font-size: clamp(2.4rem, 7vw, 5.4rem);
+    }
+
+    h2 {
+      font-size: clamp(1.55rem, 3.6vw, 2.5rem);
+    }
+
+    h3 {
+      font-size: 1.18rem;
+    }
+
+    .lead {
+      max-width: 780px;
+      margin: 16px 0 0;
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 1.05rem;
+    }
+
+    .section {
+      padding: 42px 0;
+    }
+
+    .section.alt {
+      background: #ebe4d8;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .hint {
+      margin: 6px 0 0;
+      color: var(--muted);
+    }
+
+    .metric-grid,
+    .card-grid,
+    .booking-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .card,
+    .metric,
+    .table-wrap,
+    .map-box {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .metric,
+    .card {
+      padding: 18px;
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 7px;
+      font-size: 1.45rem;
+      line-height: 1.1;
+    }
+
+    .card p {
+      margin: 9px 0 0;
+      color: var(--muted);
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 12px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 8px;
+      color: white;
+      background: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+    }
+
+    .tag.blue { background: var(--blue); }
+    .tag.plum { background: var(--plum); }
+    .tag.red { background: var(--red); }
+    .tag.gold { background: var(--gold); }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 860px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 13px 14px;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid var(--line);
+    }
+
+    th {
+      background: #eee4d3;
+      color: #31423a;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .route-title {
+      display: block;
+      font-weight: 900;
+    }
+
+    .small {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(320px, 0.75fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .map-box {
+      overflow: hidden;
+    }
+
+    .map-box iframe {
+      width: 100%;
+      min-height: 420px;
+      border: 0;
+      display: block;
+    }
+
+    .map-note {
+      padding: 14px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .booking-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .booking-card {
+      border-left: 5px solid var(--green);
+    }
+
+    .booking-card.high { border-left-color: var(--red); }
+    .booking-card.mid { border-left-color: var(--blue); }
+    .booking-card.flex { border-left-color: var(--gold); }
+
+    @media (max-width: 860px) {
+      .topbar,
+      .section-head { align-items: flex-start; flex-direction: column; }
+      .metric-grid,
+      .card-grid,
+      .booking-grid,
+      .split { grid-template-columns: 1fr; }
+      header { min-height: 390px; }
+      .map-box iframe { min-height: 340px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell">
+      <div class="topbar">
+        <div class="brand">Post-Camino Travel</div>
+        <nav class="toplinks" aria-label="navigation">
+          <a href="index.html">入口</a>
+          <a href="_整理備份_20260505/朝聖之路/camino-guide.html">Camino 主導覽</a>
+          <a href="_整理備份_20260505/朝聖之路/葡萄牙朝聖之路簡報.html">Camino 簡報</a>
+        </nav>
+      </div>
+      <div class="hero">
+        <h1>朝聖後旅行計畫</h1>
+        <p class="lead">這頁只放 Santiago 完成 Camino 後的旅程：Santiago 休整、Barcelona 兩天、Edinburgh / Scotland 四晚、最後前往 London。Camino 步行日、住宿地圖與進度已留在朝聖路頁面。</p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="shell">
+        <div class="metric-grid">
+          <div class="metric"><span>起點</span><strong>Santiago</strong></div>
+          <div class="metric"><span>城市段</span><strong>Barcelona 2 天</strong></div>
+          <div class="metric"><span>主行程</span><strong>Scotland 4 晚</strong></div>
+          <div class="metric"><span>銜接</span><strong>London</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2>日程總覽</h2>
+            <p class="hint">Santiago 兩晚後移動到 Barcelona，接著飛 Edinburgh，以 Edinburgh 作為 Scotland 基地。</p>
+          </div>
+          <div class="actions">
+            <a class="primary" href="https://www.google.com/maps/dir/?api=1&origin=Santiago%20de%20Compostela&destination=London&waypoints=Barcelona%7CEdinburgh" target="_blank" rel="noopener">總路線地圖</a>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>日期</th>
+                <th>城市 / 住宿</th>
+                <th>上午</th>
+                <th>下午</th>
+                <th>晚上</th>
+                <th>注意</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>6/24</td>
+                <td><span class="route-title">Santiago de Compostela</span><span class="small">續住 Rúa do Franco 58</span></td>
+                <td>Compostela / 證書</td>
+                <td>洗衣、休息、咖啡</td>
+                <td>老城慢走</td>
+                <td>6/25 11:00 前退房</td>
+              </tr>
+              <tr>
+                <td>6/25</td>
+                <td><span class="route-title">Santiago → Barcelona</span><span class="small">住宿優先 Eixample</span></td>
+                <td>退房、移動到機場或車站</td>
+                <td>抵達 Barcelona、check-in</td>
+                <td>Gothic Quarter / El Born / Tapas</td>
+                <td>只排輕鬆活動</td>
+              </tr>
+              <tr>
+                <td>6/26</td>
+                <td><span class="route-title">Barcelona</span><span class="small">Eixample 第二晚</span></td>
+                <td>Sagrada Família、Casa Batlló</td>
+                <td>回住宿休息避熱</td>
+                <td>Park Güell / Passeig de Gràcia</td>
+                <td>Casa Milà 可刪</td>
+              </tr>
+              <tr>
+                <td>6/27</td>
+                <td><span class="route-title">Barcelona → Edinburgh</span><span class="small">住宿 New Town / Haymarket</span></td>
+                <td>整理行李、前往 BCN</td>
+                <td>BCN → EDI 直飛優先</td>
+                <td>Royal Mile / Victoria Street 短散步</td>
+                <td>廉航先買行李</td>
+              </tr>
+              <tr>
+                <td>6/28</td>
+                <td><span class="route-title">Edinburgh</span><span class="small">市區精華日</span></td>
+                <td>Edinburgh Castle</td>
+                <td>Royal Mile、St Giles、Victoria Street</td>
+                <td>Calton Hill / pub</td>
+                <td>Arthur’s Seat 腳累就跳過</td>
+              </tr>
+              <tr>
+                <td>6/29</td>
+                <td><span class="route-title">Highlands 一日團</span><span class="small">Edinburgh 出發返回</span></td>
+                <td>集合出發</td>
+                <td>Glencoe / Loch Ness / Highlands</td>
+                <td>回 Edinburgh</td>
+                <td>不自駕；Isle of Skye 一日團太硬</td>
+              </tr>
+              <tr>
+                <td>6/30</td>
+                <td><span class="route-title">Glasgow / Stirling / Edinburgh</span><span class="small">依體力三選一</span></td>
+                <td>Glasgow Cathedral 或 Dean Village</td>
+                <td>Kelvingrove / Leith / Stirling Castle</td>
+                <td>回 Edinburgh</td>
+                <td>這天保留彈性</td>
+              </tr>
+              <tr>
+                <td>7/1</td>
+                <td><span class="route-title">Edinburgh → London</span><span class="small">火車到 King’s Cross 優先</span></td>
+                <td>退房、前往 Waverley</td>
+                <td>火車南下 London</td>
+                <td>check-in / 簡單晚餐</td>
+                <td>若接機場才考慮飛機</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2>住宿區域</h2>
+            <p class="hint">重點是少搬、少爬、交通順，剛走完 Camino 不要再被行李折磨。</p>
+          </div>
+        </div>
+        <div class="card-grid">
+          <article class="card">
+            <h3>Santiago</h3>
+            <p>6/23-6/25 實住 Apartment in Casa Iacobus / Room in Santiago de Compostela，地址 Rúa do Franco 58。</p>
+            <div class="tag-row"><span class="tag">已訂 / 已住</span><span class="tag gold">6/25 退房</span></div>
+            <div class="quick-links"><a href="https://maps.app.goo.gl/DACd312Vj6jE2m2h8?g_st=ic" target="_blank" rel="noopener">Google Maps</a></div>
+          </article>
+          <article class="card">
+            <h3>Barcelona</h3>
+            <p>首選 Eixample：冷氣、電梯、近地鐵、評分 8.0+。避免 La Rambla 正旁邊與沒電梯老公寓。</p>
+            <div class="tag-row"><span class="tag blue">Eixample</span><span class="tag red">冷氣必備</span></div>
+            <div class="quick-links"><a href="https://www.google.com/maps/search/?api=1&query=Eixample%20hotel%20Barcelona%20air%20conditioning%20elevator" target="_blank" rel="noopener">住宿搜尋</a></div>
+          </article>
+          <article class="card">
+            <h3>Edinburgh</h3>
+            <p>首選 New Town 或 Haymarket。Old Town 很美但坡多、石板路多，拖行李比較累。</p>
+            <div class="tag-row"><span class="tag plum">New Town</span><span class="tag blue">Haymarket</span></div>
+            <div class="quick-links"><a href="https://www.google.com/maps/search/?api=1&query=Edinburgh%20New%20Town%20Haymarket%20hotel%20elevator" target="_blank" rel="noopener">住宿搜尋</a></div>
+          </article>
+          <article class="card">
+            <h3>London</h3>
+            <p>若從 Edinburgh 搭火車，King’s Cross 一帶最順。若要準備 7/8 LHR BR68，可最後移到 Heathrow 周邊。</p>
+            <div class="tag-row"><span class="tag gold">King’s Cross</span><span class="tag">Heathrow 備案</span></div>
+            <div class="quick-links"><a href="https://www.google.com/maps/search/?api=1&query=London%20hotel%20near%20King%27s%20Cross%20or%20Heathrow" target="_blank" rel="noopener">住宿搜尋</a></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2>訂票優先順序</h2>
+            <p class="hint">先鎖交通與住宿，再買熱門景點。不另外做表格檔，直接在這頁看。</p>
+          </div>
+        </div>
+        <div class="booking-grid">
+          <article class="card booking-card high">
+            <h3>第一優先</h3>
+            <p>Barcelona → Edinburgh 機票、Edinburgh → London 火車或機票、Barcelona 住宿、Edinburgh 住宿、Highlands 一日團。</p>
+            <div class="quick-links">
+              <a href="https://www.google.com/travel/flights" target="_blank" rel="noopener">Google Flights</a>
+              <a href="https://www.lner.co.uk/" target="_blank" rel="noopener">LNER</a>
+              <a href="https://www.rabbies.com/en-gb/tour/loch-ness-glencoe-highlands-day-tour-from-edinburgh" target="_blank" rel="noopener">Rabbie’s</a>
+            </div>
+          </article>
+          <article class="card booking-card mid">
+            <h3>第二優先</h3>
+            <p>Sagrada Família、Park Güell、Casa Batlló、Edinburgh Castle。Barcelona 景點盡量避開中午高溫。</p>
+            <div class="quick-links">
+              <a href="https://sagradafamilia.org/en/tickets-individuals" target="_blank" rel="noopener">Sagrada Família</a>
+              <a href="https://parkguell.barcelona/en" target="_blank" rel="noopener">Park Güell</a>
+              <a href="https://www.edinburghcastle.scot/plan-your-visit/tickets/" target="_blank" rel="noopener">Edinburgh Castle</a>
+            </div>
+          </article>
+          <article class="card booking-card flex">
+            <h3>彈性項目</h3>
+            <p>Glasgow 火車、Stirling Castle、Leith / Dean Village / Museum。這些可依體力決定，不用太早壓死。</p>
+            <div class="quick-links">
+              <a href="https://www.scotrail.co.uk/" target="_blank" rel="noopener">ScotRail</a>
+              <a href="https://www.stirlingcastle.scot/" target="_blank" rel="noopener">Stirling Castle</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2>地圖與搜尋</h2>
+            <p class="hint">總路線是跨國大方向；實際交通仍以航班、火車票與住宿位置為準。</p>
+          </div>
+        </div>
+        <div class="split">
+          <div class="map-box">
+            <iframe src="https://maps.google.com/maps?saddr=Santiago%20de%20Compostela&daddr=Barcelona+to:Edinburgh+to:London&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <div class="map-note">Google 地圖只作城市串接參考；Santiago → Barcelona 與 Barcelona → Edinburgh 建議用飛機，Edinburgh → London 住市中心時火車優先。</div>
+          </div>
+          <div class="card-grid" style="grid-template-columns:1fr;">
+            <article class="card">
+              <h3>交通判斷</h3>
+              <p>Santiago 到 Barcelona：依航班或火車時間決定。Barcelona 到 Edinburgh：直飛優先。Edinburgh 到 London：若住市中心，火車優先。</p>
+            </article>
+            <article class="card">
+              <h3>體力判斷</h3>
+              <p>剛走完 Camino，Barcelona 只排三個高第重點；Scotland 不自駕，用 Edinburgh 當基地，一日團處理高地。</p>
+            </article>
+            <article class="card">
+              <h3>目前最重要</h3>
+              <p>先訂 BCN → EDI、Edinburgh 住宿、Highlands 一日團。Barcelona 景點票接著處理。</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
