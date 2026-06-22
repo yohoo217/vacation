@@ -187,6 +187,8 @@
     .route-tag.spiritual { background: var(--blue); }
     .route-tag.rejoin { background: var(--green); }
     .route-tag.start { background: var(--gold); }
+    .route-tag.post { background: #5f6f52; }
+    .route-tag.city { background: #7a4e81; }
     .stay-name {
       margin-top: 5px;
       font-weight: 850;
@@ -358,7 +360,7 @@
       <h1>Camino 住宿地圖與附近補給</h1>
       <p class="subtitle">每一日住宿點都可直接開 Google Maps；每日卡片提供附近洗衣店、餐廳、麵包店、超市搜尋。總覽地圖把 Porto 到 Santiago 的住宿順序串在一起。</p>
       <div class="status-row">
-        <span class="pill">目前：Day 14 Padrón / A Casa Da Meixida（6/22）</span>
+        <span class="pill">目前：Day 15 Santiago（6/23-6/24）</span>
         <span class="pill">已走：約 170.5 / 218.5 km</span>
         <span class="pill">完成度：約 78%</span>
       </div>
@@ -391,7 +393,7 @@
 
     <section class="route-panel">
       <h2>接下來每日住宿點路線</h2>
-      <p class="route-intro">目前 6/22 船後實住 A Casa Da Meixida（Aldea Muíños 25, Padrón）。6/23 走進 Santiago，住宿為 Rúa do Franco 58（Apartment in Casa Iacobus / Room in Santiago de Compostela），check-in after 15:00，checkout Thu Jun 25 11:00。</p>
+      <p class="route-intro">目前 6/23-6/24 住 Santiago Rúa do Franco 58。6/25 從 Santiago 前往 Barcelona，Barcelona 待兩天，之後 Barcelona → Edinburgh / Scotland 四晚，最後 Edinburgh → London。</p>
       <div class="route-grid" id="nextRouteGrid"></div>
     </section>
 
@@ -524,10 +526,38 @@
         address: "Rúa do Franco 58, Santiago de Compostela, Spain",
         km: "17-20 km",
         maps: "https://maps.app.goo.gl/DACd312Vj6jE2m2h8?g_st=ic"
+      },
+      {
+        day: "朝聖後", date: "6/24", city: "Santiago de Compostela", route: "post",
+        stay: "Apartment in Casa Iacobus / Room in Santiago de Compostela",
+        address: "Rúa do Franco 58, Santiago de Compostela, Spain",
+        km: "市區 0-5 km",
+        maps: "https://maps.app.goo.gl/DACd312Vj6jE2m2h8?g_st=ic"
+      },
+      {
+        day: "Barcelona", date: "6/25-6/26", city: "Barcelona", route: "city",
+        stay: "Barcelona Eixample 住宿待選",
+        address: "Eixample, Barcelona, Spain",
+        km: "城市停留 2 天",
+        maps: "https://www.google.com/maps/search/?api=1&query=Eixample%20hotel%20Barcelona%20air%20conditioning%20elevator"
+      },
+      {
+        day: "Scotland", date: "6/27-6/30", city: "Edinburgh", route: "city",
+        stay: "Edinburgh New Town / Haymarket 住宿待選",
+        address: "New Town or Haymarket, Edinburgh, Scotland",
+        km: "Scotland 4 晚",
+        maps: "https://www.google.com/maps/search/?api=1&query=Edinburgh%20New%20Town%20Haymarket%20hotel%20elevator"
+      },
+      {
+        day: "London", date: "7/1 起", city: "London", route: "city",
+        stay: "London 住宿待選",
+        address: "London, England",
+        km: "Edinburgh → London",
+        maps: "https://www.google.com/maps/search/?api=1&query=London%20hotel%20near%20King%27s%20Cross%20or%20Heathrow"
       }
     ];
 
-    const currentStayIndex = 13;
+    const currentStayIndex = 14;
     let selectedIndex = currentStayIndex;
     let selectedCategory = "stay";
 
@@ -550,7 +580,7 @@
     function allDirectionsUrl() {
       const origin = enc(stays[0].address);
       const stops = stays.slice(1).map((stay) => enc(stay.address)).join("+to:");
-      return `https://maps.google.com/maps?saddr=${origin}&daddr=${stops}&dirflg=w`;
+      return `https://maps.google.com/maps?saddr=${origin}&daddr=${stops}`;
     }
 
     function nextStays() {
@@ -561,20 +591,20 @@
       const routeStays = nextStays();
       const origin = enc(routeStays[0].address);
       const stops = routeStays.slice(1).map((stay) => enc(stay.address)).join("+to:");
-      return `https://maps.google.com/maps?saddr=${origin}&daddr=${stops}&dirflg=w`;
+      return `https://maps.google.com/maps?saddr=${origin}&daddr=${stops}`;
     }
 
     function allEmbedUrl() {
       const origin = enc(stays[0].address);
       const stops = stays.slice(1).map((stay) => enc(stay.address)).join("+to:");
-      return `https://maps.google.com/maps?saddr=${origin}&daddr=${stops}&dirflg=w&output=embed`;
+      return `https://maps.google.com/maps?saddr=${origin}&daddr=${stops}&output=embed`;
     }
 
     function nextEmbedUrl() {
       const routeStays = nextStays();
       const origin = enc(routeStays[0].address);
       const stops = routeStays.slice(1).map((stay) => enc(stay.address)).join("+to:");
-      return `https://maps.google.com/maps?saddr=${origin}&daddr=${stops}&dirflg=w&output=embed`;
+      return `https://maps.google.com/maps?saddr=${origin}&daddr=${stops}&output=embed`;
     }
 
     function allStaySearchUrl() {
@@ -582,7 +612,9 @@
     }
 
     function legDirectionsUrl(fromStay, toStay) {
-      return `https://www.google.com/maps/dir/?api=1&origin=${enc(fromStay.address)}&destination=${enc(toStay.address)}&travelmode=walking`;
+      const walkingRoutes = new Set(["start", "central", "spiritual", "rejoin"]);
+      const walkMode = walkingRoutes.has(fromStay.route) && walkingRoutes.has(toStay.route);
+      return `https://www.google.com/maps/dir/?api=1&origin=${enc(fromStay.address)}&destination=${enc(toStay.address)}${walkMode ? "&travelmode=walking" : ""}`;
     }
 
     function routeName(route) {
@@ -590,7 +622,9 @@
         start: "起點",
         central: "中央線",
         spiritual: "靈性之路",
-        rejoin: "進城段"
+        rejoin: "進城段",
+        post: "朝聖後",
+        city: "城市段"
       }[route] || "路線";
     }
 
