@@ -294,12 +294,41 @@
     .booking-card.mid { border-left-color: var(--blue); }
     .booking-card.flex { border-left-color: var(--gold); }
 
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .receipt-shot {
+      margin: 0;
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .receipt-shot img {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: #111;
+    }
+
+    .receipt-shot figcaption {
+      padding: 10px 12px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
     @media (max-width: 860px) {
       .topbar,
       .section-head { align-items: flex-start; flex-direction: column; }
       .metric-grid,
       .card-grid,
       .booking-grid,
+      .image-grid,
       .split { grid-template-columns: 1fr; }
       header { min-height: 390px; }
       .map-box iframe { min-height: 340px; }
@@ -321,7 +350,9 @@
         <h1>朝聖後旅行計畫</h1>
         <p class="lead">這頁只放 Santiago 完成 Camino 後的旅程：Santiago 休整、Barcelona 兩天、Edinburgh / Scotland 四晚、最後前往 London。Camino 步行日、住宿地圖與進度已留在朝聖路頁面。</p>
         <div class="toplinks" style="margin-top:20px;">
+          <a href="#daily-timetable">每日時間表</a>
           <a href="#transport">機票時間表</a>
+          <a href="#booking-shots">訂票截圖</a>
           <a href="#lodging">住宿候選</a>
           <a href="#activities">活動訂票</a>
           <a href="#day-tours">一日團</a>
@@ -339,6 +370,179 @@
           <div class="metric"><span>城市段</span><strong>Barcelona 2 天</strong></div>
           <div class="metric"><span>主行程</span><strong>Scotland 4 晚</strong></div>
           <div class="metric"><span>銜接</span><strong>London</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="daily-timetable">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2>每日時間表</h2>
+            <p class="hint">這張表可以當作手機上每天照著看的版本：幾點做什麼、怎麼移動、哪裡要保守抓時間。</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>日期</th>
+                <th>時間</th>
+                <th>要做什麼</th>
+                <th>交通方式</th>
+                <th>地點 / 提醒</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>6/24</td>
+                <td>09:30-11:30</td>
+                <td>領 Compostela / 證書，老城輕鬆走走。</td>
+                <td>步行</td>
+                <td>Santiago de Compostela；今天以恢復、洗衣、整理行李為主。</td>
+              </tr>
+              <tr>
+                <td>6/24</td>
+                <td>14:00-17:00</td>
+                <td>洗衣、咖啡、休息；把明天火車票和行李先整理好。</td>
+                <td>步行</td>
+                <td>晚上 20:30 前確認 6/25 06:51 火車，建議早睡。</td>
+              </tr>
+              <tr>
+                <td>6/25</td>
+                <td>05:45-06:51</td>
+                <td>起床、退房、前往 Santiago de Compostela 車站，搭火車出發。</td>
+                <td>步行或計程車 + 火車</td>
+                <td>06:10 前離開 Rúa do Franco 58；06:51 發車。</td>
+              </tr>
+              <tr>
+                <td>6/25</td>
+                <td>15:11-19:00</td>
+                <td>抵達 Barcelona Sants，前往住宿 check-in，傍晚再去 Gothic Quarter / El Born 吃 tapas。</td>
+                <td>火車 + 地鐵 / 計程車 / 步行</td>
+                <td>長途火車日，晚上只排近距離散步。</td>
+              </tr>
+              <tr>
+                <td>6/26</td>
+                <td>09:00-13:00</td>
+                <td>Sagrada Família、Casa Batlló。</td>
+                <td>地鐵 / 巴士 / 計程車</td>
+                <td>Barcelona 白天熱，門票時段盡量排早上。</td>
+              </tr>
+              <tr>
+                <td>6/26</td>
+                <td>13:30-20:00</td>
+                <td>回住宿休息避熱，傍晚去 Park Güell，晚上吃飯。</td>
+                <td>地鐵 / 巴士 / 計程車</td>
+                <td>Casa Milà 可刪，保留體力。</td>
+              </tr>
+              <tr>
+                <td>6/27</td>
+                <td>上午-13:30</td>
+                <td>收行李、確認 easyJet boarding pass、護照/ID 資料、行李尺寸。</td>
+                <td>住宿內準備</td>
+                <td>每人 small cabin bag 45 x 36 x 20 cm + large cabin bag 56 x 45 x 25 cm。</td>
+              </tr>
+              <tr>
+                <td>6/27</td>
+                <td>13:30-14:50</td>
+                <td>Barcelona 市區前往 BCN Terminal 2C。</td>
+                <td>R2 Nord / Aerobús A2 / 計程車</td>
+                <td>住 Sants / Eixample 可用 R2 Nord 到 Aeroport T2；住 Plaça Catalunya 附近可搭 Aerobús A2。</td>
+              </tr>
+              <tr>
+                <td>6/27</td>
+                <td>14:50-18:50</td>
+                <td>easyJet EJU7115：BCN T2C → Edinburgh EDI。</td>
+                <td>飛機</td>
+                <td>Bag drop 14:50 開、16:10 關；16:50 起飛，18:50 抵達。</td>
+              </tr>
+              <tr>
+                <td>6/27</td>
+                <td>19:30-21:00</td>
+                <td>從 Edinburgh Airport 進市區、check-in、附近晚餐。</td>
+                <td>Airlink 100 / tram / taxi</td>
+                <td>抵達夜不要再排遠點，留給入境和行李緩衝。</td>
+              </tr>
+              <tr>
+                <td>6/28</td>
+                <td>09:30-18:30</td>
+                <td>Edinburgh Castle、Royal Mile、St Giles、Victoria Street、Calton Hill。</td>
+                <td>步行 / 公車</td>
+                <td>Arthur’s Seat 腳累就跳過，Calton Hill 已經很夠看夕陽。</td>
+              </tr>
+              <tr>
+                <td>6/29</td>
+                <td>07:30-20:30</td>
+                <td>Highlands 一日團：Glencoe、Loch Ness、Highlands 風景。</td>
+                <td>一日團巴士</td>
+                <td>集合點要依最後訂的團確認；前一晚先查走路或公車時間。</td>
+              </tr>
+              <tr>
+                <td>6/30</td>
+                <td>09:30-19:00</td>
+                <td>三選一：Glasgow 一日遊、Stirling Castle、或 Edinburgh 慢玩恢復日。</td>
+                <td>ScotRail / 公車 / 步行</td>
+                <td>最推薦 Glasgow；若腳累就改 Dean Village + Leith。</td>
+              </tr>
+              <tr>
+                <td>7/1</td>
+                <td>10:00-17:30</td>
+                <td>Edinburgh Waverley → London King’s Cross；抵達後 check-in。</td>
+                <td>LNER / Lumo 火車 + 地鐵</td>
+                <td>住 London 市中心的話火車比飛機順；不需要處理機場和廉航行李。</td>
+              </tr>
+              <tr>
+                <td>7/2</td>
+                <td>09:30-20:30</td>
+                <td>Westminster、Big Ben、St James’s Park、South Bank、Covent Garden。</td>
+                <td>地鐵 / 步行</td>
+                <td>第一天倫敦先排經典區域，動線集中。</td>
+              </tr>
+              <tr>
+                <td>7/3</td>
+                <td>10:00-21:00</td>
+                <td>British Museum、Soho、Chinatown、West End 或 pub。</td>
+                <td>地鐵 / 步行</td>
+                <td>博物館可彈性，晚上看是否要訂音樂劇。</td>
+              </tr>
+              <tr>
+                <td>7/4</td>
+                <td>09:30-18:30</td>
+                <td>Tower of London、Tower Bridge、Borough Market、Tate Modern。</td>
+                <td>地鐵 / 步行 / Thames boat 可選</td>
+                <td>若想坐船，這天最順。</td>
+              </tr>
+              <tr>
+                <td>7/5</td>
+                <td>10:00-19:30</td>
+                <td>Kensington / Hyde Park / V&A / Natural History Museum。</td>
+                <td>地鐵 / 步行</td>
+                <td>比較溫和的一天，適合補休息。</td>
+              </tr>
+              <tr>
+                <td>7/6</td>
+                <td>09:00-19:00</td>
+                <td>可選 Oxford / Cambridge / Bath 一日遊。</td>
+                <td>火車或一日團巴士</td>
+                <td>如果不想再移動，改 Shoreditch + Columbia Road / 市集。</td>
+              </tr>
+              <tr>
+                <td>7/7</td>
+                <td>10:00-20:00</td>
+                <td>Notting Hill、Portobello、購物、整理退稅/行李。</td>
+                <td>地鐵 / 公車 / 步行</td>
+                <td>最後完整一天，不排太遠。</td>
+              </tr>
+              <tr>
+                <td>7/8</td>
+                <td>16:30-21:35</td>
+                <td>前往 Heathrow LHR，搭 BR68 21:35。</td>
+                <td>Elizabeth line / Piccadilly line / Heathrow Express</td>
+                <td>建議 17:30-18:00 抵達 LHR；當天白天只排輕鬆近點。</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </section>
@@ -479,6 +683,31 @@
               </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="booking-shots">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2>訂票截圖</h2>
+            <p class="hint">只放已打碼與裁切版本，保留航班、時間、行李資訊；訂位代碼、付款資訊與姓名不放到公開頁。</p>
+          </div>
+        </div>
+        <div class="image-grid">
+          <figure class="receipt-shot">
+            <img src="assets/post-camino/easyjet-flight-redacted-1.jpg" alt="easyJet EJU7115 flight time from Barcelona Terminal 2C to Edinburgh">
+            <figcaption>easyJet EJU7115：BCN Terminal 2C 16:50 → EDI 18:50，bag drop 14:50-16:10。</figcaption>
+          </figure>
+          <figure class="receipt-shot">
+            <img src="assets/post-camino/easyjet-flight-redacted-2.jpg" alt="easyJet cabin bag allowance redacted screenshot">
+            <figcaption>座位 5B / 5C；每人 small cabin bag + large cabin bag。</figcaption>
+          </figure>
+          <figure class="receipt-shot">
+            <img src="assets/post-camino/easyjet-flight-redacted-3.jpg" alt="easyJet check-in open flight detail redacted screenshot">
+            <figcaption>Check-in 已開；出發前補 passport / ID、完成 online check-in、下載 boarding pass。</figcaption>
+          </figure>
         </div>
       </div>
     </section>
