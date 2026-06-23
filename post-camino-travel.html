@@ -1,0 +1,921 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>朝聖後旅行計畫</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1e2730;
+      --muted: #63717c;
+      --paper: #f4f0e8;
+      --surface: #fffdf8;
+      --line: #d8d0c1;
+      --green: #1f6b55;
+      --blue: #2f6f8f;
+      --plum: #6f4f7c;
+      --red: #a34534;
+      --gold: #b67724;
+      --shadow: 0 16px 42px rgba(38, 42, 45, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", sans-serif;
+      line-height: 1.55;
+    }
+
+    a { color: inherit; }
+
+    .shell {
+      width: min(1120px, calc(100% - 28px));
+      margin: 0 auto;
+    }
+
+    header {
+      min-height: 430px;
+      color: white;
+      display: grid;
+      align-items: end;
+      background:
+        linear-gradient(90deg, rgba(24, 39, 48, 0.96), rgba(24, 39, 48, 0.6)),
+        url("_整理備份_20260505/朝聖之路/camino_cover.png") center/cover;
+    }
+
+    .hero {
+      padding: 34px 0 42px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding-top: 18px;
+    }
+
+    .brand {
+      font-weight: 900;
+    }
+
+    .toplinks,
+    .actions,
+    .quick-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .toplinks a,
+    .actions a,
+    .quick-links a {
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      padding: 9px 12px;
+      text-decoration: none;
+      font-weight: 900;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .toplinks a {
+      color: white;
+      border-color: rgba(255, 255, 255, 0.32);
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(10px);
+    }
+
+    .actions a.primary,
+    .quick-links a.primary {
+      color: white;
+      border-color: var(--green);
+      background: var(--green);
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      max-width: 850px;
+      font-size: clamp(2.4rem, 7vw, 5.4rem);
+    }
+
+    h2 {
+      font-size: clamp(1.55rem, 3.6vw, 2.5rem);
+    }
+
+    h3 {
+      font-size: 1.18rem;
+    }
+
+    .lead {
+      max-width: 780px;
+      margin: 16px 0 0;
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 1.05rem;
+    }
+
+    .section {
+      padding: 42px 0;
+    }
+
+    .section.alt {
+      background: #ebe4d8;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .hint {
+      margin: 6px 0 0;
+      color: var(--muted);
+    }
+
+    .metric-grid,
+    .card-grid,
+    .booking-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .card,
+    .metric,
+    .table-wrap,
+    .map-box {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .metric,
+    .card {
+      padding: 18px;
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 7px;
+      font-size: 1.45rem;
+      line-height: 1.1;
+    }
+
+    .card p {
+      margin: 9px 0 0;
+      color: var(--muted);
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 12px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 8px;
+      color: white;
+      background: var(--green);
+      font-size: 0.76rem;
+      font-weight: 900;
+    }
+
+    .tag.blue { background: var(--blue); }
+    .tag.plum { background: var(--plum); }
+    .tag.red { background: var(--red); }
+    .tag.gold { background: var(--gold); }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 860px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 13px 14px;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid var(--line);
+    }
+
+    th {
+      background: #eee4d3;
+      color: #31423a;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .route-title {
+      display: block;
+      font-weight: 900;
+    }
+
+    .small {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(320px, 0.75fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .map-box {
+      overflow: hidden;
+    }
+
+    .map-box iframe {
+      width: 100%;
+      min-height: 420px;
+      border: 0;
+      display: block;
+    }
+
+    .map-note {
+      padding: 14px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .booking-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .booking-card {
+      border-left: 5px solid var(--green);
+    }
+
+    .booking-card.high { border-left-color: var(--red); }
+    .booking-card.mid { border-left-color: var(--blue); }
+    .booking-card.flex { border-left-color: var(--gold); }
+
+    @media (max-width: 860px) {
+      .topbar,
+      .section-head { align-items: flex-start; flex-direction: column; }
+      .metric-grid,
+      .card-grid,
+      .booking-grid,
+      .split { grid-template-columns: 1fr; }
+      header { min-height: 390px; }
+      .map-box iframe { min-height: 340px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell">
+      <div class="topbar">
+        <div class="brand">Post-Camino Travel</div>
+        <nav class="toplinks" aria-label="navigation">
+          <a href="index.html">入口</a>
+          <a href="_整理備份_20260505/朝聖之路/camino-guide.html">Camino 主導覽</a>
+          <a href="_整理備份_20260505/朝聖之路/葡萄牙朝聖之路簡報.html">Camino 簡報</a>
+        </nav>
+      </div>
+      <div class="hero">
+        <h1>朝聖後旅行計畫</h1>
+        <p class="lead">這頁只放 Santiago 完成 Camino 後的旅程：Santiago 休整、Barcelona 兩天、Edinburgh / Scotland 四晚、最後前往 London。Camino 步行日、住宿地圖與進度已留在朝聖路頁面。</p>
+        <div class="toplinks" style="margin-top:20px;">
+          <a href="#transport">機票時間表</a>
+          <a href="#lodging">住宿候選</a>
+          <a href="#activities">活動訂票</a>
+          <a href="#day-tours">一日團</a>
+          <a href="#london">London 行程</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="shell">
+        <div class="metric-grid">
+          <div class="metric"><span>起點</span><strong>Santiago</strong></div>
+          <div class="metric"><span>城市段</span><strong>Barcelona 2 天</strong></div>
+          <div class="metric"><span>主行程</span><strong>Scotland 4 晚</strong></div>
+          <div class="metric"><span>銜接</span><strong>London</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="transport">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2>交通 / 機票 Time Table</h2>
+            <p class="hint">這裡給可執行的目標時段與訂票入口。實際票價、行李規則、起降時間請以打開後的航空公司或鐵路頁為準。</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>日期</th>
+                <th>區間</th>
+                <th>建議時段</th>
+                <th>可查班次 / 公司</th>
+                <th>原因</th>
+                <th>訂票連結</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>6/25</td>
+                <td><span class="route-title">Santiago SCQ → Barcelona BCN</span><span class="small">飛行約 1h45；Vueling / Ryanair 有直飛</span></td>
+                <td>首選 11:00-16:00 起飛；備選 17:00-20:00</td>
+                <td>Skyscanner 顯示約 40 班/週，最早約 06:00、最晚約 23:35；Vueling 官方航線頁標示 SCQ→BCN 約 1h45。</td>
+                <td>你 11:00 前退房，太早航班會壓力大；太晚抵達 Barcelona 不利 check-in 和晚餐。</td>
+                <td>
+                  <div class="quick-links">
+                    <a href="https://www.vueling.com/en-us/flights-from-santiagodecompostela-to-barcelona" target="_blank" rel="noopener">Vueling</a>
+                    <a href="https://www.ryanair.com/" target="_blank" rel="noopener">Ryanair</a>
+                    <a href="https://www.google.com/travel/flights?q=SCQ%20to%20BCN%202026-06-25" target="_blank" rel="noopener">Google Flights</a>
+                    <a href="https://www.skyscanner.com/routes/scq/bcn/santiago-de-compostela-to-barcelona.html" target="_blank" rel="noopener">Skyscanner</a>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>6/27</td>
+                <td><span class="route-title">Barcelona BCN → Edinburgh EDI</span><span class="small">直飛約 2h55；Ryanair / easyJet / Vueling</span></td>
+                <td>首選 10:30-15:30 起飛；避免 07:00 前與 21:00 後</td>
+                <td>Skyscanner 顯示 2026/6 約 39 班/週；FlightsFrom 顯示 Ryanair 約每日 1-2 班、Vueling 約每日 1 班、easyJet 約每日 1 班。</td>
+                <td>上午退房後從 Eixample 到 BCN 約 35-50 分鐘；中午或下午飛，抵達 Edinburgh 還能順利進市區。</td>
+                <td>
+                  <div class="quick-links">
+                    <a href="https://www.vueling.com/" target="_blank" rel="noopener">Vueling</a>
+                    <a href="https://www.easyjet.com/" target="_blank" rel="noopener">easyJet</a>
+                    <a href="https://www.ryanair.com/" target="_blank" rel="noopener">Ryanair</a>
+                    <a href="https://www.skyscanner.com/routes/bcn/edi/barcelona-to-edinburgh.html" target="_blank" rel="noopener">Skyscanner</a>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>7/1</td>
+                <td><span class="route-title">Edinburgh Waverley → London King’s Cross</span><span class="small">火車優先，約 4h10-4h15</span></td>
+                <td>首選 10:00-13:00 出發；抵達 London 約 14:15-17:30</td>
+                <td>LNER 官方表示 Edinburgh-London 約 4h11，且有頻繁班次；Lumo 也營運 Edinburgh-London。</td>
+                <td>市中心到市中心，不用機場安檢與等行李；對剛走完 Camino 最省心。</td>
+                <td>
+                  <div class="quick-links">
+                    <a href="https://www.lner.co.uk/routes/edinburgh-to-london-kings-cross-trains/" target="_blank" rel="noopener">LNER</a>
+                    <a href="https://www.nationalrail.co.uk/" target="_blank" rel="noopener">National Rail</a>
+                    <a href="https://www.lumo.co.uk/plan-your-journey/our-timetable" target="_blank" rel="noopener">Lumo</a>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>7/1 備案</td>
+                <td><span class="route-title">Edinburgh EDI → London airports</span><span class="small">飛行約 1h25-1h30，但加上機場時間未必快</span></td>
+                <td>只有票價差很多或要接機場住宿時才選</td>
+                <td>Skyscanner 顯示 EDI→London 直飛很多，平均飛行約 1h26；British Airways / easyJet / Ryanair 常見。</td>
+                <td>若住 London 市中心，火車通常比跑機場更穩。</td>
+                <td>
+                  <div class="quick-links">
+                    <a href="https://www.britishairways.com/content/flights/from-edinburgh" target="_blank" rel="noopener">British Airways</a>
+                    <a href="https://www.easyjet.com/" target="_blank" rel="noopener">easyJet</a>
+                    <a href="https://www.skyscanner.com/routes/edi/lond/edinburgh-to-london.html" target="_blank" rel="noopener">Skyscanner</a>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>7/8</td>
+                <td><span class="route-title">London 市區 → Heathrow LHR</span><span class="small">BR68 21:35 起飛</span></td>
+                <td>建議 17:30-18:00 抵達 LHR；市區約 16:30-17:15 出發</td>
+                <td>Elizabeth line / Piccadilly line / Heathrow Express 依住宿位置決定。</td>
+                <td>長程國際線保守抓起飛前 3 小時到機場；當天不要排遠點。</td>
+                <td>
+                  <div class="quick-links">
+                    <a href="https://tfl.gov.uk/" target="_blank" rel="noopener">TfL</a>
+                    <a href="https://www.heathrowexpress.com/" target="_blank" rel="noopener">Heathrow Express</a>
+                    <a href="https://www.heathrow.com/" target="_blank" rel="noopener">Heathrow</a>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2>日程總覽</h2>
+            <p class="hint">把交通時段放進每天節奏，避免太早出門或太晚抵達。</p>
+          </div>
+          <div class="actions">
+            <a class="primary" href="https://www.google.com/maps/dir/?api=1&origin=Santiago%20de%20Compostela&destination=London&waypoints=Barcelona%7CEdinburgh" target="_blank" rel="noopener">總路線地圖</a>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>日期</th>
+                <th>城市 / 住宿</th>
+                <th>上午 / 中午</th>
+                <th>下午</th>
+                <th>晚上</th>
+                <th>注意</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>6/24</td>
+                <td><span class="route-title">Santiago de Compostela</span><span class="small">續住 Rúa do Franco 58</span></td>
+                <td>09:30-11:30 Compostela / 證書</td>
+                <td>14:00-17:00 洗衣、休息、咖啡</td>
+                <td>18:30 老城慢走、晚餐</td>
+                <td>6/25 11:00 前退房</td>
+              </tr>
+              <tr>
+                <td>6/25</td>
+                <td><span class="route-title">Santiago → Barcelona</span><span class="small">住宿優先 Eixample</span></td>
+                <td>10:30 退房準備；目標 11:00-16:00 SCQ→BCN</td>
+                <td>抵達 Barcelona、check-in、補水休息</td>
+                <td>19:00 Gothic Quarter / El Born / Tapas</td>
+                <td>只排輕鬆活動</td>
+              </tr>
+              <tr>
+                <td>6/26</td>
+                <td><span class="route-title">Barcelona</span><span class="small">Eixample 第二晚</span></td>
+                <td>09:00 Sagrada Família；11:30 Casa Batlló</td>
+                <td>13:30-16:30 回住宿休息避熱</td>
+                <td>17:30 Park Güell；20:00 晚餐</td>
+                <td>Casa Milà 可刪</td>
+              </tr>
+              <tr>
+                <td>6/27</td>
+                <td><span class="route-title">Barcelona → Edinburgh</span><span class="small">住宿 New Town / Haymarket</span></td>
+                <td>退房、前往 BCN；目標 10:30-15:30 起飛</td>
+                <td>BCN → EDI 直飛；搭 tram / bus 進市區</td>
+                <td>短走 Royal Mile / Victoria Street</td>
+                <td>廉航先買行李</td>
+              </tr>
+              <tr>
+                <td>6/28</td>
+                <td><span class="route-title">Edinburgh</span><span class="small">市區精華日</span></td>
+                <td>09:30 Edinburgh Castle</td>
+                <td>13:00 Royal Mile、St Giles、Victoria Street</td>
+                <td>17:30 Calton Hill / pub</td>
+                <td>Arthur’s Seat 腳累就跳過</td>
+              </tr>
+              <tr>
+                <td>6/29</td>
+                <td><span class="route-title">Highlands 一日團</span><span class="small">Edinburgh 出發返回</span></td>
+                <td>07:30-08:00 集合出發</td>
+                <td>Glencoe / Loch Ness / Highlands</td>
+                <td>19:30-20:30 回 Edinburgh</td>
+                <td>不自駕；Isle of Skye 一日團太硬</td>
+              </tr>
+              <tr>
+                <td>6/30</td>
+                <td><span class="route-title">Glasgow / Stirling / Edinburgh</span><span class="small">依體力三選一</span></td>
+                <td>09:30 Glasgow Cathedral 或 Dean Village</td>
+                <td>14:00 Kelvingrove / Leith / Stirling Castle</td>
+                <td>19:00 回 Edinburgh 或市區晚餐</td>
+                <td>這天保留彈性</td>
+              </tr>
+              <tr>
+                <td>7/1</td>
+                <td><span class="route-title">Edinburgh → London</span><span class="small">火車到 King’s Cross 優先</span></td>
+                <td>10:00-13:00 Edinburgh Waverley 出發</td>
+                <td>約 14:15-17:30 抵達 London King’s Cross</td>
+                <td>check-in / King’s Cross 周邊晚餐</td>
+                <td>若接機場才考慮飛機</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="lodging">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2>住宿候選</h2>
+            <p class="hint">重點是少搬、少爬、交通順。以下是區域與候選名單，實際價格和空房仍以打開後的訂房頁為準。</p>
+          </div>
+        </div>
+        <div class="card-grid">
+          <article class="card">
+            <h3>Santiago</h3>
+            <p>6/23-6/25 實住 Apartment in Casa Iacobus / Room in Santiago de Compostela，地址 Rúa do Franco 58。</p>
+            <div class="tag-row"><span class="tag">已訂 / 已住</span><span class="tag gold">6/25 退房</span></div>
+            <div class="quick-links"><a href="https://maps.app.goo.gl/DACd312Vj6jE2m2h8?g_st=ic" target="_blank" rel="noopener">Google Maps</a></div>
+          </article>
+          <article class="card">
+            <h3>Barcelona</h3>
+            <p>首選 Eixample：冷氣、電梯、近地鐵、評分 8.0+。候選：Hotel Constanza、Praktik Garden、Acta Antibes、Hotel Granvia / Hotel Jazz。</p>
+            <div class="tag-row"><span class="tag blue">Eixample</span><span class="tag red">冷氣必備</span></div>
+            <div class="quick-links">
+              <a href="https://www.google.com/maps/search/?api=1&query=Hotel%20Constanza%20Barcelona" target="_blank" rel="noopener">Hotel Constanza</a>
+              <a href="https://www.google.com/maps/search/?api=1&query=Praktik%20Garden%20Barcelona" target="_blank" rel="noopener">Praktik Garden</a>
+              <a href="https://www.google.com/maps/search/?api=1&query=Acta%20Antibes%20Barcelona" target="_blank" rel="noopener">Acta Antibes</a>
+              <a href="https://www.google.com/maps/search/?api=1&query=Eixample%20hotel%20Barcelona%20air%20conditioning%20elevator" target="_blank" rel="noopener">Eixample 搜尋</a>
+            </div>
+          </article>
+          <article class="card">
+            <h3>Edinburgh</h3>
+            <p>首選 New Town 或 Haymarket。候選：Motel One Princes、YOTEL Edinburgh、Premier Inn Princes Street / York Place、voco Haymarket。</p>
+            <div class="tag-row"><span class="tag plum">New Town</span><span class="tag blue">Haymarket</span></div>
+            <div class="quick-links">
+              <a href="https://www.google.com/maps/search/?api=1&query=Motel%20One%20Edinburgh%20Princes" target="_blank" rel="noopener">Motel One</a>
+              <a href="https://www.google.com/maps/search/?api=1&query=YOTEL%20Edinburgh" target="_blank" rel="noopener">YOTEL</a>
+              <a href="https://www.google.com/maps/search/?api=1&query=Premier%20Inn%20Edinburgh%20City%20Centre%20Princes%20Street" target="_blank" rel="noopener">Premier Inn</a>
+              <a href="https://www.google.com/maps/search/?api=1&query=Edinburgh%20New%20Town%20Haymarket%20hotel%20elevator" target="_blank" rel="noopener">區域搜尋</a>
+            </div>
+          </article>
+          <article class="card">
+            <h3>London</h3>
+            <p>若從 Edinburgh 搭火車，King’s Cross / St Pancras 一帶最順。候選：hub by Premier Inn King’s Cross、Point A King’s Cross、The Standard；最後一晚可考慮 Heathrow T4。</p>
+            <div class="tag-row"><span class="tag gold">King’s Cross</span><span class="tag">Heathrow 備案</span></div>
+            <div class="quick-links">
+              <a href="https://www.google.com/maps/search/?api=1&query=hub%20by%20Premier%20Inn%20London%20King%27s%20Cross" target="_blank" rel="noopener">hub King’s Cross</a>
+              <a href="https://www.google.com/maps/search/?api=1&query=Point%20A%20Hotel%20London%20King%27s%20Cross" target="_blank" rel="noopener">Point A</a>
+              <a href="https://www.google.com/maps/search/?api=1&query=The%20Standard%20London%20King%27s%20Cross" target="_blank" rel="noopener">The Standard</a>
+              <a href="https://www.google.com/maps/search/?api=1&query=Premier%20Inn%20Heathrow%20Terminal%204" target="_blank" rel="noopener">Heathrow T4</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="activities">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2>要玩的活動與門票</h2>
+            <p class="hint">Barcelona 和 Edinburgh 先訂熱門時段；London 多數博物館可彈性，但熱門付費景點仍建議先買。</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>城市</th>
+                <th>活動</th>
+                <th>建議時間</th>
+                <th>取捨</th>
+                <th>連結</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Barcelona</td>
+                <td><span class="route-title">Sagrada Família</span><span class="small">最優先，建議早上第一段</span></td>
+                <td>6/26 09:00-10:30</td>
+                <td>買官方票；塔樓可選，腳累或怕高就不用加。</td>
+                <td><a href="https://sagradafamilia.org/en/tickets" target="_blank" rel="noopener">官方票</a></td>
+              </tr>
+              <tr>
+                <td>Barcelona</td>
+                <td><span class="route-title">Casa Batlló</span><span class="small">高第建築第二順位</span></td>
+                <td>6/26 11:30-13:00</td>
+                <td>General Visit 已足夠；想要更安靜可看早場或夜間。</td>
+                <td><a href="https://www.casabatllo.es/en/online-tickets/" target="_blank" rel="noopener">官方票</a></td>
+              </tr>
+              <tr>
+                <td>Barcelona</td>
+                <td><span class="route-title">Park Güell</span><span class="small">傍晚比較舒服</span></td>
+                <td>6/26 17:30-19:00</td>
+                <td>需提前線上買票；白天太熱就延後到最晚可售時段。</td>
+                <td><a href="https://parkguell.barcelona/en" target="_blank" rel="noopener">官方票</a></td>
+              </tr>
+              <tr>
+                <td>Barcelona</td>
+                <td><span class="route-title">Casa Milà / La Pedrera</span><span class="small">可選，不必硬塞</span></td>
+                <td>有餘力再排</td>
+                <td>若 Sagrada Família + Casa Batlló + Park Güell 已排滿，這個可以刪。</td>
+                <td><a href="https://www.lapedrera.com/en/" target="_blank" rel="noopener">官方頁</a></td>
+              </tr>
+              <tr>
+                <td>Edinburgh</td>
+                <td><span class="route-title">Edinburgh Castle</span><span class="small">市區必看</span></td>
+                <td>6/28 09:30-11:30</td>
+                <td>暑期常滿，先買早上時段；下午留給 Royal Mile。</td>
+                <td><a href="https://www.edinburghcastle.scot/plan-your-visit/tickets/" target="_blank" rel="noopener">官方票</a></td>
+              </tr>
+              <tr>
+                <td>Edinburgh</td>
+                <td><span class="route-title">Royal Mile + St Giles + Victoria Street</span><span class="small">不需訂票</span></td>
+                <td>6/28 下午</td>
+                <td>慢走即可；下雨可插入 National Museum of Scotland。</td>
+                <td><a href="https://www.google.com/maps/search/?api=1&query=Royal%20Mile%20St%20Giles%20Victoria%20Street%20Edinburgh" target="_blank" rel="noopener">地圖</a></td>
+              </tr>
+              <tr>
+                <td>London</td>
+                <td><span class="route-title">British Museum</span><span class="small">免費，適合半天</span></td>
+                <td>7/2 上午</td>
+                <td>先看埃及、希臘、亞述重點；不要逛到腳炸。</td>
+                <td><a href="https://www.britishmuseum.org/visit" target="_blank" rel="noopener">參觀資訊</a></td>
+              </tr>
+              <tr>
+                <td>London</td>
+                <td><span class="route-title">National Gallery</span><span class="small">免費，適合接 Trafalgar Square</span></td>
+                <td>7/2 下午</td>
+                <td>常設展免費，特展另計；可和 Covent Garden 放同一天。</td>
+                <td><a href="https://www.nationalgallery.org.uk/visiting/plan-your-visit" target="_blank" rel="noopener">參觀資訊</a></td>
+              </tr>
+              <tr>
+                <td>London</td>
+                <td><span class="route-title">Tower of London</span><span class="small">建議提前買</span></td>
+                <td>7/4 上午</td>
+                <td>和 Tower Bridge、Borough Market、South Bank 很順。</td>
+                <td><a href="https://www.hrp.org.uk/tower-of-london/visit/tickets-and-prices/" target="_blank" rel="noopener">官方票</a></td>
+              </tr>
+              <tr>
+                <td>London</td>
+                <td><span class="route-title">Westminster Abbey</span><span class="small">皇室與加冕教堂</span></td>
+                <td>7/3 上午</td>
+                <td>提前買票可省排隊；接 St James’s Park / Buckingham Palace。</td>
+                <td><a href="https://www.westminster-abbey.org/visit-us/prices-and-entry-times/" target="_blank" rel="noopener">官方票</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="day-tours">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2>Scotland 一日旅行團</h2>
+            <p class="hint">最推薦仍是從 Edinburgh 出發的 Loch Ness + Glencoe + Scottish Highlands。一日團車程長，但不用自駕也不用搬住宿。</p>
+          </div>
+        </div>
+        <div class="booking-grid">
+          <article class="card booking-card high">
+            <h3>首選：Rabbie’s</h3>
+            <p>Loch Ness, Glencoe & Highlands day tour。小團感較好，適合不想搭很大巴、剛走完 Camino 想省心的人。</p>
+            <div class="tag-row"><span class="tag red">最推薦</span><span class="tag">少走路</span></div>
+            <div class="quick-links"><a href="https://www.rabbies.com/en-gb/tour/loch-ness-glencoe-highlands-day-tour-from-edinburgh" target="_blank" rel="noopener">官方頁</a></div>
+          </article>
+          <article class="card booking-card mid">
+            <h3>備選：Timberbush</h3>
+            <p>同樣是 Loch Ness、Glencoe、Highlands，一天從 Edinburgh 來回；價格通常較清楚，行程時間長。</p>
+            <div class="tag-row"><span class="tag blue">經典路線</span><span class="tag gold">長車程</span></div>
+            <div class="quick-links"><a href="https://www.timberbush-tours.co.uk/our-tours/from-edinburgh/1-day-tours/loch-ness-glencoe-highlands" target="_blank" rel="noopener">官方頁</a></div>
+          </article>
+          <article class="card booking-card flex">
+            <h3>備選：Discover Scotland</h3>
+            <p>Loch Ness Tour from Edinburgh，小團高地路線，可看 Stirling Castle、Callander、Glencoe、Fort Augustus 等點。</p>
+            <div class="tag-row"><span class="tag plum">小團</span><span class="tag blue">高地景觀</span></div>
+            <div class="quick-links"><a href="https://www.discoverscotlandtours.com/tours/loch-ness-tour-from-edinburgh/" target="_blank" rel="noopener">官方頁</a></div>
+          </article>
+        </div>
+        <div class="table-wrap" style="margin-top:16px;">
+          <table>
+            <thead>
+              <tr>
+                <th>6/30 備案</th>
+                <th>怎麼玩</th>
+                <th>適合狀態</th>
+                <th>連結</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Glasgow 一日遊</td>
+                <td>火車 Edinburgh Waverley → Glasgow Queen Street；Cathedral、Necropolis、University of Glasgow、Kelvingrove、Ashton Lane。</td>
+                <td>想多看一個城市，腳還可以。</td>
+                <td><a href="https://www.scotrail.co.uk/train-times/edinburgh-waverley-to-glasgow-queen-street" target="_blank" rel="noopener">ScotRail</a></td>
+              </tr>
+              <tr>
+                <td>Stirling Castle + Loch Lomond</td>
+                <td>城堡 + 湖區組合，比 Highlands 一日團短一些；可自排火車或找一日團。</td>
+                <td>想看城堡與湖，但不想整天坐高地長車。</td>
+                <td><a href="https://www.stirlingcastle.scot/" target="_blank" rel="noopener">Stirling Castle</a></td>
+              </tr>
+              <tr>
+                <td>Edinburgh 恢復日</td>
+                <td>Dean Village、Stockbridge、Royal Botanic Garden、Leith 晚餐。</td>
+                <td>腳累、天氣不好、想慢慢收拾。</td>
+                <td><a href="https://www.google.com/maps/search/?api=1&query=Dean%20Village%20Stockbridge%20Leith%20Edinburgh" target="_blank" rel="noopener">地圖</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="booking">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2>訂票優先順序</h2>
+            <p class="hint">先鎖交通與住宿，再買熱門景點。不另外做表格檔，直接在這頁看。</p>
+          </div>
+        </div>
+        <div class="booking-grid">
+          <article class="card booking-card high">
+            <h3>第一優先</h3>
+            <p>Barcelona → Edinburgh 機票、Edinburgh → London 火車或機票、Barcelona 住宿、Edinburgh 住宿、Highlands 一日團。</p>
+            <div class="quick-links">
+              <a href="https://www.google.com/travel/flights" target="_blank" rel="noopener">Google Flights</a>
+              <a href="https://www.lner.co.uk/" target="_blank" rel="noopener">LNER</a>
+              <a href="https://www.rabbies.com/en-gb/tour/loch-ness-glencoe-highlands-day-tour-from-edinburgh" target="_blank" rel="noopener">Rabbie’s</a>
+            </div>
+          </article>
+          <article class="card booking-card mid">
+            <h3>第二優先</h3>
+            <p>Sagrada Família、Park Güell、Casa Batlló、Edinburgh Castle。Barcelona 景點盡量避開中午高溫。</p>
+            <div class="quick-links">
+              <a href="https://sagradafamilia.org/en/tickets-individuals" target="_blank" rel="noopener">Sagrada Família</a>
+              <a href="https://parkguell.barcelona/en" target="_blank" rel="noopener">Park Güell</a>
+              <a href="https://www.edinburghcastle.scot/plan-your-visit/tickets/" target="_blank" rel="noopener">Edinburgh Castle</a>
+            </div>
+          </article>
+          <article class="card booking-card flex">
+            <h3>彈性項目</h3>
+            <p>Glasgow 火車、Stirling Castle、Leith / Dean Village / Museum。這些可依體力決定，不用太早壓死。</p>
+            <div class="quick-links">
+              <a href="https://www.scotrail.co.uk/" target="_blank" rel="noopener">ScotRail</a>
+              <a href="https://www.stirlingcastle.scot/" target="_blank" rel="noopener">Stirling Castle</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="london">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2>London 詳細行程</h2>
+            <p class="hint">以 7/1 抵達 London、7/8 21:35 從 Heathrow 搭 BR68 離開來排。節奏偏舒服，不把每天塞滿。</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>日期</th>
+                <th>上午</th>
+                <th>下午</th>
+                <th>晚上</th>
+                <th>住宿 / 交通</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>7/1</td>
+                <td>Edinburgh 退房，搭火車到 London King’s Cross</td>
+                <td>Check-in，King’s Cross / Coal Drops Yard / Regent’s Canal 慢走</td>
+                <td>簡單晚餐，早睡恢復</td>
+                <td>住 King’s Cross / St Pancras 最順</td>
+              </tr>
+              <tr>
+                <td>7/2</td>
+                <td>British Museum</td>
+                <td>Covent Garden、National Gallery、Trafalgar Square</td>
+                <td>Soho / Chinatown 晚餐，可看 West End show</td>
+                <td>博物館日，走路量中等</td>
+              </tr>
+              <tr>
+                <td>7/3</td>
+                <td>Westminster Abbey、Parliament / Big Ben 外觀</td>
+                <td>St James’s Park、Buckingham Palace、Piccadilly / Fortnum & Mason</td>
+                <td>Mayfair / Soho 晚餐</td>
+                <td>Abbey 建議提前買票</td>
+              </tr>
+              <tr>
+                <td>7/4</td>
+                <td>Tower of London</td>
+                <td>Tower Bridge、Borough Market、South Bank / Tate Modern</td>
+                <td>Thames 河邊散步</td>
+                <td>Tower 早上去比較好</td>
+              </tr>
+              <tr>
+                <td>7/5</td>
+                <td>Greenwich 半日遊：Royal Observatory / Maritime Museum</td>
+                <td>搭船或 DLR 回市區，Canary Wharf 或 St Paul’s</td>
+                <td>自由晚餐</td>
+                <td>如果下雨，改 V&A / Natural History Museum</td>
+              </tr>
+              <tr>
+                <td>7/6</td>
+                <td>Notting Hill / Portobello Road 或 Kensington Gardens</td>
+                <td>V&A Museum / Natural History Museum / Harrods 三選一</td>
+                <td>整理戰利品與行李</td>
+                <td>這天留彈性，避免過累</td>
+              </tr>
+              <tr>
+                <td>7/7</td>
+                <td>最後購物：Oxford Street / Regent Street / Carnaby</td>
+                <td>下午茶或輕鬆咖啡；可移到 Heathrow 周邊住宿</td>
+                <td>整理行李、確認 BR68</td>
+                <td>若行李多，今晚住 Heathrow T4 很省心</td>
+              </tr>
+              <tr>
+                <td>7/8</td>
+                <td>輕鬆早餐、寄放行李或留在機場周邊</td>
+                <td>保守抓 17:30-18:00 到 Heathrow</td>
+                <td>21:35 BR68 LHR → TPE</td>
+                <td>長程航班日，不排遠點</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-grid" style="margin-top:16px;">
+          <article class="card">
+            <h3>London 住宿判斷</h3>
+            <p>前幾晚住 King’s Cross / St Pancras，火車抵達、地鐵與 Eurostar 區域都方便。最後一晚若想省心可移 Heathrow Terminal 4。</p>
+          </article>
+          <article class="card">
+            <h3>London Pass 不一定需要</h3>
+            <p>你排的核心多是免費博物館 + 2-3 個付費景點。若只去 Tower / Westminster Abbey，單買通常比較彈性。</p>
+          </article>
+          <article class="card">
+            <h3>腳累備案</h3>
+            <p>任何一天都可以把下午改成咖啡館、書店、河邊或公園。Camino 後的 London 不需要再每天硬衝。</p>
+          </article>
+          <article class="card">
+            <h3>交通</h3>
+            <p>市區用 contactless / Apple Pay 搭 Tube 和 bus；去 Heathrow 可用 Piccadilly Line 或 Elizabeth line，依住宿位置選。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2>地圖與搜尋</h2>
+            <p class="hint">總路線是跨國大方向；實際交通仍以航班、火車票與住宿位置為準。</p>
+          </div>
+        </div>
+        <div class="split">
+          <div class="map-box">
+            <iframe src="https://maps.google.com/maps?saddr=Santiago%20de%20Compostela&daddr=Barcelona+to:Edinburgh+to:London&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <div class="map-note">Google 地圖只作城市串接參考；Santiago → Barcelona 與 Barcelona → Edinburgh 建議用飛機，Edinburgh → London 住市中心時火車優先。</div>
+          </div>
+          <div class="card-grid" style="grid-template-columns:1fr;">
+            <article class="card">
+              <h3>交通判斷</h3>
+              <p>Santiago 到 Barcelona：依航班或火車時間決定。Barcelona 到 Edinburgh：直飛優先。Edinburgh 到 London：若住市中心，火車優先。</p>
+            </article>
+            <article class="card">
+              <h3>體力判斷</h3>
+              <p>剛走完 Camino，Barcelona 只排三個高第重點；Scotland 不自駕，用 Edinburgh 當基地，一日團處理高地。</p>
+            </article>
+            <article class="card">
+              <h3>目前最重要</h3>
+              <p>先訂 BCN → EDI、Edinburgh 住宿、Highlands 一日團。Barcelona 景點票接著處理。</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
